@@ -12,7 +12,7 @@
         </el-row>
       </el-form>
     </el-card>
-    <div class="contentClass">
+    <div class="contentClass"> 
       <div class="login-form">
         <span class="login-form-one"></span>
         <span class="login-form-two"></span>
