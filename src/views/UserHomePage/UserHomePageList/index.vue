@@ -104,8 +104,8 @@
                   </el-dropdown-menu>
                 </el-dropdown>
               </el-button-group>
-              <el-switch v-if="rolesFlag && rolesFlag[0] != 1" style="margin-left:20px;" v-model="WhereParameter.Invalid"
-                active-text="在保" inactive-text="过期">
+              <el-switch active-color="#13ce66" inactive-color="#ff4949" style="margin-left:20px;"
+                v-model="WhereParameter.Invalid" active-text="在保" inactive-text="过期">
               </el-switch>
             </el-col>
             <!-- <el-col :span="6" style="text-align:right ;">
@@ -160,7 +160,7 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table  v-loading="loading" :data="StaffList" fit @selection-change="TableSelect" @row-click="toggleSelection"
+      <el-table v-loading="loading" :data="StaffList" fit @selection-change="TableSelect" @row-click="toggleSelection"
         ref="multipleTable" :cell-style="showBackground">
         <el-table-column type="selection" width="50" fixed="left"> </el-table-column>
         <el-table-column prop="ProgramName" label="方案名称" min-width="140" show-overflow-tooltip
@@ -234,7 +234,7 @@
         layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
     </el-card>
     <!-- 添加投保数据 -->
-    <el-dialog :visible.sync="addStaffVisible" top="5vh" width="60%" @close="detailAddDialogVisibleClosed"
+    <el-dialog :visible.sync="addStaffVisible" top="5vh" width="70%" @close="detailAddDialogVisibleClosed"
       :lock-scroll="false" :append-to-body="true">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
@@ -997,7 +997,7 @@ export default {
               if (res.success) {
                 this.$message.success("添加成功");
                 this.addStaffVisible = false;
-                this.GetStaffList();
+                this.GetProgramInfoAll(this.WhereParameter.EnterPriseCode, false)
               } else {
                 this.$message.error(res.resultMessage);
               }
@@ -1176,7 +1176,7 @@ export default {
           this.updateStaffFrom.EndDate = '';
           this.updateDialogVisible = false;
           this.$message.success("操作成功");
-          this.GetStaffList();
+          this.GetProgramInfoAll(this.WhereParameter.EnterPriseCode, false);
         } else {
           this.$message.error(res.resultMessage);
         }
@@ -1311,13 +1311,18 @@ export default {
         if (response.status == 200) {
           //删除时传入的存储缓存清空
           this.fileDeleteCatch = null;
-          this.$message.success(response.data.resultMessage);
+          this.$message({
+            type: 'success',
+            showClose: true,
+            message: response.data.resultMessage,
+            duration: 6000
+          });
           this.ProgramNameImport = '';
           this.activeName = 'first';
           this.buttonShow = true;
           this.UploadFlag = false;
           this.ImportDialogVisible = false;
-          this.GetStaffList();
+          this.GetProgramInfoAll(this.WhereParameter.EnterPriseCode, false);
         }
       });
     },
@@ -1347,16 +1352,22 @@ export default {
       //清空已上传的文件列表
       this.$refs.upload.clearFiles();
       if (response.success) {
-        if (this.buttonShow)
-        this.$message.success(response.resultMessage);
-        else
-        this.$message.success(response.resultMessage);
+        // if (this.buttonShow)
+        //   this.$message.success(response.resultMessage);
+        // else
+        //   this.$message.success(response.resultMessage);
+        this.$message({
+          type: 'success',
+          showClose: true,
+          message: response.resultMessage,
+          duration: 6000
+        });
         this.ProgramNameImport = '';
         this.activeName = 'first';
         this.buttonShow = true;
         this.UploadFlag = false;
         this.ImportDialogVisible = false;
-        this.GetStaffList();
+        this.GetProgramInfoAll(this.WhereParameter.EnterPriseCode, false);
       }
       // 删除时里面有之前删除的数据，那么需要问询是否继续操作
       else if (!response.success && response.resultCode == "continue") {
@@ -1479,7 +1490,7 @@ export default {
           this.ChildEnterpriseList = res.result;
           if (this.ChildEnterpriseList.length > 0) {
             this.WhereParameter.EnterPriseCode = this.ChildEnterpriseList[0].EnterPriseCode;
-            this.GetProgramInfoAll(this.ChildEnterpriseList[0].EnterPriseCode)
+            this.GetProgramInfoAll(this.ChildEnterpriseList[0].EnterPriseCode, true)
           }
         } else {
           this.ChildEnterpriseList = [];
@@ -1487,13 +1498,17 @@ export default {
       });
     },
     //根据分公司获取改公司下所有方案
-    GetProgramInfoAll(EnterPriseCode) {
+    GetProgramInfoAll(EnterPriseCode, Flag) {
       GetProgramInfoAll(
         EnterPriseCode
       ).then((res) => {
-        //方案和部门清空选中数据默认为空
-        this.WhereParameter.ProgramCode = [];
-        this.WhereParameter.DepartmentCode = [];
+        // 初次加载需要清空一下数据
+        if (Flag) {
+          //方案和部门清空选中数据默认为空
+          this.WhereParameter.ProgramCode = [];
+          this.WhereParameter.DepartmentCode = [];
+        }
+
         if (res.success) {
           this.ProgramInfoAllList = res.result;
           //公司数据
@@ -1541,7 +1556,7 @@ export default {
       this.ReadOnly = true
     this.myHeaders['X-Token'] = this.$store.getters.token;
     this.rolesFlag = this.$store.getters.roles;
-    
+
     if (this.rolesFlag[0] == 5)
       this.UpdateWidth = 170;
     else
