@@ -248,8 +248,8 @@ $cursor: #737478;
   .login-form {
     border: 1px solid #79bbff;
     border-radius: 3px;
-    width: 420px;
-    height: 360px;
+    width: 470px;
+    height: 380px;
     position: relative;
     overflow: hidden;
     background-color: #ffffff;
@@ -326,7 +326,7 @@ $cursor: #737478;
     }
 
     .loginFormClass {
-      padding: 44px 50px 50px 50px;
+      padding: 55px 55px 50px 55px;
     }
   }
 
@@ -357,7 +357,7 @@ $cursor: #737478;
     .title {
       font-size: 20px;
       color: #999999;
-      margin: 0px auto 30px auto;
+      margin: 0px auto 34px auto;
       text-align: center;
       font-weight: bold;
     }
