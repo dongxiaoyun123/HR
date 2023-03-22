@@ -20,7 +20,7 @@
 
     <el-backtop target=".app-wrapper" :bottom="45">
       <el-tooltip placement="top" content="回到顶部">
-        <svg-icon style="color: #1890FF;" icon-class='BackToTop' />
+        <svg-icon style="color: #1890FF;font-size:medium;" icon-class='BackToTop' />
       </el-tooltip>
     </el-backtop>
   </div>

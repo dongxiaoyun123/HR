@@ -18,5 +18,6 @@ const getters = {
   /// 如果为空证明是合同方用户，不为空那么就是付款方用户
   ParentCode: state => state.user.ParentCode,
   MenuPermissions: state => state.user.MenuPermissions,
+  InsuranceTypeCode: state => state.user.InsuranceTypeCode,//生效方式
 }
 export default getters

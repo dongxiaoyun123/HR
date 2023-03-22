@@ -59,10 +59,11 @@ export function GetAddDepartmentList(EnterpriseCode) {
   })
 }
 
-export function GetRangeDate() {
+export function GetRangeDate(Flag) {
   return request({
     url: '/HrMain/GetRangeDate',
-    method: 'post'
+    method: 'post',
+    params: { Flag }
   })
 }
 

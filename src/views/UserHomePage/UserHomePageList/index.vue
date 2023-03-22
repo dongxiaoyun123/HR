@@ -74,13 +74,12 @@
               <el-button-group class="buttonGroupClass">
                 <el-button type="primary" @click="GetAdmin_PermissionSearch" icon="el-icon-search">查 询
                 </el-button>
-                <el-button type="success" @click="ShowAddStaffDialog(null)" icon="el-icon-circle-plus-outline">增
-                  加
+                <el-button type="success" @click="ShowAddStaffDialog(null)" icon="el-icon-circle-plus-outline">增 员
                 </el-button>
                 <el-button type="danger" icon="el-icon-delete" @click="UpdateDialog" :disabled="ReadOnly">
-                  删 除</el-button>
+                  减 员</el-button>
                 <el-button type="warning" icon="el-icon-upload2" @click="ImportStaffDialog">
-                  上 传
+                  批量增减
                 </el-button>
                 <el-dropdown v-loading.fullscreen.lock="ExportLoading" element-loading-text="拼命导出中"
                   element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"
@@ -89,17 +88,19 @@
                       handleButtonCommand(command);
                     }
                   ">
-                  <el-button type="info" v-show="rolesFlag && rolesFlag[0] != 1">
-                    更 多<i class="el-icon-arrow-down el-icon--right"></i>
+                  <el-button type="info">
+                    导 出<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :disabled="ReadOnly" command="a" icon="el-icon-download">导出当前查询数据(在保)
                       {{ "\xa0" }}
                     </el-dropdown-item>
-                    <el-dropdown-item :disabled="ReadOnly" command="b" icon="el-icon-download">导出该合同方下全部数据(在保) {{ "\xa0"
-                    }}
+                    <el-dropdown-item v-show="IfClearableEnterprise" :disabled="ReadOnly" command="b"
+                      icon="el-icon-download">导出该合同方下全部数据(在保) {{ "\xa0"
+                      }}
                     </el-dropdown-item>
-                    <el-dropdown-item :disabled="ReadOnly" command="c" icon="el-icon-download">导出该合同方下全部数据 {{ "\xa0" }}
+                    <el-dropdown-item v-show="rolesFlag && rolesFlag[0] != 1" :disabled="ReadOnly" command="c"
+                      icon="el-icon-download">导出该合同方下全部数据 {{ "\xa0" }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -107,6 +108,14 @@
               <el-switch active-color="#13ce66" inactive-color="#ff4949" style="margin-left:20px;"
                 v-model="WhereParameter.Invalid" active-text="在保" inactive-text="过期">
               </el-switch>
+            </el-col>
+            <el-col :span="6">
+              <div style="text-align: right;margin-top: 0.23rem;"
+                v-if="this.$store.getters.roles.indexOf(7) != -1 || this.$store.getters.roles.indexOf(1) != -1">
+                <el-tag v-if="InsuranceTypeCode == 1" type="danger">当前用户生效方式：次日生效</el-tag>
+                <el-tag v-else-if="InsuranceTypeCode == 2" type="danger">当前用户生效方式：月底生效</el-tag>
+                <el-tag v-else type="danger">当前用户生效方式：暂无配置</el-tag>
+              </div>
             </el-col>
             <!-- <el-col :span="6" style="text-align:right ;">
               <mallki class-name="mallki-text" :text="totalMoney" />
@@ -196,9 +205,9 @@
         </el-table-column>
         <el-table-column prop="PhoneNumber" label="手机号" min-width="100">
         </el-table-column>
-        <el-table-column prop="MedicalInsuranceAddress" label="医保地址" min-width="100" show-overflow-tooltip>
+        <el-table-column prop="MedicalInsuranceAddress" label="社保地区" min-width="100" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="MedicalInsuranceTypeName" label="医保类型" min-width="180">
+        <el-table-column prop="MedicalInsuranceTypeName" label="社保类型" min-width="180">
         </el-table-column>
         <el-table-column prop="StaffAddress" label="员工地区" min-width="100" show-overflow-tooltip>
         </el-table-column>
@@ -291,8 +300,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="医保类型" prop="MedicalInsuranceTypeCodeAdd">
-              <el-select v-model="addStaffForm.MedicalInsuranceTypeCodeAdd" filterable placeholder="医保类型" clearable="">
+            <el-form-item label="社保类型" prop="MedicalInsuranceTypeCodeAdd">
+              <el-select v-model="addStaffForm.MedicalInsuranceTypeCodeAdd" filterable placeholder="社保类型" clearable="">
                 <el-option v-for="item in MedicalInsuranceTypeArray" :key="item.ConfigValue" :label="item.ConfigName"
                   :value="item.ConfigValue">
                 </el-option>
@@ -300,9 +309,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="医保地址" prop="MedicalInsuranceAddress">
-              <el-input v-model="addStaffForm.MedicalInsuranceAddress" placeholder="医保地址"></el-input>
-              <!-- <el-cascader placeholder="医保地址" :options="regionOptions" v-model="addStaffForm.region" filterable
+            <el-form-item label="社保地区" prop="MedicalInsuranceAddress">
+              <el-input v-model="addStaffForm.MedicalInsuranceAddress" placeholder="社保地区"></el-input>
+              <!-- <el-cascader placeholder="社保地区" :options="regionOptions" v-model="addStaffForm.region" filterable
                 clearable></el-cascader> -->
             </el-form-item>
           </el-col>
@@ -407,7 +416,7 @@
         <el-row class="buttonCenter">
           <el-col>
             <el-button :disabled="ReadOnly" type="primary" :loading="LoadingAdd" @click="addStaff">保 存</el-button>
-            <el-button :disabled="ReadOnly" v-if="!IfUpdate" @click="detailAddDialogVisibleClosed">重 置</el-button>
+            <el-button :disabled="ReadOnly" v-if="!IfUpdate" @click="detailAddDialogVisibleReset">重 置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -568,6 +577,7 @@ export default {
       }
     };
     return {
+      InsuranceTypeCode: null,
       ReadOnly: false,//演示人员不能操作数据
       myHeaders: { 'X-Token': '' },
       rolesFlag: '',
@@ -773,7 +783,8 @@ export default {
       fileListRepeatDelete: [], //文件列表
       fileDeleteCatch: null,//批量删除并且继续提交用到此参数
       ExportLoading: false,
-      UpdateWidth: 80
+      UpdateWidth: 80,
+      IfClearableEnterprise: true,
     };
   },
   methods: {
@@ -794,6 +805,7 @@ export default {
         DeleteStaff(row.StaffCode, row.ProgramCode, this.WhereParameter.EnterPriseCode).then((res) => {
           if (res.success) {
             this.$message.success("操作成功");
+            this.GetProgramInfoAll(this.WhereParameter.EnterPriseCode, false)
           } else {
             this.$message.error("删除失败");
           }
@@ -1007,24 +1019,44 @@ export default {
     },
     //添加窗口关闭
     detailAddDialogVisibleClosed() {
-      //初始化data-addStaffForm 的数据
+      // //初始化data-addStaffForm 的数据
+      //使用重置数据不能再data中定义this，可以在初始化时定义
       this.$data.addStaffForm = this.$options.data().addStaffForm;
       this.$refs.addStaffRef.resetFields();
+      this.addStaffVisible = false;
     },
+    detailAddDialogVisibleReset() {
+      this.$data.addStaffForm = this.$options.data().addStaffForm;
+      this.addStaffForm.DocumentTypeCodeAdd = '1';
+      this.addStaffForm.EmployeeRelationshipCodeAdd = '1';
+      this.$refs.addStaffRef.resetFields();
+    },
+    //正序
+    sortKey(array, key) {
+      return array.sort(function (a, b) {
+        var x = a[key];
+        var y = b[key];
+        return ((x < y) ? -1 : (x > y) ? 1 : 0)
+      })
+    },
+
     //弹出添加窗口(修改需要传入参数)
     ShowAddStaffDialog(row) {
       //获取配置下拉数据
       GetDataConfigData().then((res) => {
         if (res.success) {
-          this.DocumentTypeArray = res.result.filter((item) => {
+          this.DocumentTypeArray = this.sortKey(res.result.filter((item) => {
             return item.DataTypes == "DocumentType";
-          });
-          this.MedicalInsuranceTypeArray = res.result.filter((item) => {
-            return item.DataTypes == "MedicalInsuranceType";
-          });
-          this.EmployeeRelationsArray = res.result.filter((item) => {
-            return item.DataTypes == "EmployeeRelations";
-          });
+          }), 'ConfigValue');
+          this.MedicalInsuranceTypeArray =
+            this.sortKey(res.result.filter((item) => {
+              return item.DataTypes == "MedicalInsuranceType";
+            }), 'ConfigValue');
+
+          this.EmployeeRelationsArray =
+            this.sortKey(res.result.filter((item) => {
+              return item.DataTypes == "EmployeeRelations";
+            }), 'ConfigValue');
         } else {
           this.DataConfigList = [];
         }
@@ -1052,22 +1084,26 @@ export default {
         }
       });
       //获取企业用户日期范围限制参数
-      GetRangeDate().then((res) => {
+      GetRangeDate(true).then((res) => {
         if (res.success) {
           this.RangeDateArray = res.result;
           this.pickerOptionsAdd.disabledDate = (time) => {
-            if (this.RangeDateArray.InsuranceTypeCode == 1) {
-              return (
-                time.getTime() < moment(this.RangeDateArray.MinDate).valueOf()
-                || time.getTime() > moment(this.RangeDateArray.EndDate).valueOf()
-              );
-            }
-            else {
-              return (
-                time.getTime() < moment(this.RangeDateArray.BeginDate).valueOf()
-                || time.getTime() > moment(this.RangeDateArray.EndDate).valueOf()
-              );
-            }
+            return (
+              time.getTime() < moment(this.RangeDateArray.BeginDate).valueOf()
+              || time.getTime() > moment(this.RangeDateArray.EndDate).valueOf()
+            );
+            // if (this.RangeDateArray.InsuranceTypeCode == 1) {
+            //   return (
+            //     time.getTime() < moment(this.RangeDateArray.MinDate).valueOf()
+            //     || time.getTime() > moment(this.RangeDateArray.EndDate).valueOf()
+            //   );
+            // }
+            // else {
+            //   return (
+            //     time.getTime() < moment(this.RangeDateArray.BeginDate).valueOf()
+            //     || time.getTime() > moment(this.RangeDateArray.EndDate).valueOf()
+            //   );
+            // }
           }
         } else {
           this.RangeDateArray = [];
@@ -1098,8 +1134,11 @@ export default {
         this.addStaffForm.StaffCode = row.StaffCode;
         this.addStaffForm.MainStaffCode = row.MainStaffCode;
       }
-      else
+      else {
+        this.addStaffForm.DocumentTypeCodeAdd = '1';
+        this.addStaffForm.EmployeeRelationshipCodeAdd = '1';
         this.IfUpdate = false;
+      }
       this.addStaffVisible = true;
     },
 
@@ -1127,7 +1166,7 @@ export default {
         return null;
     },
     toggleSelection(row, column, event) {
-      if (column.label != "操作")
+      if (column && column.label != "操作")
         this.$refs.multipleTable.toggleRowSelection(row);
     },
     TableSelect(selection) {
@@ -1221,7 +1260,7 @@ export default {
       }
       this.updateStaffFrom.EndDate = "";
       //获取企业用户日期范围限制参数
-      GetRangeDate().then((res) => {
+      GetRangeDate(false).then((res) => {
         if (res.success) {
           this.pickerOptionsUpdate.disabledDate = (time) => {
             return (
@@ -1557,6 +1596,8 @@ export default {
     this.myHeaders['X-Token'] = this.$store.getters.token;
     this.rolesFlag = this.$store.getters.roles;
 
+    this.IfClearableEnterprise = this.$store.getters.ParentCode ? false : true;
+
     if (this.rolesFlag[0] == 5)
       this.UpdateWidth = 170;
     else
@@ -1565,6 +1606,7 @@ export default {
     // if (this.UserBaseInfoLoginBackstage) {
     this.GetEnterpriseList();
     // }
+    this.InsuranceTypeCode = this.$store.getters.InsuranceTypeCode;
   },
   computed: {
     //计算属性不需要在上面数据中重新定义了，直接在组件中使用即可

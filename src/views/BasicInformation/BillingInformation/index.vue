@@ -1,7 +1,7 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px" >
+            <el-form label-width="100px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">
@@ -15,10 +15,9 @@
                             </el-form-item>
                         </el-col>
                         <el-button-group class="buttonGroupClass">
-                            <el-button  type="primary" @click="GetAdmin_PermissionSearch"
-                                icon="el-icon-search">查 询
+                            <el-button type="primary" @click="GetAdmin_PermissionSearch" icon="el-icon-search">查 询
                             </el-button>
-                            <el-button  type="success" @click="showContractorDialog(null)"
+                            <el-button type="success" @click="showContractorDialog(null)"
                                 icon="el-icon-circle-plus-outline">增
                                 加
                             </el-button>
@@ -28,9 +27,8 @@
             </el-form>
         </el-card>
         <el-card class="CardTableClass">
-            <el-table v-loading="loading" highlight-current-row :data="BillingList" fit >
-                <el-table-column prop="EnterpriseName" label="付款方" min-width="180"
-                    show-overflow-tooltip></el-table-column>
+            <el-table v-loading="loading" highlight-current-row :data="BillingList" fit>
+                <el-table-column prop="EnterpriseName" label="付款方" min-width="180" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="OrderCode" label="账单编号" min-width="150" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="OrderBeginTime" label="开始时间" min-width="120" show-overflow-tooltip>
                     <template slot-scope="scope">
@@ -51,9 +49,8 @@
             </el-table>
             <!-- 分页区域 -->
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
-                :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper"
-                :total="total"></el-pagination>
+                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]" :page-size="WhereParameter.PageSize"
+                layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
         </el-card>
         <!-- 添加账单信息 -->
         <el-dialog :visible.sync="addBillingVisible" top="5vh" width="45%" @close="detailAddDialogVisibleClosed"
@@ -62,16 +59,15 @@
             <div slot="title" class="dialog-title">
                 <span>添加账单信息</span>
             </div>
-            <el-form  :model="AddBillingForm" ref="addBillingRef" :rules="addBillingRules"
-                label-width="120px">
+            <el-form :model="AddBillingForm" ref="addBillingRef" :rules="addBillingRules" label-width="120px">
                 <el-alert style="margin-bottom:20px ;" type="warning" show-icon title="只有续签的客户才能添加账单信息，慎重！慎重！慎重！"
                     :closable="false">
                 </el-alert>
                 <el-form-item label="合同方" prop="ParentCode">
                     <el-select v-model="AddBillingForm.ParentCode" filterable placeholder="合同方"
                         @change="GetChildEnterprise">
-                        <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                            :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
+                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -83,16 +79,15 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="账单日期" prop="OrderRangeDate">
-                    <el-date-picker  @input="datetimeChange" v-model="AddBillingForm.OrderRangeDate" type="daterange"
-                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        :picker-options="pickerOptions">
+                    <el-date-picker @input="datetimeChange" v-model="AddBillingForm.OrderRangeDate" type="daterange"
+                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
                     </el-date-picker>
                 </el-form-item>
 
                 <el-divider></el-divider>
                 <el-row class="buttonCenter">
                     <el-col>
-                        <el-button  type="primary" :loading="LoadingAdd" @click="addBilling">保
+                        <el-button type="primary" :loading="LoadingAdd" @click="addBilling">保
                             存</el-button>
                     </el-col>
                 </el-row>
@@ -109,12 +104,14 @@ import {
     AddOrder,
     GetEnterpriseList,
     GetChildEnterprise,
+    GetContractorList,
 } from "@/api/hrmain";
 export default {
     components: {
     },
     data() {
         return {
+            ParentContractorList: [],
             ChildEnterpriseList: [],
             EnterpriseList: [],
             addBillingVisible: false,
@@ -337,6 +334,24 @@ export default {
                 }
             });
         },
+        //获取员工方案列表数据
+        ParentGetContractorList() {
+            var parameter = {
+                ContractorParameter: "",
+                EnterpriseType: 1,
+                PageIndex: 1,
+                PageSize: 10000,
+            }
+            GetContractorList(
+                parameter
+            ).then((res) => {
+                if (res.success) {
+                    this.ParentContractorList = res.result.data;
+                } else {
+                    this.ParentContractorList = [];
+                }
+            });
+        },
     },
     created() {
     },
@@ -344,6 +359,7 @@ export default {
     mounted() {
         this.GetEnterpriseList();
         this.GetAdmin_PermissionSearch();
+        this.ParentGetContractorList();
     },
     computed: {
     }

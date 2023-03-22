@@ -251,7 +251,7 @@ export default {
         GetBank() {
             this.$getBankcardinfo.getBankBin(this.EnterpriseManage.CollectionAccount, (err, data) => {
                 if (!err) {
-                    
+
                     this.EnterpriseManage.BankName = data.bankName;
                 }
                 else
@@ -333,13 +333,22 @@ export default {
         handleChange(value) {
             this.AddEnterpriseFrom.EnterpriseCityArray = value;
         },
+        //正序
+        sortKey(array, key) {
+            return array.sort(function (a, b) {
+                var x = a[key];
+                var y = b[key];
+                return ((x < y) ? -1 : (x > y) ? 1 : 0)
+            })
+        },
         GetDataConfigData() {
             //获取配置下拉数据
             GetDataConfigData().then((res) => {
                 if (res.success) {
-                    this.AccountOpenTypeArray = res.result.filter((item) => {
-                        return item.DataTypes == "AccountOpenType";
-                    });
+                    this.AccountOpenTypeArray =
+                        this.sortKey(res.result.filter((item) => {
+                            return item.DataTypes == "AccountOpenType";
+                        }), 'ConfigValue');
                     // this.EnterpriseManage.AccountOpenType = this.AccountOpenTypeArray[0].ConfigValue;
                 } else {
                     this.AccountOpenTypeArray = [];

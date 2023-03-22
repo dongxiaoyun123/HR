@@ -54,8 +54,8 @@
                 <el-form-item label="合同方" prop="ParentCode">
                     <el-select v-model="AddSynchronizationForm.ParentCode" filterable placeholder="合同方"
                         @change="GetChildEnterprise">
-                        <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                            :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
+                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -87,13 +87,15 @@ import {
     GetChildEnterprise,
     GetSynchronizationList,
     AddSynchronization,
-    DeleteSynchronization
+    DeleteSynchronization,
+    GetContractorList
 } from "@/api/hrmain";
 export default {
     components: {
     },
     data() {
         return {
+            ParentContractorList: [],
             ChildEnterpriseList: [],
             EnterpriseList: [],
             addSynchronizationVisible: false,
@@ -240,6 +242,24 @@ export default {
                 }
             });
         },
+        //获取员工方案列表数据
+        ParentGetContractorList() {
+            var parameter = {
+                ContractorParameter: "",
+                EnterpriseType: 1,
+                PageIndex: 1,
+                PageSize: 10000,
+            }
+            GetContractorList(
+                parameter
+            ).then((res) => {
+                if (res.success) {
+                    this.ParentContractorList = res.result.data;
+                } else {
+                    this.ParentContractorList = [];
+                }
+            });
+        },
     },
     created() {
     },
@@ -247,6 +267,7 @@ export default {
     mounted() {
         this.GetEnterpriseList();
         this.GetAdmin_PermissionSearch();
+        this.ParentGetContractorList();
     },
     computed: {
     }

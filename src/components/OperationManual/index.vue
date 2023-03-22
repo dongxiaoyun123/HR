@@ -1,8 +1,10 @@
 <template>
   <div>
     <svg-icon style="font-size:16px ;" icon-class="pdf" @click="openpdf" />
-    <el-dialog append-to-body :visible="isshowpdf" width="80%"  top="5vh" @close="isshowpdf = false">
-      <iframe style="width: 100%; height: calc(100vh - 200px);" :src="src"></iframe>
+    <el-dialog append-to-body :visible="isshowpdf" width="80%" top="5vh" @close="isshowpdf = false">
+      <iframe v-if="rolesFlag && rolesFlag[0] == 1" style="width: 100%; height: calc(100vh - 200px);"
+        :src="srcEnterprise"></iframe>
+      <iframe v-else style="width: 100%; height: calc(100vh - 200px);" :src="src"></iframe>
     </el-dialog>
   </div>
 </template>
@@ -10,8 +12,10 @@
 export default {
   data() {
     return {
-      src: '/static/HR保险管理系统操作手册2023v1.0.pdf',
-      isshowpdf: false
+      src: '/static/HR保险管理系统操作手册2023v2.0.pdf',
+      srcEnterprise: '/static/企业HR保险管理系统操作手册2023v2.0.pdf',
+      isshowpdf: false,
+      rolesFlag: this.$store.getters.roles,
     }
   },
   methods: {
@@ -21,6 +25,5 @@ export default {
   }
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>
 

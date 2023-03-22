@@ -1,7 +1,7 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px" >
+            <el-form label-width="100px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">
@@ -14,11 +14,9 @@
                             </el-form-item>
                         </el-col>
                         <el-button-group class="buttonGroupClass">
-                            <el-button  type="primary" @click="GetAdmin_PermissionSearch"
-                                icon="el-icon-search">查 询
+                            <el-button type="primary" @click="GetAdmin_PermissionSearch" icon="el-icon-search">查 询
                             </el-button>
-                            <el-button  type="success" @click="showContractorDialog()"
-                                icon="el-icon-circle-plus-outline">增
+                            <el-button type="success" @click="showContractorDialog()" icon="el-icon-circle-plus-outline">增
                                 加
                             </el-button>
                         </el-button-group>
@@ -27,7 +25,7 @@
             </el-form>
         </el-card>
         <el-card class="CardTableClass">
-            <el-table v-loading="loading" highlight-current-row :data="BackstageRegionList" fit >
+            <el-table v-loading="loading" highlight-current-row :data="BackstageRegionList" fit>
                 <el-table-column prop="User_Account" label="登录名" width="150" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="User_RealName" label="真实姓名" width="150" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="EnterPriseName" label="公司名称" width="250" show-overflow-tooltip></el-table-column>
@@ -41,9 +39,8 @@
             </el-table>
             <!-- 分页区域 -->
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
-                :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper"
-                :total="total"></el-pagination>
+                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]" :page-size="WhereParameter.PageSize"
+                layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
         </el-card>
         <!-- 添加同步信息 -->
         <el-dialog :visible.sync="addBackstageRegionVisible" top="5vh" width="45%" @close="detailAddDialogVisibleClosed"
@@ -52,8 +49,8 @@
             <div slot="title" class="dialog-title">
                 <span>添加同步信息</span>
             </div>
-            <el-form  :model="AddBackstageRegionForm" ref="addBackstageRegionRef"
-                :rules="addBackstageRegionRules" label-width="120px">
+            <el-form :model="AddBackstageRegionForm" ref="addBackstageRegionRef" :rules="addBackstageRegionRules"
+                label-width="120px">
                 <el-form-item label="客服人员" prop="User_ID">
                     <el-select v-model="AddBackstageRegionForm.User_ID" filterable placeholder="客服人员">
                         <el-option v-for="item in BackstageUserList" :key="item.User_ID" :label="item.User_RealName"
@@ -62,17 +59,16 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="合同方" prop="ParentCode">
-                    <el-select v-model="AddBackstageRegionForm.ParentCode" filterable
-                        placeholder="合同方" multiple>
-                        <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                            :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
+                    <el-select v-model="AddBackstageRegionForm.ParentCode" filterable placeholder="合同方" multiple>
+                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-divider></el-divider>
                 <el-row class="buttonCenter">
                     <el-col>
-                        <el-button  type="primary" :loading="LoadingAdd" @click="AddBackstageRegion">保
+                        <el-button type="primary" :loading="LoadingAdd" @click="AddBackstageRegion">保
                             存</el-button>
                     </el-col>
                 </el-row>
@@ -90,13 +86,14 @@ import {
     AddBackstageRegion,
     DeleteBackstageRegion,
     GetBackstageUserList,
-
+    GetContractorList,
 } from "@/api/hrmain";
 export default {
     components: {
     },
     data() {
         return {
+            ParentContractorList:[],
             BackstageUserList: [],
             ChildEnterpriseList: [],
             EnterpriseList: [],
@@ -248,6 +245,24 @@ export default {
                 }
             });
         },
+        //获取员工方案列表数据
+        ParentGetContractorList() {
+            var parameter = {
+                ContractorParameter: "",
+                EnterpriseType: 1,
+                PageIndex: 1,
+                PageSize: 10000,
+            }
+            GetContractorList(
+                parameter
+            ).then((res) => {
+                if (res.success) {
+                    this.ParentContractorList = res.result.data;
+                } else {
+                    this.ParentContractorList = [];
+                }
+            });
+        },
     },
     created() {
     },
@@ -256,6 +271,7 @@ export default {
         this.GetEnterpriseList();
         this.GetAdmin_PermissionSearch();
         this.GetBackstageUserList();
+        this.ParentGetContractorList();
     },
     computed: {
     }

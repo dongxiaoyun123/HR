@@ -35,6 +35,13 @@
                 </el-table-column>
                 <el-table-column prop="EnterPriseName" label="公司名称" min-width="150" show-overflow-tooltip>
                 </el-table-column>
+                <el-table-column prop="InsuranceTypeCode" label="生效方式" min-width="100" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.InsuranceTypeCode == 1" type="success">次日生效</el-tag>
+                        <el-tag v-else-if="scope.row.InsuranceTypeCode == 2" >月底生效</el-tag>
+                        <el-tag v-else type="info">暂无配置</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" fixed="right" width="160">
                     <template slot-scope="scope">
                         <el-button icon="el-icon-edit" type="text" size="mini" @click="
@@ -73,8 +80,8 @@
                 <el-form-item label="合同方" prop="ParentCode">
                     <el-select v-model="AddUserForm.ParentCode" filterable placeholder="合同方"
                         @change="GetChildEnterpriseChange" :disabled="IfUpdate">
-                        <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                            :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
+                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -130,6 +137,7 @@ import {
     AddPayer,
     UpdateUserInfo,
     DeleteUserInfo,
+    GetContractorList,
 } from "@/api/hrmain";
 export default {
     components: {
@@ -147,6 +155,7 @@ export default {
                 callback();
         };
         return {
+            ParentContractorList: [],
             ShowEntFlag: true,
             ChildEnterpriseList: [],
             IfUpdate: false,
@@ -423,6 +432,24 @@ export default {
                 }
             });
         },
+        //获取员工方案列表数据
+        ParentGetContractorList() {
+            var parameter = {
+                ContractorParameter: "",
+                EnterpriseType: 1,
+                PageIndex: 1,
+                PageSize: 10000,
+            }
+            GetContractorList(
+                parameter
+            ).then((res) => {
+                if (res.success) {
+                    this.ParentContractorList = res.result.data;
+                } else {
+                    this.ParentContractorList = [];
+                }
+            });
+        },
     },
     created() {
     },
@@ -430,6 +457,7 @@ export default {
     mounted() {
         this.GetEnterpriseList();
         this.GetAdmin_PermissionSearch();
+        this.ParentGetContractorList();
     },
     computed: {
     }

@@ -44,7 +44,7 @@
             <span class="svg-container">
               <i class="el-icon-key"></i>
             </span>
-            <el-input ref="inputVal" style="width:202px ;" v-model="loginForm.inputVal" placeholder="验证码" tabindex="1"
+            <el-input ref="inputVal" style="width:202px ;" v-model="loginForm.inputVal" placeholder="验证码" tabindex="3"
               autocomplete="on"  />
             <validate-code class="validateClass" ref="ref_validateCode" @change="changeCode" />
           </el-form-item>

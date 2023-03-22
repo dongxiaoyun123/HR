@@ -46,7 +46,7 @@
       </el-col>
       <el-col :span="6">
         <div class="grid-content">
-          <el-statistic title="支付超时">
+          <el-statistic title="超时">
             <template slot="prefix">
               <div v-if="!AllFlag">
                 <svg-icon icon-class="OrderPaymentTimeout" style="color: #FFBA00;font-size: 18px;" />
@@ -60,28 +60,28 @@
     </el-row>
     <el-skeleton style="width: 100%;margin-top:20px ;" :loading="loading" :rows="9" animated>
       <el-table :data="DetailData" size="small" height="325px" border>
-        <el-table-column prop="EnterPriseName" show-overflow-tooltip label="公司名称" min-width="180"></el-table-column>
-        <el-table-column prop="OrderCharging" show-overflow-tooltip label="计费中" sortable min-width="90">
+        <el-table-column prop="EnterPriseName" show-overflow-tooltip label="公司名称" min-width="190"></el-table-column>
+        <el-table-column prop="OrderTotal" show-overflow-tooltip label="总金额" sortable min-width="85">
+          <template slot-scope="scope">
+            <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{ scope.row.OrderTotal }}</span>
+            <span v-else>暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="OrderCharging" show-overflow-tooltip label="计费中" sortable min-width="85">
           <template slot-scope="scope">
             <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{ scope.row.OrderCharging }}</span>
             <span v-else>暂无</span>
           </template>
         </el-table-column>
-        <el-table-column prop="OrderPaid" show-overflow-tooltip label="已支付" sortable min-width="90">
+        <el-table-column prop="OrderPaid" show-overflow-tooltip label="已支付" sortable min-width="85">
           <template slot-scope="scope"> <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{ scope.row.OrderPaid
           }}</span>
             <span v-else>暂无</span>
           </template>
         </el-table-column>
-        <el-table-column prop="OrderPaymentTimeout" show-overflow-tooltip label="超时" sortable min-width="90">
+        <el-table-column prop="OrderPaymentTimeout" show-overflow-tooltip label="超时" sortable min-width="85">
           <template slot-scope="scope"> <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{
             scope.row.OrderPaymentTimeout }}</span>
-            <span v-else>暂无</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="OrderTotal" show-overflow-tooltip label="总金额" sortable min-width="90">
-          <template slot-scope="scope">
-            <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{ scope.row.OrderTotal }}</span>
             <span v-else>暂无</span>
           </template>
         </el-table-column>

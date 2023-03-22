@@ -102,8 +102,8 @@
                 <el-form-item label="合同方" prop="ParentCode">
                     <el-select v-model="AddContractorForm.ParentCode" filterable placeholder="合同方"
                         @change="ParentCodeChange" :disabled="IfUpdate">
-                        <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                            :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
+                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -170,6 +170,7 @@ export default {
     },
     data() {
         return {
+            ParentContractorList:[],
             IfUpdate: false,
             EnterpriseList: [],
             ChannelInformationList: [],
@@ -351,7 +352,7 @@ export default {
         },
         //确认行内编辑
         confirmEdit(row) {
-            
+
             if (!row.OrderBy) {
                 this.$message({
                     message: '请输入排序值',
@@ -451,7 +452,7 @@ export default {
                 this.AddContractorForm.Simples = row.Simples == '1' ? '1' : '0';
                 this.AddContractorForm.ChName = row.ChID;
                 this.AddContractorForm.ParentCode = row.ParentCode;
-                
+
                 this.AddContractorForm.OrderBy = row.OrderBy;
             }
             else
@@ -539,9 +540,28 @@ export default {
                 }
             });
         },
+        //获取员工方案列表数据
+        ParentGetContractorList() {
+            var parameter = {
+                ContractorParameter: "",
+                EnterpriseType: 1,
+                PageIndex: 1,
+                PageSize: 10000,
+            }
+            GetContractorList(
+                parameter
+            ).then((res) => {
+                if (res.success) {
+                    this.ParentContractorList = res.result.data;
+                } else {
+                    this.ParentContractorList = [];
+                }
+            });
+        },
     },
     created() {
         this.GetChannelInformation();
+        this.ParentGetContractorList();
     },
     //加载完成后执行调取回款数据接口
     mounted() {

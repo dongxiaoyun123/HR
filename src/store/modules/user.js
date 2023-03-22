@@ -11,8 +11,9 @@ const state = {
   introduction: '',
   roles: [],
   realname: '',
-  ParentCode:'',
-  MenuPermissions:null,
+  ParentCode: '',
+  MenuPermissions: null,
+  InsuranceTypeCode: null,
 }
 
 const mutations = {
@@ -38,11 +39,14 @@ const mutations = {
   //   state.UserBaseInfoLoginBackstage = UserBaseInfoLoginBackstage
   // },
   SET_ParentCode: (state, ParentCode) => {
-    
+
     state.ParentCode = ParentCode
   },
   SET_MenuPermissions: (state, MenuPermissions) => {
     state.MenuPermissions = MenuPermissions
+  },
+  SET_InsuranceTypeCode: (state, InsuranceTypeCode) => {
+    state.InsuranceTypeCode = InsuranceTypeCode
   },
 }
 
@@ -90,14 +94,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         if (response.result) {
-          const { roleArray, UserInfo, ParentCode, MenuPermissions } = response.result
+          const { roleArray, UserInfo, ParentCode, MenuPermissions,InsuranceTypeCode } = response.result
           // const { roles } = result
           // const { roles, name, avatar, introduction } = result
           // roles must be a non-empty array
           // if (!roles || roles.length <= 0) {
           //   reject('getInfo: roles must be a non-null array!')
           // }
-          
           commit('SET_ParentCode', ParentCode)
           // //这个参数是userId不过现在还没用到，等用到再说
           // commit('SET_UserBaseInfoLoginBackstage', UserBaseInfoLoginBackstage)
@@ -110,6 +113,8 @@ const actions = {
           //重新存储一下token，防止刷新页面token丢失
           commit('SET_TOKEN', state.token)
           commit('SET_MenuPermissions', MenuPermissions)
+          commit('SET_InsuranceTypeCode', InsuranceTypeCode)
+
           if (roleArray.length != 0)
             resolve(roleArray)
         }
