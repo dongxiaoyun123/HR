@@ -1,44 +1,45 @@
 <template>
   <div>
-    <el-badge :is-dot="true" style="line-height: 25px;margin-top: -5px;" @click.native="dialogTableVisible=true">
-      <el-button style="padding: 8px 10px;"  type="danger">
-        <svg-icon icon-class="bug" />
-      </el-button>
-    </el-badge>
+    <!-- <el-badge :is-dot="true" style="line-height: 25px;margin-top: -5px;" @click.native="dialogTableVisible=true"> -->
+      <!-- <el-button style="padding: 8px 10px;"  type="danger"> -->
+        <svg-icon icon-class="question"  @click.native="dialogTableVisible=true"/>
+      <!-- </el-button> -->
+    <!-- </el-badge> -->
 
-    <el-dialog :visible.sync="dialogTableVisible" width="80%" append-to-body>
-      <div slot="title">
+    <el-dialog :visible.sync="dialogTableVisible" top="5vh" width="80%" append-to-body>
+      <!-- <div slot="title">
         <span style="padding-right: 10px;">Error Log</span>
         <el-button size="mini" type="primary" icon="el-icon-delete" @click="clearAll">Clear All</el-button>
-      </div>
-      <el-table :data="errorLogs" border>
-        <el-table-column label="Message">
+      </div> -->
+      <el-table :data="MessageLogList" border height="calc(100vh - 180px)">
+        <el-table-column label="疑难问题">
           <template slot-scope="{row}">
-            <div>
-              <span class="message-title">Msg:</span>
+            <div class="divClass">
+              <span class="message-title">菜单名称：</span>
+              <el-tag type="primary">
+                {{ row.MenuName }}
+              </el-tag>
+            </div>
+            <div class="divClass">
+              <span class="message-title">问题描述：</span>
               <el-tag type="danger">
-                {{ row.err.message }}
+                {{ row.ProblemDescription }}
               </el-tag>
             </div>
-            <br>
-            <div>
-              <span class="message-title" style="padding-right: 10px;">Info: </span>
-              <el-tag type="warning">
-                {{ row.vm.$vnode.tag }} error in {{ row.info }}
+            <div class="divClass">
+              <span class="message-title">结果反馈：</span>
+              <el-tag v-if="row.ResultFeedback=='已解决'" type="success">
+                {{ row.ResultFeedback }}
               </el-tag>
-            </div>
-            <br>
-            <div>
-              <span class="message-title" style="padding-right: 16px;">Url: </span>
-              <el-tag type="success">
-                {{ row.url }}
+              <el-tag v-else type="warning">
+                {{ row.ResultFeedback }}
               </el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="Stack">
+        <el-table-column label="解决方案">
           <template slot-scope="scope">
-            {{ scope.row.err.stack }}
+            {{ scope.row.Solution }}
           </template>
         </el-table-column>
       </el-table>
@@ -47,11 +48,16 @@
 </template>
 
 <script>
+
+import {
+  GetMessageLog
+} from "@/api/hrmain";
 export default {
   name: 'ErrorLog',
   data() {
     return {
-      dialogTableVisible: false
+      dialogTableVisible: false,
+      MessageLogList:[],
     }
   },
   computed: {
@@ -63,16 +69,33 @@ export default {
     clearAll() {
       this.dialogTableVisible = false
       this.$store.dispatch('errorLog/clearErrorLog')
-    }
-  }
+    },
+        //获取数据
+        GetMessageLog() {
+          GetMessageLog().then((res) => {
+                if (res.success) {
+                    this.MessageLogList = res.result;
+                } else {
+                    this.MessageLogList = [];
+                }
+            });
+        },
+  },
+      mounted() {
+        this.GetMessageLog();
+
+    },
 }
 </script>
 
 <style scoped>
 .message-title {
-  font-size: 16px;
+  font-size: 13px;
   color: #333;
   font-weight: bold;
   padding-right: 8px;
+}
+.divClass{
+  margin: 10px 0;
 }
 </style>

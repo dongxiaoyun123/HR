@@ -529,3 +529,10 @@ export function GetChildUserConId(Conid) {
     params: { Conid }
   })
 }
+
+export function GetMessageLog() {
+  return request({
+    url: '/HrMain/GetMessageLog',
+    method: 'post',
+  })
+}

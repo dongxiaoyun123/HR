@@ -12,7 +12,9 @@
           <search id="header-search" class="right-menu-item" />
         </el-tooltip>
 
-        <message-log class="errLog-container right-menu-item hover-effect" />
+        <el-tooltip content="疑难问题" effect="dark" placement="bottom">
+          <message-log class="errLog-container right-menu-item hover-effect" />
+        </el-tooltip>
 
         <el-tooltip content="全屏" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
