@@ -69,11 +69,11 @@ service.interceptors.response.use(
     //} 
     if (res.resultMessage == "登陆超时" || res.resultMessage == "过期token") {
       store.dispatch('user/resetToken');
-      Message({
-        message: "请求超时，请刷新页面重新登陆",
-        type: 'error',
-        duration: 5 * 1000
-      })
+      // Message({
+      //   message: "请求超时，请刷新页面重新登陆",
+      //   type: 'error',
+      //   duration: 5 * 1000
+      // })
     }
     return res
     //这里的所有抛出异常先关闭在各个页面抛出异常（因为要更新实体，所以在此注释）

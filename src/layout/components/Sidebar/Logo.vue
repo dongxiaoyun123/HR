@@ -48,6 +48,10 @@ export default {
       case "#/loginkangkang":
         this.logo = kangkang;
         break;
+        case "#/loginNotLogo":
+        this.logo = '';
+        break;
+        
     }
   },
 }

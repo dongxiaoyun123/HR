@@ -7,7 +7,7 @@
 
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
-  
+
         <el-tooltip content="菜单搜索" effect="dark" placement="bottom">
           <search id="header-search" class="right-menu-item" />
         </el-tooltip>
@@ -34,7 +34,7 @@
         }
       ">
 
-        <el-form  :inline="true" style="color: white;height: 50px;cursor: pointer;">
+        <el-form :inline="true" style="color: white;height: 50px;cursor: pointer;">
           <el-form-item>
             <div class="avatar-wrapper">
               <el-avatar size="medium" shape="circle" :src="userlogo">
@@ -77,8 +77,7 @@
       <el-dialog append-to-body title="修改密码" :visible.sync="updatePasswordVisible" top="15vh" width="30%"
         @close="dialogClosed">
         <!-- 内容主体 -->
-        <el-form  :model="updatePassword" ref="updatePasswordRef" :rules="updatePasswordRules"
-          label-width="100px">
+        <el-form :model="updatePassword" ref="updatePasswordRef" :rules="updatePasswordRules" label-width="100px">
           <el-form-item label="新密码" prop="User_Pwd">
             <el-input v-model="updatePassword.User_Pwd" show-password></el-input>
           </el-form-item>
@@ -89,10 +88,10 @@
         <el-divider></el-divider>
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="UpdatePasswordLoading" @click="UpdatePasswordCommit" >
+            <el-button type="primary" :loading="UpdatePasswordLoading" @click="UpdatePasswordCommit">
               确 定
             </el-button>
-            <el-button @click="updatePasswordVisible = false" >取 消</el-button>
+            <el-button @click="updatePasswordVisible = false">取 消</el-button>
           </el-col>
         </el-row>
       </el-dialog>
@@ -197,17 +196,23 @@ export default {
       var LogoCatch = window.localStorage.getItem('LogoCatch');
       switch (LogoCatch) {
         case "#/login":
-        this.$router.push(`/login`);
-        break;
+          this.$router.push(`/login`);
+          break;
         case "#/loginxinyazhong":
-        this.$router.push(`/loginxinyazhong`);
-        break;
+          this.$router.push(`/loginxinyazhong`);
+          break;
         case "#/loginzhiweijia":
-        this.$router.push(`/loginzhiweijia`);
-        break;
+          this.$router.push(`/loginzhiweijia`);
+          break;
         case "#/loginkangkang":
-        this.$router.push(`/loginkangkang`);
-        break;
+          this.$router.push(`/loginkangkang`);
+          break;
+        case "#/loginNotLogo":
+          this.$router.push(`/loginNotLogo`);
+          break;
+        default:
+          this.$router.push(`/login`);
+          break;
       }
       //清除logo缓存
       window.localStorage.removeItem("LogoCatch");

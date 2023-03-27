@@ -70,6 +70,12 @@ export const constantRoutes = [
     component: () => import('@/views/loginkangkang/index'),
     hidden: true
   },
+  {
+    path: '/loginNotLogo',
+    component: () => import('@/views/loginNotLogo/index'),
+    hidden: true
+  },
+  
   // {
   //   path: '/auth-redirect',
   //   component: () => import('@/views/login/auth-redirect'),

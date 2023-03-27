@@ -8,7 +8,7 @@ import getPageTitle from '@/utils/get-page-title'
 import Watermark from '@/utils/watermark';  //水印
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/auth-redirect', '/login', '/loginxinyazhong', '/loginzhiweijia', '/loginkangkang'] // no redirect whitelist
+const whiteList = ['/auth-redirect', '/login', '/loginxinyazhong', '/loginzhiweijia', '/loginkangkang', '/loginNotLogo'] // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
   // start progress bar
@@ -18,13 +18,13 @@ router.beforeEach(async (to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken();
-  
+
   if (hasToken) {
     if (to.path === '/' || whiteList.indexOf(to.path) !== -1) {
       next({ path: '/' })
       NProgress.done()
     }
-    // else if (to.path === '/login' || to.path === '/loginxinyazhong' || to.path === '/loginzhiweijia' || to.path === '/loginkangkang') {
+    // else if (to.path === '/login' || to.path === '/loginxinyazhong' || to.path === '/loginzhiweijia' || to.path === '/loginkangkang' || to.path === '/loginNotLogo') {
     //   // if is logged in, redirect to the home page
     //   //自己添加的验证，根据不同的菜单跳转到默认的路由（配置菜单不同）
     //   if (store.getters.MenuPermissions && store.getters.MenuPermissions.indexOf(2) != -1)
@@ -40,7 +40,7 @@ router.beforeEach(async (to, from, next) => {
         next()
       } else {
         try {
-          
+
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           //获取角色和公司编号（如果是公司角色那么需要公司编号来进行动态获取绑定的路由）
@@ -75,6 +75,9 @@ router.beforeEach(async (to, from, next) => {
             case "#/loginkangkang":
               next(`/loginkangkang`);
               break;
+            case "#/loginNotLogo":
+              next(`/loginNotLogo`);
+              break;
             default:
               next(`/login`)
           }
@@ -83,7 +86,6 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    
     /* has no token*/
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
@@ -104,6 +106,9 @@ router.beforeEach(async (to, from, next) => {
           break;
         case "#/loginkangkang":
           next(`/loginkangkang`);
+          break;
+        case "#/loginNotLogo":
+          next(`/loginNotLogo`);
           break;
         default:
           next(`/login`)
