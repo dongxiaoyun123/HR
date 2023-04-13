@@ -187,7 +187,7 @@
                                 </el-table-column>
                             </el-table>
                             <!-- 分页区域 -->
-                            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                                 :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
                                 :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper"
                                 :total="total"></el-pagination>
@@ -303,7 +303,7 @@
                                     </el-table-column>
                                 </el-table>
                                 <!-- 分页区域 -->
-                                <el-pagination @size-change="AddhandleSizeChange" @current-change="AddhandleCurrentChange"
+                                <el-pagination background @size-change="AddhandleSizeChange" @current-change="AddhandleCurrentChange"
                                     :current-page="WhereParameter.AddPageIndex" :page-sizes="[20, 50, 100]"
                                     :page-size="WhereParameter.AddPageSize" layout="total, sizes, prev, pager, next, jumper"
                                     :total="Addtotal"></el-pagination>
@@ -347,7 +347,7 @@
                                     </el-table-column>
                                 </el-table>
                                 <!-- 分页区域 -->
-                                <el-pagination @size-change="DeletehandleSizeChange"
+                                <el-pagination background @size-change="DeletehandleSizeChange"
                                     @current-change="DeletehandleCurrentChange"
                                     :current-page="WhereParameter.DeletePageIndex" :page-sizes="[20, 50, 100]"
                                     :page-size="WhereParameter.DeletePageSize"
