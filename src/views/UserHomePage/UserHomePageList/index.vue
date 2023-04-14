@@ -503,6 +503,10 @@
         </el-row>
       </el-form>
     </el-dialog>
+    <div v-if="isShowProgress" class="popContainer">
+      <el-progress :percentage="parseInt(fakes.progress * 100)" :text-inside="true" :stroke-width="24"
+        :color="customColors" style="top: 30%; left: 28%; width: 44%"></el-progress>
+    </div>
   </div>
 </template>
 
@@ -531,6 +535,7 @@ import {
 } from "@/api/hrmain";
 // import Mallki from '../UserHomePageList/components/TextHoverEffect/'
 import axios from "axios";
+// import FakeProgress from 'fake-progress';
 export default {
   components: {
     // Mallki
@@ -577,6 +582,19 @@ export default {
       }
     };
     return {
+
+      isShowProgress: false,
+      fakes: new FakeProgress({
+        timeConstant: 10000,
+        autoStart: false
+      }),
+      customColors: [
+        { color: '#ff4949', percentage: 20 },
+        { color: '#ffba00', percentage: 40 },
+        { color: '#5cb87a', percentage: 60 },
+        { color: '#1989fa', percentage: 80 },
+        { color: '#6f7ad3', percentage: 100 }
+      ],
       InsuranceTypeCode: null,
       ReadOnly: false,//演示人员不能操作数据
       myHeaders: { 'X-Token': '' },
@@ -815,6 +833,8 @@ export default {
     },
     //执行上方按钮更多操作
     handleButtonCommand(flag) {
+      this.isShowProgress = true;
+      this.fakes.start();
       switch (flag) {
         case "a":
           this.ExportStaff();
@@ -855,6 +875,15 @@ export default {
         PageSize: 100000,
       }
       ExportStaffList(parameter).then((res) => {
+        this.fakes.end();
+        //初始化进度条
+        setTimeout(() => {
+          this.fakes = new FakeProgress({
+            timeConstant: 10000,
+            autoStart: false
+          });
+          this.isShowProgress = false;
+        }, 800)
         if (res.success) {
           window.location.href = res.result;
         } else {
@@ -867,6 +896,15 @@ export default {
     ExportStaffAll(ifNoInsurance) {
       this.ExportLoading = true;
       ExportStaffListAll(this.WhereParameter.ParentEnterPriseCode, ifNoInsurance).then((res) => {
+        this.fakes.end();
+        //初始化进度条
+        setTimeout(() => {
+          this.fakes = new FakeProgress({
+            timeConstant: 10000,
+            autoStart: false
+          });
+          this.isShowProgress = false;
+        }, 800)
         if (res.success) {
           window.location.href = res.result;
         } else {
@@ -1671,5 +1709,16 @@ export default {
 
 .el-range-editor--small.el-input__inner {
   width: 100%;
+}
+
+/*遮罩层*/
+.popContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.6);
 }
 </style>
