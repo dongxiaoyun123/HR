@@ -57,13 +57,11 @@
                             icon="el-icon-refresh" type="text" size="mini" @click="
                                 synchronization(scope.row)
                             ">同步</el-button> -->
-                        <el-dropdown v-loading.fullscreen.lock="synchronizationLoading" element-loading-text="拼命同步中"
-                            element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"
-                            icon="el-icon-refresh" style="margin-left: 10px;" @command="
-                                (command) => {
-                                    handleButtonCommand(command, scope.row);
-                                }
-                            ">
+                        <el-dropdown icon="el-icon-refresh" style="margin-left: 10px;" @command="
+                            (command) => {
+                                handleButtonCommand(command, scope.row);
+                            }
+                        ">
                             <el-button type="text" size="mini">
                                 更 多<i class="el-icon-arrow-down el-icon--right"></i>
                             </el-button>
@@ -173,8 +171,7 @@
                     <el-button style="float: right;" type="primary" :loading="LoadingChildEnterprise"
                         @click="SaveChildEnterprise">设置</el-button>
                 </div>
-                <el-checkbox  v-model="checkAll"
-                    @change="handleCheckAllChange">全选</el-checkbox>
+                <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                 <div style="margin: 15px 0;"></div>
                 <el-checkbox-group v-model="checkedChildEnterprise" @change="handleCheckedChildEnterpriseChange">
                     <el-row>
@@ -187,6 +184,10 @@
                 </el-checkbox-group>
             </el-card>
         </el-dialog>
+        <div v-if="isShowProgress" class="popContainer">
+            <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
+                style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
+        </div>
     </div>
 </template>
 
@@ -194,6 +195,7 @@
 import { getDateByTimes } from "@/utils"; //时间日期格式化成字符串
 import { scrollTo } from '@/utils/scroll-to'
 import moment from "moment"; //导入模块
+import FakeProgress from 'fake-progress';
 import {
     GetContractorList,
     GetChannelInformation,
@@ -216,7 +218,18 @@ export default {
     },
     data() {
         return {
-            synchronizationLoading: false,
+            isShowProgress: false,
+            fakes: new FakeProgress({
+                timeConstant: 10000,
+                autoStart: false
+            }),
+            customColors: [
+                { color: '#ff4949', percentage: 20 },
+                { color: '#ffba00', percentage: 40 },
+                { color: '#5cb87a', percentage: 60 },
+                { color: '#1989fa', percentage: 80 },
+                { color: '#6f7ad3', percentage: 100 }
+            ],
             IfUpdate: false,
             ChannelInformationList: [],
             addContractorVisible: false,
@@ -422,7 +435,7 @@ export default {
                     });
                     GetChildEnterpriseBind(EnterpriseCode, Flag).then((res) => {
                         if (res.success) {
-                            
+
                             this.checkedChildEnterprise = res.result;
                             this.checkAll = res.result.length === this.ChildEnterpriseList.length;
                         } else {
@@ -450,7 +463,7 @@ export default {
         //保存关联数据
         SaveChildEnterprise() {
             this.LoadingChildEnterprise = true;
-            
+
             let parameter = {
                 AllKeys: this.AllKeys,
                 checkedChildEnterprise: this.checkedChildEnterprise,
@@ -489,9 +502,18 @@ export default {
                     return this.$message.info("已取消");
                 }
                 else {
-                    this.synchronizationLoading = true;
+                    this.isShowProgress = true;
+                    this.fakes.start();
                     HrSynchronizeData(item.EnterPriseCode).then((res) => {
-                        this.synchronizationLoading = false;
+                        this.fakes.end();
+                        //初始化进度条
+                        setTimeout(() => {
+                            this.fakes = new FakeProgress({
+                                timeConstant: 10000,
+                                autoStart: false
+                            });
+                            this.isShowProgress = false;
+                        }, 800)
                         if (res.success) {
                             this.$message.success("操作成功");
                         } else {
@@ -693,5 +715,20 @@ export default {
 .buttonCenter {
     text-align: center;
     margin-top: 20px;
+}
+
+/*遮罩层*/
+.popContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+::v-deep .el-progress__text {
+    color: white !important;
 }
 </style>

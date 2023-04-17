@@ -45,9 +45,7 @@
                                 <el-button type="primary" icon="el-icon-search" @click="GetOperationLogSearch">查
                                     询
                                 </el-button>
-                                <el-button :disabled="ReadOnly" v-loading.fullscreen.lock="ExportLoading"
-                                    element-loading-text="拼命导出中" element-loading-spinner="el-icon-loading"
-                                    element-loading-background="rgba(0, 0, 0, 0.8)" type="success" icon="el-icon-download"
+                                <el-button :disabled="ReadOnly" type="success" icon="el-icon-download"
                                     @click="ExportOperationLog">导 出
                                 </el-button>
                             </el-button-group>
@@ -77,10 +75,15 @@
                 :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]" :page-size="WhereParameter.PageSize"
                 layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
         </el-card>
+        <div v-if="isShowProgress" class="popContainer">
+            <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
+                style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
+        </div>
     </div>
 </template>
 
 <script>
+import FakeProgress from 'fake-progress';
 import { scrollTo } from '@/utils/scroll-to'
 import { getDateByTimes } from "@/utils"; //时间日期格式化成字符串
 import moment from "moment"; //导入模块
@@ -97,6 +100,18 @@ export default {
     },
     data() {
         return {
+            isShowProgress: false,
+            fakes: new FakeProgress({
+                timeConstant: 10000,
+                autoStart: false
+            }),
+            customColors: [
+                { color: '#ff4949', percentage: 20 },
+                { color: '#ffba00', percentage: 40 },
+                { color: '#5cb87a', percentage: 60 },
+                { color: '#1989fa', percentage: 80 },
+                { color: '#6f7ad3', percentage: 100 }
+            ],
             ReadOnly: false,//演示人员不能操作数据
             WhereParameter: {
                 ParentEnterPriseCode: '',
@@ -192,7 +207,6 @@ export default {
             },
 
             loading: false,
-            ExportLoading: false,
         };
     },
     methods: {
@@ -250,7 +264,6 @@ export default {
             });
         },
         ExportOperationLog() {
-            this.ExportLoading = true;
             if (this.WhereParameter.CreateTime && this.WhereParameter.CreateTime.length > 0) {
                 this.WhereParameter.BeginTime = this.$moment(this.WhereParameter.CreateTime[0]).format("YYYY-MM-DD");
                 this.WhereParameter.EndTime = this.$moment(this.WhereParameter.CreateTime[1]).format("YYYY-MM-DD");
@@ -267,15 +280,23 @@ export default {
                 PageIndex: 1,
                 PageSize: 100000,
             }
+            this.isShowProgress = true;
+            this.fakes.start();
             ReportOperationLog(parameter).then((res) => {
+                this.fakes.end();
+                //初始化进度条
+                setTimeout(() => {
+                    this.fakes = new FakeProgress({
+                        timeConstant: 10000,
+                        autoStart: false
+                    });
+                    this.isShowProgress = false;
+                }, 800)
                 if (res.success) {
-
-
                     window.location.href = res.result;
                 } else {
                     this.$message.error("导出失败，请重新刷新页面");
                 }
-                this.ExportLoading = false;
             });
         },
 
@@ -341,5 +362,20 @@ export default {
 
 .buttonGroupClass {
     margin-left: 2.7rem;
+}
+
+/*遮罩层*/
+.popContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+::v-deep .el-progress__text {
+    color: white !important;
 }
 </style>

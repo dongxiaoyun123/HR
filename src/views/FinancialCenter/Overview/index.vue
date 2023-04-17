@@ -90,11 +90,8 @@
                                     <template slot-scope="scope">
                                         <el-button :disabled="ReadOnly" icon="el-icon-view" type="text" size="mini"
                                             @click="OpenOrderDetailVisible(scope.row)">详情</el-button>
-                                        <el-button :disabled="ReadOnly" v-loading.fullscreen.lock="ExportLoading"
-                                            element-loading-text="拼命导出中" element-loading-spinner="el-icon-loading"
-                                            element-loading-background="rgba(0, 0, 0, 0.8)"
-                                            @click="ExportAllByOrder(scope.row)" icon="el-icon-download" type="text"
-                                            size="mini">导出</el-button>
+                                        <el-button :disabled="ReadOnly" @click="ExportAllByOrder(scope.row)"
+                                            icon="el-icon-download" type="text" size="mini">导出</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -139,10 +136,8 @@
                                         <el-button type="primary" @click="GetAdmin_PermissionSearch"
                                             icon="el-icon-search">查询明细
                                         </el-button>
-                                        <el-button :disabled="ReadOnly" v-loading.fullscreen.lock="ExportLoading"
-                                            element-loading-text="拼命导出中" element-loading-spinner="el-icon-loading"
-                                            element-loading-background="rgba(0, 0, 0, 0.8)" type="success"
-                                            @click="ExportOrderDetail(null)" icon="el-icon-download">导出明细
+                                        <el-button :disabled="ReadOnly" type="success" @click="ExportOrderDetail(null)"
+                                            icon="el-icon-download">导出明细
                                         </el-button>
                                     </el-button-group>
                                 </el-col>
@@ -303,10 +298,10 @@
                                     </el-table-column>
                                 </el-table>
                                 <!-- 分页区域 -->
-                                <el-pagination background @size-change="AddhandleSizeChange" @current-change="AddhandleCurrentChange"
-                                    :current-page="WhereParameter.AddPageIndex" :page-sizes="[20, 50, 100]"
-                                    :page-size="WhereParameter.AddPageSize" layout="total, sizes, prev, pager, next, jumper"
-                                    :total="Addtotal"></el-pagination>
+                                <el-pagination background @size-change="AddhandleSizeChange"
+                                    @current-change="AddhandleCurrentChange" :current-page="WhereParameter.AddPageIndex"
+                                    :page-sizes="[20, 50, 100]" :page-size="WhereParameter.AddPageSize"
+                                    layout="total, sizes, prev, pager, next, jumper" :total="Addtotal"></el-pagination>
                             </el-card>
                         </div>
                     </transition>
@@ -358,11 +353,16 @@
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
+        <div v-if="isShowProgress" class="popContainer">
+            <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
+                style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
+        </div>
     </div>
 </template>
 <script>
 import moment from "moment";
 import { scrollTo } from '@/utils/scroll-to'
+import FakeProgress from 'fake-progress';
 moment.locale("zh-cn");
 import {
     GetEnterpriseList,
@@ -379,8 +379,19 @@ export default {
     },
     data() {
         return {
+            isShowProgress: false,
+            fakes: new FakeProgress({
+                timeConstant: 10000,
+                autoStart: false
+            }),
+            customColors: [
+                { color: '#ff4949', percentage: 20 },
+                { color: '#ffba00', percentage: 40 },
+                { color: '#5cb87a', percentage: 60 },
+                { color: '#1989fa', percentage: 80 },
+                { color: '#6f7ad3', percentage: 100 }
+            ],
             ReadOnly: false,//演示人员不能操作数据
-            ExportLoading: false,
             buttonShow: true,
             buttonDetailShow: true,
             OrderDetailMoney: {
@@ -524,14 +535,24 @@ export default {
                 Flag: 0,
                 ProgramCode: [],
             }
-            this.ExportLoading = true;
+            this.isShowProgress = true;
+            this.fakes.start();
             OrderExportAll(parameter).then((res) => {
+
+                this.fakes.end();
+                //初始化进度条
+                setTimeout(() => {
+                    this.fakes = new FakeProgress({
+                        timeConstant: 10000,
+                        autoStart: false
+                    });
+                    this.isShowProgress = false;
+                }, 800)
                 if (res.success) {
                     window.location.href = res.result;
                 } else {
                     this.$message.error("导出失败，请重新刷新页面");
                 }
-                this.ExportLoading = false;
             });
         },
         //根据详情导出数据
@@ -552,14 +573,24 @@ export default {
                 EndTime: this.WhereParameter.EndTime,
                 Flag: 1,
             }
-            this.ExportLoading = true;
+            this.isShowProgress = true;
+            this.fakes.start();
             OrderExportAll(parameter).then((res) => {
+
+                this.fakes.end();
+                //初始化进度条
+                setTimeout(() => {
+                    this.fakes = new FakeProgress({
+                        timeConstant: 10000,
+                        autoStart: false
+                    });
+                    this.isShowProgress = false;
+                }, 800)
                 if (res.success) {
                     window.location.href = res.result;
                 } else {
                     this.$message.error("导出失败，请重新刷新页面");
                 }
-                this.ExportLoading = false;
             });
         },
         //详情关闭
@@ -929,5 +960,20 @@ export default {
     display: inline-block;
     margin: 0;
     line-height: 100%;
+}
+
+/*遮罩层*/
+.popContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+::v-deep .el-progress__text {
+    color: white !important;
 }
 </style>

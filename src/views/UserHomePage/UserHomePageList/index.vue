@@ -81,13 +81,11 @@
                 <el-button type="warning" icon="el-icon-upload2" @click="ImportStaffDialog">
                   批量增减
                 </el-button>
-                <el-dropdown v-loading.fullscreen.lock="ExportLoading" element-loading-text="拼命导出中"
-                  element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"
-                  style="margin-left: 0;" @command="
-                    (command) => {
-                      handleButtonCommand(command);
-                    }
-                  ">
+                <el-dropdown style="margin-left: 0;" @command="
+                  (command) => {
+                    handleButtonCommand(command);
+                  }
+                ">
                   <el-button type="info">
                     导 出<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
@@ -504,8 +502,8 @@
       </el-form>
     </el-dialog>
     <div v-if="isShowProgress" class="popContainer">
-      <el-progress :percentage="parseInt(fakes.progress * 100)" :text-inside="true" :stroke-width="24"
-        :color="customColors" style="top: 30%; left: 28%; width: 44%"></el-progress>
+      <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
+        style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
     </div>
   </div>
 </template>
@@ -515,6 +513,7 @@ import { getDateByTimes } from "@/utils"; //时间日期格式化成字符串
 import moment from "moment"; //导入模块
 moment.locale("zh-cn"); //设置语言 或 moment.lang('zh-cn');
 import { isIdentityId } from './components/validate'
+import FakeProgress from 'fake-progress';
 import {
   GetEnterpriseList,
   GetChildUser,
@@ -535,7 +534,6 @@ import {
 } from "@/api/hrmain";
 // import Mallki from '../UserHomePageList/components/TextHoverEffect/'
 import axios from "axios";
-// import FakeProgress from 'fake-progress';
 export default {
   components: {
     // Mallki
@@ -582,7 +580,6 @@ export default {
       }
     };
     return {
-
       isShowProgress: false,
       fakes: new FakeProgress({
         timeConstant: 10000,
@@ -800,7 +797,6 @@ export default {
       fileList: [], //文件列表
       fileListRepeatDelete: [], //文件列表
       fileDeleteCatch: null,//批量删除并且继续提交用到此参数
-      ExportLoading: false,
       UpdateWidth: 80,
       IfClearableEnterprise: true,
     };
@@ -849,7 +845,6 @@ export default {
     },
     //导出选中方案在保
     ExportStaff() {
-      this.ExportLoading = true;
       if (this.WhereParameter.CreateTime && this.WhereParameter.CreateTime.length > 0) {
         this.WhereParameter.BeginTime = this.$moment(this.WhereParameter.CreateTime[0]).format("YYYY-MM-DD");
         this.WhereParameter.EndTime = this.$moment(this.WhereParameter.CreateTime[1]).format("YYYY-MM-DD");
@@ -889,12 +884,10 @@ export default {
         } else {
           this.$message.error("导出失败，请重新刷新页面");
         }
-        this.ExportLoading = false;
       });
     },
     //导出选中方案在保
     ExportStaffAll(ifNoInsurance) {
-      this.ExportLoading = true;
       ExportStaffListAll(this.WhereParameter.ParentEnterPriseCode, ifNoInsurance).then((res) => {
         this.fakes.end();
         //初始化进度条
@@ -910,7 +903,6 @@ export default {
         } else {
           this.$message.error("导出失败，请重新刷新页面");
         }
-        this.ExportLoading = false;
       });
     },
     handleClick(tab, event) {
@@ -1720,5 +1712,9 @@ export default {
   bottom: 0;
   z-index: 999999;
   background: rgba(0, 0, 0, 0.6);
+}
+
+::v-deep .el-progress__text {
+  color: white !important;
 }
 </style>

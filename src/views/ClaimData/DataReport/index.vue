@@ -39,13 +39,11 @@
                                 <el-button style="margin-left:2rem ;" type="primary" icon="el-icon-search"
                                     @click="GetReportData">查 询
                                 </el-button>
-                                <el-dropdown v-loading.fullscreen.lock="ExportLoading" element-loading-text="拼命导出中"
-                                    element-loading-spinner="el-icon-loading"
-                                    element-loading-background="rgba(0, 0, 0, 0.8)" style="margin-left: 0;" @command="
-                                        (command) => {
-                                            handleButtonCommand(command);
-                                        }
-                                    ">
+                                <el-dropdown style="margin-left: 0;" @command="
+                                    (command) => {
+                                        handleButtonCommand(command);
+                                    }
+                                ">
                                     <el-button type="success">
                                         更 多<i class="el-icon-arrow-down el-icon--right"></i>
                                     </el-button>
@@ -196,12 +194,15 @@
                     </el-card>
                 </el-col>
             </el-row>
-
         </el-row>
-
+        <div v-if="isShowProgress" class="popContainer">
+            <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
+                style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
+        </div>
     </div>
 </template>
 <script>
+import FakeProgress from 'fake-progress';
 import moment from "moment";
 moment.locale("zh-cn");
 import {
@@ -218,6 +219,18 @@ export default {
     },
     data() {
         return {
+            isShowProgress: false,
+            fakes: new FakeProgress({
+                timeConstant: 10000,
+                autoStart: false
+            }),
+            customColors: [
+                { color: '#ff4949', percentage: 20 },
+                { color: '#ffba00', percentage: 40 },
+                { color: '#5cb87a', percentage: 60 },
+                { color: '#1989fa', percentage: 80 },
+                { color: '#6f7ad3', percentage: 100 }
+            ],
             ReadOnly: false,//演示人员不能操作数据
             Total_LiPeiCount: null,
             UnFinish_LipeiCount: null,
@@ -329,7 +342,6 @@ export default {
             },
             list0: [],
             list1: [],
-            ExportLoading: false,
         };
     },
     methods: {
@@ -346,7 +358,6 @@ export default {
         },
         //导出报销
         ExportReimbursement() {
-            this.ExportLoading = true;
             if (this.WhereParameter.CreateTime && this.WhereParameter.CreateTime.length > 0) {
                 this.WhereParameter.BeginTime = this.$moment(this.WhereParameter.CreateTime[0]).format("YYYY-MM-DD");
                 this.WhereParameter.EndTime = this.$moment(this.WhereParameter.CreateTime[1]).format("YYYY-MM-DD");
@@ -361,18 +372,27 @@ export default {
                 BeginTime: this.WhereParameter.BeginTime,
                 EndTime: this.WhereParameter.EndTime,
             }
+            this.isShowProgress = true;
+            this.fakes.start();
             GetDetails(parameter).then((res) => {
+                this.fakes.end();
+                //初始化进度条
+                setTimeout(() => {
+                    this.fakes = new FakeProgress({
+                        timeConstant: 10000,
+                        autoStart: false
+                    });
+                    this.isShowProgress = false;
+                }, 800)
                 if (res.success) {
                     window.location.href = res.result;
                 } else {
                     this.$message.error("导出失败，请重新刷新页面");
                 }
-                this.ExportLoading = false;
             });
         },
         //导出退单
         ExportChargeback() {
-            this.ExportLoading = true;
             if (this.WhereParameter.CreateTime && this.WhereParameter.CreateTime.length > 0) {
                 this.WhereParameter.BeginTime = this.$moment(this.WhereParameter.CreateTime[0]).format("YYYY-MM-DD");
                 this.WhereParameter.EndTime = this.$moment(this.WhereParameter.CreateTime[1]).format("YYYY-MM-DD");
@@ -387,13 +407,23 @@ export default {
                 BeginTime: this.WhereParameter.BeginTime,
                 EndTime: this.WhereParameter.EndTime,
             }
+            this.isShowProgress = true;
+            this.fakes.start();
             GetDetailsRev(parameter).then((res) => {
+                this.fakes.end();
+                //初始化进度条
+                setTimeout(() => {
+                    this.fakes = new FakeProgress({
+                        timeConstant: 10000,
+                        autoStart: false
+                    });
+                    this.isShowProgress = false;
+                }, 800)
                 if (res.success) {
                     window.location.href = res.result;
                 } else {
                     this.$message.error("导出失败，请重新刷新页面");
                 }
-                this.ExportLoading = false;
             });
         },
         datetimeChange(time) {
@@ -557,5 +587,20 @@ export default {
 
 ::v-deep .el-card__body {
     padding: 20px 20px 0 20px;
+}
+
+/*遮罩层*/
+.popContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+::v-deep .el-progress__text {
+    color: white !important;
 }
 </style>
