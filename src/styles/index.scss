@@ -239,3 +239,7 @@ aside {
     padding: 4px 7px
   }
 }
+// 如果有复选框，那么献给table赋一个tableCheckClass 然后全选按钮就可以对齐了
+.tableCheckClass.el-table th.el-table__cell:first-child  .cell{
+  padding-left:14px
+}

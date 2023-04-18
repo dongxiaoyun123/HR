@@ -1,7 +1,7 @@
 <template>
   <div style="margin:20px">
     <el-card>
-      <el-form label-width="100px">
+      <el-form label-width="80px">
         <el-row>
           <el-col :span="6">
             <el-form-item class="formClass" label="合同方">

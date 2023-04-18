@@ -1,12 +1,13 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">
                             <el-form-item style="margin-bottom: 0;" label="客服人员">
-                                <el-select v-model="WhereParameter.User_ID" filterable placeholder="客服人员" clearable>
+                                <el-select style="width:100% ;" v-model="WhereParameter.User_ID" filterable
+                                    placeholder="客服人员" clearable>
                                     <el-option v-for="item in BackstageUserList" :key="item.User_ID"
                                         :label="item.User_RealName" :value="item.User_ID">
                                     </el-option>
@@ -93,7 +94,7 @@ export default {
     },
     data() {
         return {
-            ParentContractorList:[],
+            ParentContractorList: [],
             BackstageUserList: [],
             ChildEnterpriseList: [],
             EnterpriseList: [],

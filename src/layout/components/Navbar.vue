@@ -77,7 +77,7 @@
       <el-dialog append-to-body title="修改密码" :visible.sync="updatePasswordVisible" top="15vh" width="30%"
         @close="dialogClosed">
         <!-- 内容主体 -->
-        <el-form :model="updatePassword" ref="updatePasswordRef" :rules="updatePasswordRules" label-width="100px">
+        <el-form :model="updatePassword" ref="updatePasswordRef" :rules="updatePasswordRules" label-width="90px">
           <el-form-item label="新密码" prop="User_Pwd">
             <el-input v-model="updatePassword.User_Pwd" show-password></el-input>
           </el-form-item>

@@ -1,7 +1,7 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">
@@ -485,7 +485,7 @@ export default {
                 if (res.success) {
                     flag = true;
                 } else {
-                    this.$message.error(res.resultMessage);
+                    this.$message.warning(res.resultMessage);
                 }
             });
             if (flag) {

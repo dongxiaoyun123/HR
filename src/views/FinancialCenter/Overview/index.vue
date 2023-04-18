@@ -1,7 +1,7 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">
@@ -102,7 +102,7 @@
             <el-tab-pane label="流水明细" name="second">
                 <transition name="el-fade-in-linear">
                     <div v-show="!buttonShow">
-                        <el-form label-width="100px">
+                        <el-form label-width="90px">
                             <el-row>
                                 <el-col :span="12" v-if="ActiveName == 'second'">
                                     <el-form-item label="保障方案" class="whereClass">

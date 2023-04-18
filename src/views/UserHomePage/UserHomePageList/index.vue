@@ -1,7 +1,7 @@
 <template>
   <div style="margin:8px">
     <el-card>
-      <el-form label-width="100px">
+      <el-form label-width="90px">
         <el-row>
           <el-row>
             <el-col :span="6">
@@ -167,7 +167,7 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table v-loading="loading" :data="StaffList" fit @selection-change="TableSelect" @row-click="toggleSelection"
+      <el-table class="tableCheckClass" v-loading="loading" :data="StaffList" fit @selection-change="TableSelect" @row-click="toggleSelection"
         ref="multipleTable" :cell-style="showBackground">
         <el-table-column type="selection" width="50" fixed="left"> </el-table-column>
         <el-table-column prop="ProgramName" label="方案名称" min-width="140" show-overflow-tooltip
@@ -435,7 +435,7 @@
       </el-row>
     </el-dialog>
     <el-dialog title="上传文件" :visible.sync="ImportDialogVisible" width="40%">
-      <el-form ref="importRef" label-width="100px">
+      <el-form ref="importRef" label-width="90px">
 
         <el-alert style="margin-bottom:20px ;" type="success" show-icon
           v-if="EnterpriseData && EnterpriseData.Simples != 1" title="此公司目前配置的是普通模板" :closable="false">
@@ -1659,7 +1659,7 @@ export default {
 }
 
 .buttonGroupClass {
-  margin-left: 1.9rem;
+  margin-left: 1.3rem;
 }
 
 .linkClass {

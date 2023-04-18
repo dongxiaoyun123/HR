@@ -1,7 +1,7 @@
 <template>
     <div style="margin:8px">
         <el-card style="padding-bottom:20px ;">
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">

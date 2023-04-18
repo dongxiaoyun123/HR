@@ -1,7 +1,7 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
                         <el-col :span="8">
@@ -36,7 +36,7 @@
         </el-card>
 
         <el-form v-loading="loading" style="width: 100%;" :model="EnterpriseManage" ref="EnterpriseManageRef"
-            :rules="EnterpriseManageRules" label-width="100px">
+            :rules="EnterpriseManageRules" label-width="90px">
             <el-card style="margin-top:8px ;">
                 <div slot="header" class="clearfix">
                     <span>收款账户</span>

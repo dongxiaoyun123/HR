@@ -1,11 +1,11 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item class="whereClass" label="合同方">
+                            <el-form-item  label="合同方">
                                 <el-select class="whereClass" v-model="WhereParameter.ParentEnterPriseCode" filterable
                                     placeholder="合同方" @change="GetChildUser">
                                     <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
@@ -15,7 +15,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item class="whereClass" label="付款方">
+                            <el-form-item  label="付款方">
                                 <el-select @change="GetAdmin_PermissionSearch" class="whereClass"
                                     v-model="WhereParameter.EnterPriseCode" filterable placeholder="付款方"
                                     :clearable="IfClearableEnterprise">
@@ -27,21 +27,21 @@
                         </el-col>
 
                         <el-col :span="6">
-                            <el-form-item class="whereClass" label="投保日期">
-                                <el-date-picker format="yyyy-MM" v-model="WhereParameter.Times" type="month"
+                            <el-form-item label="投保日期">
+                                <el-date-picker  class="whereClass" format="yyyy-MM" v-model="WhereParameter.Times" type="month"
                                     placeholder="选择月" :clearable="false">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item class="whereClass" label="人员信息">
+                            <el-form-item  label="人员信息">
                                 <el-input v-model="WhereParameter.Kwd" clearable placeholder="姓名、证件号"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-button style="margin-left:2.7rem ;" type="primary" @click="GetAdmin_PermissionSearch"
+                            <el-button style="margin-left:2rem ;" type="primary" @click="GetAdmin_PermissionSearch"
                                 icon="el-icon-search">查 询
                             </el-button>
                         </el-col>

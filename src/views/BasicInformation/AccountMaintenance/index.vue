@@ -1,10 +1,10 @@
 <template>
     <div style="margin:8px">
         <el-card style="padding-bottom:20px ;">
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-form-item style="margin-bottom: 0;" label="合同方">
                                 <el-select class="whereClass" v-model="WhereParameter.ParentEnterPriseCode" filterable
                                     placeholder="合同方" @change="GetChildUser">
@@ -14,7 +14,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-form-item style="margin-bottom: 0;" label="付款方">
                                 <el-select @change="GetEnterpriseInfo" class="whereClass"
                                     v-model="WhereParameter.EnterPriseCode" filterable placeholder="付款方">
@@ -24,7 +24,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-button :disabled="ReadOnly" style="margin-left: 2rem;" type="primary" :loading="LoadingAdd"
                                 @click="UpdateEnterpriseManage">保
                                 存</el-button>

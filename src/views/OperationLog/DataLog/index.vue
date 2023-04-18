@@ -1,7 +1,7 @@
 <template>
     <div style="margin:8px">
         <el-card>
-            <el-form label-width="100px">
+            <el-form label-width="90px">
                 <el-row>
                     <el-row>
                         <el-col :span="6">
@@ -361,7 +361,7 @@ export default {
 }
 
 .buttonGroupClass {
-    margin-left: 2.7rem;
+    margin-left: 2rem;
 }
 
 /*遮罩层*/
