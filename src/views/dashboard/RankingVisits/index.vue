@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:100%">
     <el-card style="width:100% ;height:550px;margin-top: 20px;">
       <div slot="header" class="clearfix">
         <span style="float: left;margin: 0;line-height: 2.2rem;">就诊次数排行</span>
@@ -74,7 +74,7 @@ export default {
           contentData[i]
         );
       }
-
+debugger
       var option = {
         grid: {
           left: '3%',

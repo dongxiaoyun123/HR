@@ -55,8 +55,18 @@
         </div>
       </el-col>
     </el-row>
-    <ReportSummary v-show="MenuPermissions != 1" :WhereParameter="WhereParameter" />
-    <RankingVisits v-show="MenuPermissions != 1" :WhereParameter="WhereParameter" />
+    <el-row v-show="MenuPermissions != 1">
+      <el-col :xs="24" :sm="24" :lg="24">
+        <div class="chart-wrapper">
+          <ReportSummary v-show="MenuPermissions != 1" :WhereParameter="WhereParameter" />
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="24">
+        <div class="chart-wrapper">
+          <RankingVisits v-show="MenuPermissions != 1" :WhereParameter="WhereParameter" />
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

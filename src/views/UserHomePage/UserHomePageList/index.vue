@@ -252,13 +252,13 @@
           <el-col :span="12">
             <el-form-item label="姓名" prop="StaffNameAdd">
               <el-input v-model="addStaffForm.StaffNameAdd" placeholder="姓名" @input="StaffNameAddChange"
-                :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate"></el-input>
+                :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="证件类型" prop="DocumentTypeCodeAdd">
               <el-select @change="changeOther" v-model="addStaffForm.DocumentTypeCodeAdd" filterable placeholder="证件类型"
-                :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate">
+                :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate">
                 <el-option v-for="item in DocumentTypeArray" :key="item.ConfigValue" :label="item.ConfigName"
                   :value="item.ConfigValue">
                 </el-option>
@@ -270,15 +270,15 @@
           <el-col :span="12">
             <el-form-item label="证件号码" prop="IdentificationNumberAdd">
               <el-input v-model="addStaffForm.IdentificationNumberAdd" placeholder="证件号码" @blur.prevent="changeOther"
-                @input="IdentificationNumberAddChange" :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate"></el-input>
+                @input="IdentificationNumberAddChange" :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="性别" prop="SexAdd">
               <el-radio v-model="addStaffForm.SexAdd" key="0" label="0"
-                :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate" border>男</el-radio>
+                :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate" border>男</el-radio>
               <el-radio v-model="addStaffForm.SexAdd" key="1" label="1"
-                :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate" border>女</el-radio>
+                :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate" border>女</el-radio>
             </el-form-item>
           </el-col>
         </el-row>
@@ -286,7 +286,7 @@
           <el-col :span="12">
             <el-form-item label="出生日期" prop="DateOfBirthAdd">
               <el-date-picker v-model="addStaffForm.DateOfBirthAdd" type="date" placeholder="选择日期"
-                :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate">
+                :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -345,14 +345,14 @@
           <el-col :span="12">
             <el-form-item label="主被姓名" prop="MainStaffNameAdd">
               <el-input v-model="addStaffForm.MainStaffNameAdd" placeholder="主被保险人姓名" @input="MainStaffNameAddChange"
-                :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate"></el-input>
+                :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="主被证件" prop="IdentificationNumberMainAdd">
               <el-input v-model="addStaffForm.IdentificationNumberMainAdd" placeholder="主被保险人证件号码"
                 @input="MainIdentificationNumberAddChange"
-                :disabled="rolesFlag && rolesFlag[0] == 1 && IfUpdate"></el-input>
+                :disabled="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2) && IfUpdate"></el-input>
             </el-form-item>
           </el-col>
         </el-row>

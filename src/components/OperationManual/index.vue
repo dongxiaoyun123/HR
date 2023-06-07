@@ -2,7 +2,7 @@
   <div>
     <svg-icon style="font-size:16px ;" icon-class="pdf" @click="openpdf" />
     <el-dialog append-to-body :visible="isshowpdf" width="80%" top="5vh" @close="isshowpdf = false">
-      <iframe v-if="rolesFlag && rolesFlag[0] == 1" style="width: 100%; height: calc(100vh - 200px);"
+      <iframe v-if="rolesFlag && (rolesFlag[0] == 1 || rolesFlag[0] == 2)" style="width: 100%; height: calc(100vh - 200px);"
         :src="srcEnterprise"></iframe>
       <iframe v-else style="width: 100%; height: calc(100vh - 200px);" :src="src"></iframe>
     </el-dialog>
