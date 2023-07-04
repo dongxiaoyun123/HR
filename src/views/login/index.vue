@@ -52,7 +52,7 @@
             <validate-code ref="ref_validateCode" class="validateClass" @change="changeCode" />
           </el-form-item>
           <el-form-item>
-            <el-button :loading="loading" type="primary" style="width:100%" @click.native.prevent="handleLogin">登
+            <el-button size="medium" :loading="loading" type="primary" style="width:100%" @click.native.prevent="handleLogin">登
               录</el-button>
           </el-form-item>
         </el-form>
@@ -151,6 +151,7 @@ export default {
       this.imgUrl = zhiweijia;
       this.loginContentFlag = false;
       this.loginContent = '职为家';
+    // eslint-disable-next-line brace-style
     }
     // 乱写的
     else if (host.indexOf("kangkang.fuliplat.com") != -1) {
@@ -281,8 +282,8 @@ $cursor: #737478;
   .login-form {
     border: 1px solid #79bbff;
     border-radius: 3px;
-    width: 470px;
-    height: 380px;
+    width: 450px;
+    height: 345px;
     position: relative;
     overflow: hidden;
     background-color: #ffffff;
@@ -318,7 +319,7 @@ $cursor: #737478;
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(90deg, transparent, #409eff);
+        background: linear-gradient(90deg, transparent, #1890ff);
         animation: loginLeft 3s linear infinite;
       }
 
@@ -328,7 +329,7 @@ $cursor: #737478;
         right: 2px;
         width: 3px;
         height: 100%;
-        background: linear-gradient(180deg, transparent, #409eff);
+        background: linear-gradient(180deg, transparent, #1890ff);
         animation: loginTop 3s linear infinite;
         animation-delay: 0.7s;
       }
@@ -341,7 +342,7 @@ $cursor: #737478;
         right: -100%;
         width: 100%;
         height: 3px;
-        background: linear-gradient(270deg, transparent, #409eff);
+        background: linear-gradient(270deg, transparent, #1890ff);
         animation: loginRight 3s linear infinite;
         animation-delay: 1.4s;
       }
@@ -352,14 +353,14 @@ $cursor: #737478;
         left: 0px;
         width: 3px;
         height: 100%;
-        background: linear-gradient(360deg, transparent, #409eff);
+        background: linear-gradient(360deg, transparent, #1890ff);
         animation: loginBottom 3s linear infinite;
         animation-delay: 2.1s;
       }
     }
 
     .loginFormClass {
-      padding: 55px 55px 50px 55px;
+      padding: 40px 55px 0 55px;
     }
   }
 
@@ -420,6 +421,7 @@ $cursor: #737478;
 
   .logoClass {
     line-height: 43px;
+    height: 43px;
   }
 
   .titleClass {
@@ -440,7 +442,7 @@ $cursor: #737478;
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: calc(100vh - 277px);
+    height: calc(100vh - 210px);
     background-image: url("../../assets/i-mages/loginbj.jpg");
     overflow: hidden;
     background-size: cover; //或者background-size:100%;

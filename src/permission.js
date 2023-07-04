@@ -1,11 +1,11 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
+// import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
-import Watermark from '@/utils/watermark';  //水印
+import Watermark from '@/utils/watermark';  // 水印
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/auth-redirect', '/login', '/loginxinyazhong', '/loginzhiweijia', '/loginkangkang', '/loginNotLogo'] // no redirect whitelist
@@ -23,6 +23,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.path === '/' || whiteList.indexOf(to.path) !== -1) {
       next({ path: '/' })
       NProgress.done()
+      // eslint-disable-next-line brace-style
     }
     // else if (to.path === '/login' || to.path === '/loginxinyazhong' || to.path === '/loginzhiweijia' || to.path === '/loginkangkang' || to.path === '/loginNotLogo') {
     //   // if is logged in, redirect to the home page
@@ -40,10 +41,9 @@ router.beforeEach(async (to, from, next) => {
         next()
       } else {
         try {
-
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          //获取角色和公司编号（如果是公司角色那么需要公司编号来进行动态获取绑定的路由）
+          // 获取角色和公司编号（如果是公司角色那么需要公司编号来进行动态获取绑定的路由）
           const roles = await store.dispatch('user/getInfo')
 
           // generate accessible routes map based on roles
@@ -93,8 +93,8 @@ router.beforeEach(async (to, from, next) => {
     } else {
       // other pages that do not have permission to access are redirected to the login page.
       // next(`/login?redirect=${to.path}`)
-      var LogoCatch = window.localStorage.getItem('LogoCatch');
-      switch (LogoCatch) {
+      var LogoCatchs = window.localStorage.getItem('LogoCatch');
+      switch (LogoCatchs) {
         case "#/login":
           next(`/login`);
           break;
@@ -119,9 +119,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach(() => {
-  if (store.state.user.roles.indexOf(7) != -1)
-    Watermark.set(store.state.user.realname);
+  if (store.state.user.roles.indexOf(7) != -1) { Watermark.set(store.state.user.realname); }
   // finish progress bar
   NProgress.done();
-
 })

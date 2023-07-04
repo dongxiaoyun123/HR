@@ -1,98 +1,103 @@
 <template>
-    <div style="margin:8px">
-        <el-card style="padding-bottom:20px ;">
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="合同方">
-                                <el-select class="whereClass" v-model="WhereParameter.ParentEnterPriseCode" filterable
-                                    placeholder="合同方" @change="GetChildUser">
-                                    <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                                        :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="付款方">
-                                <el-select @change="GetEnterpriseInfo" class="whereClass"
-                                    v-model="WhereParameter.EnterPriseCode" filterable placeholder="付款方">
-                                    <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
-                                        :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-button :disabled="ReadOnly" style="margin-left: 2rem;" type="primary" :loading="LoadingAdd"
-                                @click="UpdateEnterpriseManage">保
-                                存</el-button>
-                        </el-col>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
+  <div style="margin:8px">
+    <el-card style="padding-bottom:20px ;">
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="合同方">
+                <el-select v-model="WhereParameter.ParentEnterPriseCode" class="whereClass" filterable
+                           placeholder="合同方" @change="GetChildUser"
+                >
+                  <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
+                             :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="付款方">
+                <el-select v-model="WhereParameter.EnterPriseCode" class="whereClass"
+                           filterable placeholder="付款方" @change="GetEnterpriseInfo"
+                >
+                  <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
+                             :label="item.EnterPriseName" :value="item.EnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-button :disabled="ReadOnly" style="margin-left: 2rem;" type="primary" :loading="LoadingAdd"
+                         @click="UpdateEnterpriseManage"
+              >保
+                存</el-button>
+            </el-col>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
 
-        <el-form v-loading="loading" style="width: 100%;" :model="EnterpriseManage" ref="EnterpriseManageRef"
-            :rules="EnterpriseManageRules" label-width="120px">
-            <el-card style="margin-top:8px ;">
-                <div slot="header" class="clearfix">
-                    <span>基本资料</span>
-                </div>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="企业名称" prop="EnterPriseName">
-                            <el-input v-model="EnterpriseManage.EnterPriseName" placeholder="企业名称" disabled=""></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="联系电话" prop="EnterPrisePhone">
-                            <el-input v-model="EnterpriseManage.EnterPrisePhone" placeholder="联系电话" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="电子邮箱" prop="EnterPriseEmail">
-                            <el-input v-model="EnterpriseManage.EnterPriseEmail" placeholder="电子邮箱" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="联系地址" prop="EnterPriseAddress">
-                            <el-input v-model="EnterpriseManage.EnterPriseAddress" placeholder="联系地址" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-card>
-            <el-card style="margin-top:-1px ;">
-                <div slot="header" class="clearfix">
-                    <span>收件地址</span>
-                </div>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="统一信用代码" prop="UnifiedSocialCreditCode">
-                            <el-input v-model="EnterpriseManage.UnifiedSocialCreditCode" placeholder="统一信用代码"
-                                clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="组织机构代码" prop="OrganizationCode">
-                            <el-input v-model="EnterpriseManage.OrganizationCode" placeholder="组织机构代码" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-card>
-            <el-card style="margin-top:-1px ;">
-                <div slot="header" class="clearfix">
-                    <span>方案信息</span>
-                </div>
-                <el-row>
-                    <el-col :span="4" v-for="item in EnterpriseManage.Children" :key="item.ProgramCode">
-                        <el-tag style="margin-bottom: 18px;" :type="item.Type">{{ item.ProgramName }}</el-tag>
-                    </el-col>
-                </el-row>
-            </el-card>
-        </el-form>
-    </div>
+    <el-form ref="EnterpriseManageRef" v-loading="loading" style="width: 100%;" :model="EnterpriseManage"
+             :rules="EnterpriseManageRules" label-width="120px"
+    >
+      <el-card style="margin-top:8px ;">
+        <div slot="header" class="clearfix">
+          <span>基本资料</span>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="企业名称" prop="EnterPriseName">
+              <el-input v-model="EnterpriseManage.EnterPriseName" placeholder="企业名称" disabled="" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系电话" prop="EnterPrisePhone">
+              <el-input v-model="EnterpriseManage.EnterPrisePhone" placeholder="联系电话" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="电子邮箱" prop="EnterPriseEmail">
+              <el-input v-model="EnterpriseManage.EnterPriseEmail" placeholder="电子邮箱" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系地址" prop="EnterPriseAddress">
+              <el-input v-model="EnterpriseManage.EnterPriseAddress" placeholder="联系地址" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <el-card style="margin-top:-1px ;">
+        <div slot="header" class="clearfix">
+          <span>收件地址</span>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="统一信用代码" prop="UnifiedSocialCreditCode">
+              <el-input v-model="EnterpriseManage.UnifiedSocialCreditCode" placeholder="统一信用代码"
+                        clearable
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="组织机构代码" prop="OrganizationCode">
+              <el-input v-model="EnterpriseManage.OrganizationCode" placeholder="组织机构代码" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <el-card style="margin-top:-1px ;">
+        <div slot="header" class="clearfix">
+          <span>方案信息</span>
+        </div>
+        <el-row>
+          <el-col v-for="item in EnterpriseManage.Children" :key="item.ProgramCode" :span="4">
+            <el-tag style="margin-bottom: 18px;" :type="item.Type">{{ item.ProgramName }}</el-tag>
+          </el-col>
+        </el-row>
+      </el-card>
+    </el-form>
+  </div>
 </template>
 <script>
 import moment from "moment";
@@ -122,8 +127,7 @@ export default {
         const checkEmail = (rule, value, callback) => {
             if (!value) {
                 return callback();
-            }
-            else {
+            } else {
                 const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
                 setTimeout(() => {
                     if (mailReg.test(value)) {
@@ -135,7 +139,7 @@ export default {
             }
         };
         return {
-            ReadOnly: false,//演示人员不能操作数据
+            ReadOnly: false, // 演示人员不能操作数据
             AccountOpenTypeArray: [],
             LoadingAdd: false,
             EnterpriseManage: {
@@ -147,7 +151,6 @@ export default {
                 OrganizationCode: '',
                 Children: [],
             },
-            AccountOpenTypeArray: [],
             WhereParameter: {
                 ParentEnterPriseCode: '',
                 EnterPriseCode: '',
@@ -170,6 +173,15 @@ export default {
                 ],
             },
         };
+    },
+    computed: {
+
+    },
+    created() { },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        if (this.$store.getters.roles.indexOf(7) != -1) { this.ReadOnly = true }
+        this.GetEnterpriseList();
     },
     methods: {
         UpdateEnterpriseManage() {
@@ -205,7 +217,7 @@ export default {
             GetEnterpriseList().then((res) => {
                 if (res.success) {
                     this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 2 });
-                    //如果有数据那么赋个默认的值
+                    // 如果有数据那么赋个默认的值
                     if (this.EnterpriseList.length > 0) {
                         this.WhereParameter.ParentEnterPriseCode = this.EnterpriseList[0].ParentEnterPriseCode;
                         this.GetChildUser(this.EnterpriseList[0].ParentEnterPriseCode);
@@ -215,7 +227,7 @@ export default {
                 }
             });
         },
-        //根据父级公司获取分公司
+        // 根据父级公司获取分公司
         GetChildUser(ParentEnterPriseCode) {
             this.WhereParameter.EnterPriseCode = '';
             GetChildUser(ParentEnterPriseCode).then((res) => {
@@ -230,7 +242,7 @@ export default {
                 }
             });
         },
-        //根据分公司获取改公司下所有公司配置数据
+        // 根据分公司获取改公司下所有公司配置数据
         GetEnterpriseInfo() {
             this.$refs.EnterpriseManageRef.resetFields();
             this.loading = true;
@@ -246,7 +258,7 @@ export default {
                         this.EnterpriseManage.OrganizationCode = res.result.OrganizationCode;
                         // this.EnterpriseManage.Children = res.result.Children;
 
-                        let types = [
+                        const types = [
                             '',
                             'success',
                             'info',
@@ -255,16 +267,15 @@ export default {
                         ];
                         this.EnterpriseManage.Children = [];
                         res.result.Children.forEach(element => {
-                            var tagType = types[Math.floor(Math.random() * 5)]; //进行计算随机
-                            let item = {
+                            var tagType = types[Math.floor(Math.random() * 5)]; // 进行计算随机
+                            const item = {
                                 ProgramCode: element.ProgramCode,
                                 ProgramName: element.ProgramName,
                                 Type: tagType,
                             };
                             this.EnterpriseManage.Children.push(item);
                         });
-                    }
-                    else {
+                    } else {
                         this.EnterpriseManage.EnterPriseName = '';
                         this.EnterpriseManage.EnterPrisePhone = '';
                         this.EnterpriseManage.EnterPriseEmail = '';
@@ -277,16 +288,6 @@ export default {
                 this.loading = false;
             });
         },
-    },
-    created() { },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        if (this.$store.getters.roles.indexOf(7) != -1)
-            this.ReadOnly = true
-        this.GetEnterpriseList();
-    },
-    computed: {
-
     }
 };
 </script>

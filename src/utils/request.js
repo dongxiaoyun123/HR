@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import {  Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -43,7 +43,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data;
-    
+
     // if the custom code is not 20000, it is judged as an error.
     // if (res.code !== 20000) {
     //   Message({
@@ -66,7 +66,7 @@ service.interceptors.response.use(
     //     })
     //   }
     //   return Promise.reject(new Error(res.message || 'Error'))
-    //} 
+    // }
     if (res.resultMessage == "登陆超时" || res.resultMessage == "过期token") {
       store.dispatch('user/resetToken');
       // Message({
@@ -76,7 +76,7 @@ service.interceptors.response.use(
       // })
     }
     return res
-    //这里的所有抛出异常先关闭在各个页面抛出异常（因为要更新实体，所以在此注释）
+    // 这里的所有抛出异常先关闭在各个页面抛出异常（因为要更新实体，所以在此注释）
     // if (!res.success) {
     //   Message({
     //     message: res.resultMessage || 'Error',
@@ -89,8 +89,7 @@ service.interceptors.response.use(
     // }
   },
   error => {
-    
-    //超时机制，十秒自动抛出异常
+    // 超时机制，十秒自动抛出异常
     Message({
       message: "请求超时，请重新刷新页面",
       type: 'error',

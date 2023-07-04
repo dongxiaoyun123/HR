@@ -1,6 +1,6 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
 import Layout from '@/layout'
-import { fetchUserMenuList } from '@/api/user'
+// import { fetchUserMenuList } from '@/api/user'
 import { getUserPermissions } from '@/api/hrmain'
 /**
  * Use meta.role to determine if the current user has permission
@@ -52,7 +52,7 @@ const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
-    
+
       // const asyncRoutesssss = [
       //   {
       //     path: '/permission',
@@ -113,7 +113,7 @@ const actions = {
       //   },
       // ]
       // accessedRoutes = filterAsyncRouter(asyncRoutesssss)
-      
+
       getUserPermissions().then(response => {
         const { result } = response;
         if (response.success) {
@@ -128,7 +128,6 @@ const actions = {
       // } else {
       //   accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       // }
-  
     })
   }
 }

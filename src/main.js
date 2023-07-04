@@ -45,12 +45,10 @@ Object.keys(filters).forEach(key => {
 
 Vue.config.productionTip = false
 
-
-import format from 'vue-text-format';//金额格式化插件
+import format from 'vue-text-format';// 金额格式化插件
 Vue.use(format);
 
-
-import getBankcardinfo from 'bankcardinfo'//根据输入账号找到银行名称
+import getBankcardinfo from 'bankcardinfo'// 根据输入账号找到银行名称
 Vue.prototype.$getBankcardinfo = getBankcardinfo
 
 import moment from "moment"

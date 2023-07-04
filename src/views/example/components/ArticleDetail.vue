@@ -37,7 +37,7 @@
 
                 <el-col :span="10">
                   <el-form-item label-width="120px" label="Publish Time:" class="postInfo-container-item">
-                    <el-date-picker style="width: 100%;" v-model="displayTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
+                    <el-date-picker v-model="displayTime" style="width: 100%;" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
                   </el-form-item>
                 </el-col>
 

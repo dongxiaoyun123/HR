@@ -20,8 +20,8 @@
       </el-table-column>
       <el-table-column align="center" label="Operations">
         <template slot-scope="scope">
-          <el-button type="primary"  @click="handleEdit(scope)">Edit</el-button>
-          <el-button type="danger"  @click="handleDelete(scope)">Delete</el-button>
+          <el-button type="primary" @click="handleEdit(scope)">Edit</el-button>
+          <el-button type="danger" @click="handleDelete(scope)">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,11 +33,13 @@
         </el-form-item>
         <el-form-item label="Desc">
           <el-input v-model="role.description" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea"
-            placeholder="Role Description" />
+                    placeholder="Role Description"
+          />
         </el-form-item>
         <el-form-item label="Menus">
           <el-tree ref="tree" :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" show-checkbox
-            node-key="path" class="permission-tree" />
+                   node-key="path" class="permission-tree"
+          />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -89,13 +91,13 @@ export default {
   methods: {
     async getRoutes() {
       const res = await getRoutes()
-      
+
       this.serviceRoutes = res.data
       this.routes = this.generateRoutes(res.data)
     },
     async getRoles() {
       const res = await getRoles()
-      
+
       this.rolesList = res.data
     },
 

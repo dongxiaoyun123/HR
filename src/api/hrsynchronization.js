@@ -15,15 +15,3 @@ export function HrSynchronizeData(EnterpriseCode) {
   })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-

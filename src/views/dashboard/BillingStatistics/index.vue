@@ -11,7 +11,7 @@
             <template slot="prefix">
               <div v-if="!AllFlag">
                 <svg-icon icon-class="OverViewAll" style="color: #FF4949;font-size: 18px;" />
-                <span class="MoneySpanClass" v-format="'#,##0.00'">{{ OrderTotal }}</span>
+                <span v-format="'#,##0.00'" class="MoneySpanClass">{{ OrderTotal }}</span>
               </div>
               <div v-else class="MoneySpanClass">暂无</div>
             </template>
@@ -24,7 +24,7 @@
             <template slot="prefix">
               <div v-if="!AllFlag">
                 <svg-icon icon-class="OrderCharging" style="color: #1890FF;font-size: 18px;" />
-                <span class="MoneySpanClass" v-format="'#,##0.00'">{{ OrderCharging }}</span>
+                <span v-format="'#,##0.00'" class="MoneySpanClass">{{ OrderCharging }}</span>
               </div>
               <div v-else class="MoneySpanClass">暂无</div>
             </template>
@@ -37,7 +37,7 @@
             <template slot="prefix">
               <div v-if="!AllFlag">
                 <svg-icon icon-class="OrderPaid" style="color: #13CE66;font-size: 18px;" />
-                <span class="MoneySpanClass" v-format="'#,##0.00'">{{ OrderPaid }}</span>
+                <span v-format="'#,##0.00'" class="MoneySpanClass">{{ OrderPaid }}</span>
               </div>
               <div v-else class="MoneySpanClass">暂无</div>
             </template>
@@ -50,7 +50,7 @@
             <template slot="prefix">
               <div v-if="!AllFlag">
                 <svg-icon icon-class="OrderPaymentTimeout" style="color: #FFBA00;font-size: 18px;" />
-                <span class="MoneySpanClass" v-format="'#,##0.00'">{{ OrderPaymentTimeout }}</span>
+                <span v-format="'#,##0.00'" class="MoneySpanClass">{{ OrderPaymentTimeout }}</span>
               </div>
               <div v-else class="MoneySpanClass">暂无</div>
             </template>
@@ -60,7 +60,7 @@
     </el-row>
     <el-skeleton style="width: 100%;margin-top:20px ;" :loading="loading" :rows="9" animated>
       <el-table :data="DetailData" size="small" height="325px" border>
-        <el-table-column prop="EnterPriseName" show-overflow-tooltip label="公司名称" min-width="190"></el-table-column>
+        <el-table-column prop="EnterPriseName" show-overflow-tooltip label="公司名称" min-width="190" />
         <el-table-column prop="OrderTotal" show-overflow-tooltip label="总金额" sortable min-width="85">
           <template slot-scope="scope">
             <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{ scope.row.OrderTotal }}</span>
@@ -75,13 +75,13 @@
         </el-table-column>
         <el-table-column prop="OrderPaid" show-overflow-tooltip label="已支付" sortable min-width="85">
           <template slot-scope="scope"> <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{ scope.row.OrderPaid
-          }}</span>
+                                        }}</span>
             <span v-else>暂无</span>
           </template>
         </el-table-column>
         <el-table-column prop="OrderPaymentTimeout" show-overflow-tooltip label="超时" sortable min-width="85">
           <template slot-scope="scope"> <span v-if="!scope.row.Flag" v-format="'¥#,##0.00'">{{
-            scope.row.OrderPaymentTimeout }}</span>
+                                          scope.row.OrderPaymentTimeout }}</span>
             <span v-else>暂无</span>
           </template>
         </el-table-column>
@@ -95,9 +95,18 @@ import {
   GetAmountDue,
 } from "@/api/dashboard";
 export default {
+  // 父组件传过来的数据
+  props: {
+    whereParameter: {
+      type: Object,
+      default() {
+                return '';
+            }
+    },
+  },
   data() {
     return {
-      IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+      IfClearableEnterprise: !this.$store.getters.ParentCode,
       myChart: null,
       loading: false,
       OrderCharging: 0,
@@ -108,19 +117,28 @@ export default {
       AllFlag: false,
     }
   },
+  watch: {
+    whereParameter: {
+      handler() {
+        this.GetAmountDue();
+      },
+      deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+    },
+  },
   mounted() {
   },
+  created() {
+  },
   methods: {
-    //根据分公司获取改公司下所有公司配置数据
+    // 根据分公司获取改公司下所有公司配置数据
     GetAmountDue() {
       this.loading = true;
       var parameter = {
-        ParentEnterPriseCode: this.WhereParameter.ParentEnterPriseCode,
-        EnterPriseCode: this.WhereParameter.EnterPriseCode,
+        ParentEnterPriseCode: this.whereParameter.ParentEnterPriseCode,
+        EnterPriseCode: this.whereParameter.EnterPriseCode,
       }
       if (!this.IfClearableEnterprise) {
-        if (!this.WhereParameter.EnterPriseCode)
-          return;
+        if (!this.whereParameter.EnterPriseCode) { return; }
       }
       GetAmountDue(parameter).then((res) => {
         this.loading = false;
@@ -131,8 +149,7 @@ export default {
           this.OrderTotal = res.result.TotalData.OrderTotal;
           this.DetailData = res.result.ChildEnterpriseGroupBy;
           this.AllFlag = res.result.TotalData.Flag;
-        }
-        else {
+        } else {
           this.$message.error("获取失败");
         }
       });
@@ -205,22 +222,6 @@ export default {
     //     });
     //   })
     // },
-  },
-  //父组件传过来的数据
-  props: {
-    WhereParameter: {
-      type: Object
-    },
-  },
-  watch: {
-    WhereParameter: {
-      handler() {
-        this.GetAmountDue();
-      },
-      deep: true,  // 可以深度检测到 obj 对象的属性值的变化
-    },
-  },
-  created() {
   }
 }
 </script>
@@ -229,7 +230,6 @@ export default {
 ::v-deep .el-card__header {
   padding: 10px 20px
 }
-
 
 .row-bg {
   padding: 10px 0;

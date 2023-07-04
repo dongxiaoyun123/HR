@@ -1,71 +1,75 @@
 <template>
-    <div style="margin:8px">
-        <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="合同方">
-                                <el-select class="whereClass" v-model="WhereParameter.ConID" filterable placeholder="合同方"
-                                    @change="GetChildUser">
-                                    <el-option v-for="item in EnterpriseList" :key="item.ConID"
-                                        :label="item.ParentEnterPriseName" :value="item.ConID">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="付款方">
-                                <el-select @change="GenderAgeStatisticsData" class="whereClass"
-                                    v-model="WhereParameter.CorpID" filterable placeholder="付款方"
-                                    :clearable='IfClearableEnterprise'>
-                                    <el-option v-for="item in ChildEnterpriseList" :key="item.CorpID"
-                                        :label="item.EnterPriseName" :value="item.CorpID">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="操作时间">
-                                <el-date-picker :clearable="false" style="width: 100%;" @input="datetimeChange"
-                                    v-model="WhereParameter.CreateTime" type="daterange" range-separator="至"
-                                    start-placeholder="开始时间" end-placeholder="结束时间" :picker-options="pickerOptions">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-button style="margin-left:2rem ;" type="primary" icon="el-icon-search"
-                                @click="GenderAgeStatisticsData">查
-                                询
-                            </el-button>
-                        </el-col>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
-
-        <el-row :gutter="8" style="margin-top: 8px;">
-            <el-col :span="12">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart1" class="ContentClass"></div>
-                    </div>
-                </el-card>
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="合同方">
+                <el-select v-model="WhereParameter.ConID" class="whereClass" filterable placeholder="合同方"
+                           @change="GetChildUser"
+                >
+                  <el-option v-for="item in EnterpriseList" :key="item.ConID"
+                             :label="item.ParentEnterPriseName" :value="item.ConID"
+                  />
+                </el-select>
+              </el-form-item>
             </el-col>
-            <el-col :span="12">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart2" class="ContentClass"></div>
-                    </div>
-                </el-card>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="付款方">
+                <el-select v-model="WhereParameter.CorpID" class="whereClass"
+                           filterable placeholder="付款方" :clearable="IfClearableEnterprise"
+                           @change="GenderAgeStatisticsData"
+                >
+                  <el-option v-for="item in ChildEnterpriseList" :key="item.CorpID"
+                             :label="item.EnterPriseName" :value="item.CorpID"
+                  />
+                </el-select>
+              </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="操作时间">
+                <el-date-picker v-model="WhereParameter.CreateTime" :clearable="false" style="width: 100%;"
+                                type="daterange" range-separator="至" start-placeholder="开始时间"
+                                end-placeholder="结束时间" :picker-options="pickerOptions" @input="datetimeChange"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-button style="margin-left:2rem ;" type="primary" icon="el-icon-search"
+                         @click="GenderAgeStatisticsData"
+              >查
+                询
+              </el-button>
+            </el-col>
+          </el-row>
         </el-row>
-    </div>
+      </el-form>
+    </el-card>
+
+    <el-row :gutter="8" style="margin-top: 8px;">
+      <el-col :span="12">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart1" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart2" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-import moment from "moment"; //导入模块
+import moment from "moment"; // 导入模块
+import { getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
 moment.locale("zh-cn");
 import {
     GetEnterpriseList,
@@ -80,7 +84,7 @@ export default {
     },
     data() {
         return {
-            IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+            IfClearableEnterprise: !this.$store.getters.ParentCode,
             EnterpriseList: [],
             WhereParameter: {
                 ConID: '',
@@ -114,7 +118,7 @@ export default {
                         text: "本年",
                         onClick(picker) {
                             const end = new Date();
-                            var y = end.getFullYear(); //年
+                            var y = end.getFullYear(); // 年
 
                             var startStr = y + "-01-01";
 
@@ -171,21 +175,34 @@ export default {
             },
             myChart1: null,
             myChart2: null,
-            ChildEnterpriseList:[],
+            ChildEnterpriseList: [],
         };
+    },
+    computed: {
+
+    },
+    created() {
+
+    },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        var now = new Date();
+        var year = now.getFullYear(); // 得到年份
+        this.WhereParameter.CreateTime = [moment(`${year}-01-01`), moment(now)];
+        this.GetEnterpriseList();
     },
     methods: {
         datetimeChange(time) {
-            //强制刷新
+            // 强制刷新
             this.$forceUpdate();
         },
-        //如果登陆人是客服，那么获取公司列表
+        // 如果登陆人是客服，那么获取公司列表
         GetEnterpriseList() {
             // 传入vuex存储的值
             GetEnterpriseList().then((res) => {
                 if (res.success) {
                     this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 1 });
-                    //如果有数据那么赋个默认的值
+                    // 如果有数据那么赋个默认的值
                     if (this.EnterpriseList.length > 0) {
                         this.WhereParameter.ConID = this.EnterpriseList[0].ConID;
                         this.GetChildUser();
@@ -195,16 +212,15 @@ export default {
                 }
             });
         },
-        //根据父级公司获取分公司
+        // 根据父级公司获取分公司
         GetChildUser() {
             this.WhereParameter.CorpID = null;
             GetChildUserConId(this.WhereParameter.ConID).then((res) => {
                 if (res.success) {
                     this.ChildEnterpriseList = res.result;
                     if (this.ChildEnterpriseList.length > 0) {
-                        //如果是合同方直接查询全部数据
-                        if (!this.IfClearableEnterprise)
-                            this.WhereParameter.CorpID = this.ChildEnterpriseList[0].CorpID;
+                        // 如果是合同方直接查询全部数据
+                        if (!this.IfClearableEnterprise) { this.WhereParameter.CorpID = this.ChildEnterpriseList[0].CorpID; }
                         this.GenderAgeStatisticsData();
                     }
                 } else {
@@ -212,14 +228,13 @@ export default {
                 }
             });
         },
-        //获取列表数据
+        // 获取列表数据
         GenderAgeStatisticsData() {
             this.loading = true;
             if (this.WhereParameter.CreateTime && this.WhereParameter.CreateTime.length > 0) {
                 this.WhereParameter.BeginTime = this.$moment(this.WhereParameter.CreateTime[0]).format("YYYY-MM-DD");
                 this.WhereParameter.EndTime = this.$moment(this.WhereParameter.CreateTime[1]).format("YYYY-MM-DD");
-            }
-            else {
+            } else {
                 this.WhereParameter.BeginTime = '';
                 this.WhereParameter.EndTime = '';
             }
@@ -255,13 +270,10 @@ export default {
                     this.ChartData = res.result;
                     this.GetCropTypeG();
                     this.GetCropTypeY();
-                }
-                else
-                    this.ChartData = [];
-
+                } else { this.ChartData = []; }
             });
         },
-        //获取疾病统计数据
+        // 获取疾病统计数据
         GetCropTypeG() {
             var option = {
                 title: {
@@ -307,7 +319,7 @@ export default {
                 });
             })
         },
-        //获取看诊统计数据
+        // 获取看诊统计数据
         GetCropTypeY() {
             var option = {
                 title: {
@@ -392,19 +404,6 @@ export default {
                 });
             })
         },
-    },
-    created() {
-
-    },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        var now = new Date();
-        var year = now.getFullYear(); //得到年份
-        this.WhereParameter.CreateTime = [moment(`${year}-01-01`), moment(now)];
-        this.GetEnterpriseList();
-    },
-    computed: {
-
     }
 };
 </script>

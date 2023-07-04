@@ -36,7 +36,7 @@ export default {
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title);
       const first = matched[0]
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: '用户首页' } }].concat(matched)
+        matched = [{ path: '/dashboard', meta: { title: '用户首页' }}].concat(matched)
       }
       // if (!this.isDashboard(first)) {
       //   matched = [{ path: '/UserHomePage/UserHomePageList', meta: { title: '用户首页' } }].concat(matched)

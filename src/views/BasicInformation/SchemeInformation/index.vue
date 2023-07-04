@@ -1,153 +1,157 @@
 <template>
-    <div style="margin:8px">
-        <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="合同方">
-                                <el-select class="whereClass" v-model="WhereParameter.ParentCode" filterable
-                                    placeholder="合同方" clearable>
-                                    <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                                        :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-button-group class="buttonGroupClass">
-                            <el-button type="primary" @click="GetAdmin_PermissionSearch" icon="el-icon-search">查 询
-                            </el-button>
-                            <el-button type="success" @click="showContractorDialog(null)"
-                                icon="el-icon-circle-plus-outline">增
-                                加
-                            </el-button>
-                        </el-button-group>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
-        <el-card class="CardTableClass">
-            <el-table v-loading="loading" highlight-current-row :data="ProgramList" fit>
-                <el-table-column prop="EnterpriseName" label="付款方" min-width="200" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="ProgramName" label="方案名称" min-width="150" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="BeginTimeString" label="开始时间" min-width="120" show-overflow-tooltip>
-                    <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
-                        <span style="margin-left: 6px">{{ scope.row.BeginTimeString }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="EndTimeString" label="结束时间" min-width="100" show-overflow-tooltip>
-                    <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
-                        <span style="margin-left: 6px">{{ scope.row.EndTimeString }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="PaymentCodeName" label="缴别" min-width="100">
-                </el-table-column>
-                <el-table-column prop="Rate" label="费率" min-width="80" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="MonthlyFeeRate" label="月费率" sortable min-width="100" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="PlanTypeName" label="类型" sortable min-width="100" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="IsDel" label="状态" sortable min-width="100" show-overflow-tooltip>
-                    <template slot-scope="scope">
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="合同方">
+                <el-select v-model="WhereParameter.ParentCode" class="whereClass" filterable
+                           placeholder="合同方" clearable
+                >
+                  <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
+                             :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-button-group class="buttonGroupClass">
+              <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
+              </el-button>
+              <el-button type="success" icon="el-icon-circle-plus-outline"
+                         @click="showContractorDialog(null)"
+              >增
+                加
+              </el-button>
+            </el-button-group>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card class="CardTableClass">
+      <el-table v-loading="loading" highlight-current-row :data="ProgramList" fit>
+        <el-table-column prop="EnterpriseName" label="付款方" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="ProgramName" label="方案名称" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="BeginTimeString" label="开始时间" min-width="120" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-time" />
+            <span style="margin-left: 6px">{{ scope.row.BeginTimeString }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="EndTimeString" label="结束时间" min-width="100" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-time" />
+            <span style="margin-left: 6px">{{ scope.row.EndTimeString }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="PaymentCodeName" label="缴别" min-width="100" />
+        <el-table-column prop="Rate" label="费率" min-width="80" show-overflow-tooltip />
+        <el-table-column prop="MonthlyFeeRate" label="月费率" sortable min-width="100" show-overflow-tooltip />
+        <el-table-column prop="PlanTypeName" label="类型" sortable min-width="100" show-overflow-tooltip />
+        <el-table-column prop="IsDel" label="状态" sortable min-width="100" show-overflow-tooltip>
+          <template slot-scope="scope">
 
-                        <el-tag effect="plain" v-if="scope.row.IsDel == 0" type="success">
-                            显示
-                        </el-tag>
-                        <el-tag effect="plain" v-else type="info">
-                            隐藏
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column min-width="215px" label="排序" fixed="right">
-                    <template slot-scope="{row}">
-                        <template v-if="row.edit">
-                            <el-input-number size="mini" v-model="row.OrderBy" :min="1"></el-input-number>
-                            <el-button size="mini" class="cancel-btn" icon="el-icon-refresh" type="text"
-                                @click="cancelEdit(row)">
-                                取消
-                            </el-button>
-                        </template>
-                        <span v-else>{{ row.OrderBy }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" fixed="right" width="250">
-                    <template slot-scope="{row}">
-                        <el-button size="mini" v-if="row.edit" type="text" icon="el-icon-check" @click="confirmEdit(row)">
-                            确定
-                        </el-button>
-                        <el-button size="mini" v-else type="text" icon="el-icon-sort" @click="row.edit = !row.edit">
-                            排序
-                        </el-button>
-                        <el-button icon="el-icon-close" v-if="row.IsDel == 0" type="text" size="mini" @click="
-                            UpdateProgramInfo(row.ProgramCode, 1)
-                        ">
-                            置为隐藏</el-button>
-                        <el-button icon="el-icon-view" v-else type="text" size="mini" @click="
-                            UpdateProgramInfo(row.ProgramCode, 0)
-                        ">
-                            置为显示</el-button>
+            <el-tag v-if="scope.row.IsDel == 0" effect="plain" type="success">
+              显示
+            </el-tag>
+            <el-tag v-else effect="plain" type="info">
+              隐藏
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column min-width="215px" label="排序" fixed="right">
+          <template slot-scope="{row}">
+            <template v-if="row.edit">
+              <el-input-number v-model="row.OrderBy" size="mini" :min="1" />
+              <el-button size="mini" class="cancel-btn" icon="el-icon-refresh" type="text"
+                         @click="cancelEdit(row)"
+              >
+                取消
+              </el-button>
+            </template>
+            <span v-else>{{ row.OrderBy }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="250">
+          <template slot-scope="{row}">
+            <el-button v-if="row.edit" size="mini" type="text" icon="el-icon-check" @click="confirmEdit(row)">
+              确定
+            </el-button>
+            <el-button v-else size="mini" type="text" icon="el-icon-sort" @click="row.edit = !row.edit">
+              排序
+            </el-button>
+            <el-button v-if="row.IsDel == 0" icon="el-icon-close" type="text" size="mini" @click="
+              UpdateProgramInfo(row.ProgramCode, 1)
+            "
+            >
+              置为隐藏</el-button>
+            <el-button v-else icon="el-icon-view" type="text" size="mini" @click="
+              UpdateProgramInfo(row.ProgramCode, 0)
+            "
+            >
+              置为显示</el-button>
 
-                        <el-button icon="el-icon-refresh" type="text" size="mini" @click="
-                            RefreshProgramInfo(row.EnterpriseCode, row.ProgramCode)
-                        ">更新</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页区域 -->
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]" :page-size="WhereParameter.PageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
-        </el-card>
-        <!-- 添加投保数据 -->
-        <el-dialog :visible.sync="addProgramVisible" top="5vh" width="45%" @close="detailAddDialogVisibleClosed"
-            :lock-scroll="false" :append-to-body="true">
-            <!-- 上面两个属性用来重置滚动条 -->
-            <div slot="title" class="dialog-title">
-                <span>添加方案信息</span>
-            </div>
-            <el-form :model="AddProgramForm" ref="addProgramRef" :rules="addProgramRules" label-width="120px">
-                <el-alert style="margin-bottom:20px ;" type="success" show-icon
-                    title="方案名称（不是隐藏的）要和客服系统中的保持一致，方案信息和当前客服系统保持一致，客服系统如果修改那么只需点击同步即可更新方案信息" :closable="false">
-                </el-alert>
-                <el-form-item label="合同方" prop="ParentCode">
-                    <el-select v-model="AddProgramForm.ParentCode" filterable placeholder="合同方"
-                        @change="GetChildEnterprise">
-                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
-                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="付款方" prop="EnterPriseCode">
-                    <el-select v-model="AddProgramForm.EnterPriseCode" filterable placeholder="付款方">
-                        <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
-                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="方案名称" prop="ProgramName">
-                    <el-input v-model="AddProgramForm.ProgramName" placeholder="方案名称"></el-input>
-                </el-form-item>
-                <el-form-item label="排序" prop="OrderBy">
-                    <el-input-number v-model="AddProgramForm.OrderBy" :min="1"></el-input-number>
-                </el-form-item>
-                <el-divider></el-divider>
-                <el-row class="buttonCenter">
-                    <el-col>
-                        <el-button type="primary" :loading="LoadingAdd" @click="addProgram">保
-                            存</el-button>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </el-dialog>
-    </div>
+            <el-button icon="el-icon-refresh" type="text" size="mini" @click="
+              RefreshProgramInfo(row.EnterpriseCode, row.ProgramCode)
+            "
+            >更新</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination background :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
+                     :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
+    </el-card>
+    <!-- 添加投保数据 -->
+    <el-dialog :visible.sync="addProgramVisible" top="5vh" width="45%" :lock-scroll="false"
+               :append-to-body="true" @close="detailAddDialogVisibleClosed"
+    >
+      <!-- 上面两个属性用来重置滚动条 -->
+      <div slot="title" class="dialog-title">
+        <span>添加方案信息</span>
+      </div>
+      <el-form ref="addProgramRef" :model="AddProgramForm" :rules="addProgramRules" label-width="120px">
+        <el-alert style="margin-bottom:20px ;" type="success" show-icon
+                  title="方案名称（不是隐藏的）要和客服系统中的保持一致，方案信息和当前客服系统保持一致，客服系统如果修改那么只需点击同步即可更新方案信息" :closable="false"
+        />
+        <el-form-item label="合同方" prop="ParentCode">
+          <el-select v-model="AddProgramForm.ParentCode" filterable placeholder="合同方"
+                     @change="GetChildEnterprise"
+          >
+            <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="付款方" prop="EnterPriseCode">
+          <el-select v-model="AddProgramForm.EnterPriseCode" filterable placeholder="付款方">
+            <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
+                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="方案名称" prop="ProgramName">
+          <el-input v-model="AddProgramForm.ProgramName" placeholder="方案名称" />
+        </el-form-item>
+        <el-form-item label="排序" prop="OrderBy">
+          <el-input-number v-model="AddProgramForm.OrderBy" :min="1" />
+        </el-form-item>
+        <el-divider />
+        <el-row class="buttonCenter">
+          <el-col>
+            <el-button type="primary" :loading="LoadingAdd" @click="addProgram">保
+              存</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
 import { scrollTo } from '@/utils/scroll-to'
-import { getDateByTimes } from "@/utils"; //时间日期格式化成字符串
 import {
     GetSettingProgramList,
     AddPrograminfo,
@@ -163,7 +167,7 @@ export default {
     },
     data() {
         return {
-            ParentContractorList:[],
+            ParentContractorList: [],
             ChildEnterpriseList: [],
             EnterpriseList: [],
             addProgramVisible: false,
@@ -198,8 +202,18 @@ export default {
             },
         };
     },
+    computed: {
+    },
+    created() {
+    },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        this.GetEnterpriseList();
+        this.GetAdmin_PermissionSearch();
+        this.ParentGetContractorList();
+    },
     methods: {
-        //行内取消编辑，还原数据
+        // 行内取消编辑，还原数据
         cancelEdit(row) {
             row.OrderBy = row.originalOrderBy
             row.edit = false
@@ -208,7 +222,7 @@ export default {
                 type: 'warning'
             })
         },
-        //确认行内编辑
+        // 确认行内编辑
         confirmEdit(row) {
             if (!row.OrderBy) {
                 this.$message({
@@ -217,7 +231,7 @@ export default {
                 });
                 return;
             }
-            //编辑排序方法
+            // 编辑排序方法
             EditProgramOrderBy(row.ProgramCode, row.OrderBy).then((res) => {
                 if (res.success) {
                     row.edit = false;
@@ -254,7 +268,7 @@ export default {
                 }
             });
         },
-        //根据父级公司获取分公司
+        // 根据父级公司获取分公司
         GetChildEnterprise() {
             GetChildEnterprise(this.AddProgramForm.ParentCode).then((res) => {
                 if (res.success) {
@@ -266,7 +280,7 @@ export default {
             });
         },
 
-        //添加投保数据
+        // 添加投保数据
         addProgram() {
             this.LoadingAdd = true;
             // 提交请求前，表单预验证
@@ -295,13 +309,13 @@ export default {
                 }
             });
         },
-        //添加窗口关闭
+        // 添加窗口关闭
         detailAddDialogVisibleClosed() {
-            //初始化data-AddProgramForm 的数据
+            // 初始化data-AddProgramForm 的数据
             this.$data.AddProgramForm = this.$options.data().AddProgramForm;
             this.$refs.addProgramRef.resetFields();
         },
-        //弹出添加窗口(修改需要传入参数)
+        // 弹出添加窗口(修改需要传入参数)
         showContractorDialog() {
             this.addProgramVisible = true;
         },
@@ -322,7 +336,7 @@ export default {
             this.WhereParameter.PageSize = 20;
             this.GetSettingProgramList();
         },
-        //获取员工方案列表数据
+        // 获取员工方案列表数据
         GetSettingProgramList() {
             this.loading = true;
             var parameter = {
@@ -335,8 +349,8 @@ export default {
             ).then((res) => {
                 if (res.success) {
                     this.ProgramList = res.result.data.map(v => {
-                        this.$set(v, 'edit', false);//通过this.$set 方法重新为数组赋值，用来判断是不是需要编辑的标识
-                        this.$set(v, 'originalOrderBy', v.OrderBy);//用于取消时重新赋值
+                        this.$set(v, 'edit', false);// 通过this.$set 方法重新为数组赋值，用来判断是不是需要编辑的标识
+                        this.$set(v, 'originalOrderBy', v.OrderBy);// 用于取消时重新赋值
                         return v
                     });
                     this.total = res.result.count;
@@ -347,7 +361,7 @@ export default {
                 this.loading = false;
             });
         },
-        //获取公司列表
+        // 获取公司列表
         GetEnterpriseList() {
             GetEnterpriseList().then((res) => {
                 if (res.success) {
@@ -357,7 +371,7 @@ export default {
                 }
             });
         },
-        //获取员工方案列表数据
+        // 获取员工方案列表数据
         ParentGetContractorList() {
             var parameter = {
                 ContractorParameter: "",
@@ -375,16 +389,6 @@ export default {
                 }
             });
         },
-    },
-    created() {
-    },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        this.GetEnterpriseList();
-        this.GetAdmin_PermissionSearch();
-        this.ParentGetContractorList();
-    },
-    computed: {
     }
 };
 </script>

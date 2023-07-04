@@ -1,7 +1,8 @@
 <template>
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
-      @toggleClick="toggleSideBar" />
+               @toggleClick="toggleSideBar"
+    />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
@@ -32,24 +33,26 @@
         (command) => {
           handleCommand(command);
         }
-      ">
+      "
+      >
 
         <el-form :inline="true" style="color: white;height: 50px;cursor: pointer;">
           <el-form-item>
             <div class="avatar-wrapper">
-              <el-avatar size="medium" shape="circle" :src="userlogo">
-              </el-avatar>
+              <el-avatar size="medium" shape="circle" :src="userlogo" />
               <!-- <img :src="userlogo" class="user-avatar"> -->
             </div>
           </el-form-item>
           <el-form-item>
             <el-tooltip v-if="realname.length > 5" class="item" effect="dark" :content="realname" placement="left">
               <div
-                style="width:80px;white-space: nowrap;text-overflow:ellipsis; overflow:hidden;color: black;height: 50px;line-height: 50px;">
+                style="width:80px;white-space: nowrap;text-overflow:ellipsis; overflow:hidden;color: black;height: 50px;line-height: 50px;"
+              >
                 {{ realname }}</div>
             </el-tooltip>
             <div v-else
-              style="width:80px;white-space: nowrap;text-overflow:ellipsis; overflow:hidden;color: black;height: 50px;line-height: 50px;">
+                 style="width:80px;white-space: nowrap;text-overflow:ellipsis; overflow:hidden;color: black;height: 50px;line-height: 50px;"
+            >
               {{ realname }}</div>
           </el-form-item>
         </el-form>
@@ -75,17 +78,18 @@
       </el-dropdown>
       <!-- 修改密码对话框 -->
       <el-dialog append-to-body title="修改密码" :visible.sync="updatePasswordVisible" top="15vh" width="30%"
-        @close="dialogClosed">
+                 @close="dialogClosed"
+      >
         <!-- 内容主体 -->
-        <el-form :model="updatePassword" ref="updatePasswordRef" :rules="updatePasswordRules" label-width="90px">
+        <el-form ref="updatePasswordRef" :model="updatePassword" :rules="updatePasswordRules" label-width="90px">
           <el-form-item label="新密码" prop="User_Pwd">
-            <el-input v-model="updatePassword.User_Pwd" show-password></el-input>
+            <el-input v-model="updatePassword.User_Pwd" show-password />
           </el-form-item>
           <el-form-item label="确认密码" prop="ConfirmPassword">
-            <el-input v-model="updatePassword.ConfirmPassword" show-password></el-input>
+            <el-input v-model="updatePassword.ConfirmPassword" show-password />
           </el-form-item>
         </el-form>
-        <el-divider></el-divider>
+        <el-divider />
         <el-row class="buttonCenter">
           <el-col>
             <el-button type="primary" :loading="UpdatePasswordLoading" @click="UpdatePasswordCommit">
@@ -164,13 +168,12 @@ export default {
     ]),
     userlogo() {
       // 存放要换的图片
-      let imgs = [
+      const imgs = [
         require('@/assets/i-mages/Logo1.gif'),
         require('@/assets/i-mages/Logo2.gif'),
         require('@/assets/i-mages/Logo3.gif'),
       ];
-      return imgs[Math.floor(Math.random() * 3)]; //进行计算随机
-
+      return imgs[Math.floor(Math.random() * 3)]; // 进行计算随机
     },
   },
   methods: {
@@ -214,15 +217,15 @@ export default {
           this.$router.push(`/login`);
           break;
       }
-      //清除logo缓存
+      // 清除logo缓存
       window.localStorage.removeItem("LogoCatch");
     },
-    //修改密码
+    // 修改密码
     updatePasswordClick() {
       this.updatePassword.User_ID = this.$store.getters.UserBaseInfoLoginBackstage;
       this.updatePasswordVisible = true;
     },
-    //修改密码提交验证
+    // 修改密码提交验证
     UpdatePasswordCommit() {
       this.UpdatePasswordLoading = true;
       // 提交请求前，表单预验证

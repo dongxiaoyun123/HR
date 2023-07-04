@@ -51,7 +51,6 @@ export default {
         case "#/loginNotLogo":
         this.logo = '';
         break;
-        
     }
   },
 }

@@ -7,7 +7,7 @@
       <el-row :gutter="8">
         <el-col :span="24">
           <div class="grid-content">
-            <div ref="chart" class="ContentClass"></div>
+            <div ref="chart" class="ContentClass" />
           </div>
         </el-col>
       </el-row>
@@ -20,22 +20,41 @@ import {
   GetChartData,
 } from "@/api/dashboard";
 export default {
+  // 父组件传过来的数据
+  props: {
+    whereParameter: {
+      type: Object,
+      default() {
+        return '';
+      }
+    },
+  },
   data() {
     return {
-      IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+      IfClearableEnterprise: !this.$store.getters.ParentCode,
       NumberOfVisits: [],
     };
   },
+  watch: {
+    whereParameter: {
+      handler() {
+        this.GetChartData();
+      },
+      deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+    },
+  },
+  created() {
+
+  },
   methods: {
-    //根据分公司获取改公司下所有公司配置数据
+    // 根据分公司获取改公司下所有公司配置数据
     GetChartData() {
       var parameter = {
-        ParentEnterPriseCode: this.WhereParameter.ParentEnterPriseCode,
-        EnterPriseCode: this.WhereParameter.EnterPriseCode,
+        ParentEnterPriseCode: this.whereParameter.ParentEnterPriseCode,
+        EnterPriseCode: this.whereParameter.EnterPriseCode,
       }
       if (!this.IfClearableEnterprise) {
-        if (!this.WhereParameter.EnterPriseCode)
-          return;
+        if (!this.whereParameter.EnterPriseCode) { return; }
       }
       var chart = this.$refs.chart
       this.myChart = echarts.init(chart);
@@ -51,13 +70,12 @@ export default {
         if (res.success) {
           this.NumberOfVisits = res.result;
           this.PercentNumberOfVisits();
-        }
-        else {
+        } else {
           this.$message.error("获取失败");
         }
       });
     },
-    //就诊次数分布
+    // 就诊次数分布
     PercentNumberOfVisits() {
       var illness_IllnessTypeListArr = [];
 
@@ -69,12 +87,11 @@ export default {
       }
       var personCaseInfoListArr = [];
       var contentData = this.NumberOfVisits.PersonCaseInfoList;
-      for (var i = 0; i < contentData.length; i++) {
+      for (var s = 0; s < contentData.length; s++) {
         personCaseInfoListArr.push(
-          contentData[i]
+          contentData[s]
         );
       }
-debugger
       var option = {
         grid: {
           left: '3%',
@@ -90,20 +107,14 @@ debugger
         xAxis: {
           data: illness_IllnessTypeListArr,
           axisLabel: {
-            inside: true,
-            textStyle: {
-              color: '#fff'
-            }
+            interval: 0,
+            rotate: -40
           },
           axisTick: {
             show: false
           },
           axisLine: {
             show: false
-          },
-          axisLabel: {
-            interval: 0,
-            rotate: -40
           },
           z: 10
         },
@@ -154,7 +165,6 @@ debugger
                     const curr = item.data / this.NumberOfVisits.Max * 100
 
                     return this.NumberOfVisits.Max == 0 ? '0%' : parseInt(curr) + '%'
-
                   }
                 }
               }
@@ -187,26 +197,9 @@ debugger
       })
     },
   },
-  //父组件传过来的数据
-  props: {
-    WhereParameter: {
-      type: Object
-    },
-  },
-  watch: {
-    WhereParameter: {
-      handler() {
-        this.GetChartData();
-      },
-      deep: true,  // 可以深度检测到 obj 对象的属性值的变化
-    },
-  },
-  created() {
-
-  },
 };
 </script>
-  
+
 <style  scoped>
 ::v-deep .el-card__header {
   padding: 10px 20px

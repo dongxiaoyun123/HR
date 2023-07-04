@@ -1,126 +1,132 @@
 <template>
-    <div style="margin:8px">
-        <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item style="margin-bottom: 0;" label="合同方">
-                                <el-select class="whereClass" v-model="WhereParameter.ParentEnterPriseCode" filterable
-                                    placeholder="合同方" @change="GetChildUser">
-                                    <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                                        :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item style="margin-bottom: 0;" label="付款方">
-                                <el-select @change="GetManageSettings" class="whereClass"
-                                    v-model="WhereParameter.EnterPriseCode" filterable placeholder="付款方">
-                                    <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
-                                        :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-button :disabled="ReadOnly" style="margin-left: 2rem;" type="primary" :loading="LoadingAdd"
-                                @click="UpdateEnterpriseManage">保
-                                存</el-button>
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item style="margin-bottom: 0;" label="合同方">
+                <el-select v-model="WhereParameter.ParentEnterPriseCode" class="whereClass" filterable
+                           placeholder="合同方" @change="GetChildUser"
+                >
+                  <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
+                             :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item style="margin-bottom: 0;" label="付款方">
+                <el-select v-model="WhereParameter.EnterPriseCode" class="whereClass"
+                           filterable placeholder="付款方" @change="GetManageSettings"
+                >
+                  <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
+                             :label="item.EnterPriseName" :value="item.EnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-button :disabled="ReadOnly" style="margin-left: 2rem;" type="primary" :loading="LoadingAdd"
+                         @click="UpdateEnterpriseManage"
+              >保
+                存</el-button>
 
-                        </el-col>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
+            </el-col>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
 
-        <el-form v-loading="loading" style="width: 100%;" :model="EnterpriseManage" ref="EnterpriseManageRef"
-            :rules="EnterpriseManageRules" label-width="90px">
-            <el-card style="margin-top:8px ;">
-                <div slot="header" class="clearfix">
-                    <span>收款账户</span>
-                </div>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="开户类型" prop="AccountOpenType">
-                            <el-select class="rangeTimeClass" v-model="EnterpriseManage.AccountOpenType" filterable
-                                placeholder="开户类型">
-                                <el-option v-for="item in AccountOpenTypeArray" :key="item.ConfigValue"
-                                    :label="item.ConfigName" :value="item.ConfigValue">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="账户姓名" prop="AccountName">
-                            <el-input v-model="EnterpriseManage.AccountName" placeholder="账户姓名" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="收款账户" prop="CollectionAccount">
-                            <el-input @input="GetBank" v-model="EnterpriseManage.CollectionAccount" placeholder="收款账户"
-                                clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8" v-if="EnterpriseManage.AccountOpenType != 2">
-                        <el-form-item label="开户网点" prop="OpeningBranch">
-                            <el-input v-model="EnterpriseManage.OpeningBranch" placeholder="开户网点" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8" v-if="EnterpriseManage.AccountOpenType != 2">
-                        <el-form-item label="银行名称" prop="BankName">
-                            <el-input v-model="EnterpriseManage.BankName" placeholder="银行名称" readonly></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-card>
-            <el-card style="margin-top:-1px ;">
-                <div slot="header" class="clearfix">
-                    <span>发票抬头</span>
-                </div>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="公司名称" prop="CompanyName">
-                            <el-input v-model="EnterpriseManage.CompanyName" placeholder="公司名称" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-card>
-            <el-card style="margin-top:-1px ;">
-                <div slot="header" class="clearfix">
-                    <span>收件地址</span>
-                </div>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="联系人" prop="ContactPerson">
-                            <el-input v-model="EnterpriseManage.ContactPerson" placeholder="联系人" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="联系方式" prop="Phone">
-                            <el-input v-model="EnterpriseManage.Phone" placeholder="联系方式" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="所在地区" prop="LocationRegion">
-                            <el-cascader class="rangeTimeClass" @change="handleChange" :options="options"
-                                v-model="EnterpriseManage.LocationRegion" clearable filterable>
-                            </el-cascader>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="详细地址" prop="DetailedAddress">
-                            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }"
-                                v-model="EnterpriseManage.DetailedAddress" placeholder="详细地址" clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-card>
-        </el-form>
+    <el-form ref="EnterpriseManageRef" v-loading="loading" style="width: 100%;" :model="EnterpriseManage"
+             :rules="EnterpriseManageRules" label-width="90px"
+    >
+      <el-card style="margin-top:8px ;">
+        <div slot="header" class="clearfix">
+          <span>收款账户</span>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="开户类型" prop="AccountOpenType">
+              <el-select v-model="EnterpriseManage.AccountOpenType" class="rangeTimeClass" filterable
+                         placeholder="开户类型"
+              >
+                <el-option v-for="item in AccountOpenTypeArray" :key="item.ConfigValue"
+                           :label="item.ConfigName" :value="item.ConfigValue"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="账户姓名" prop="AccountName">
+              <el-input v-model="EnterpriseManage.AccountName" placeholder="账户姓名" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="收款账户" prop="CollectionAccount">
+              <el-input v-model="EnterpriseManage.CollectionAccount" placeholder="收款账户" clearable
+                        @input="GetBank"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col v-if="EnterpriseManage.AccountOpenType != 2" :span="8">
+            <el-form-item label="开户网点" prop="OpeningBranch">
+              <el-input v-model="EnterpriseManage.OpeningBranch" placeholder="开户网点" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col v-if="EnterpriseManage.AccountOpenType != 2" :span="8">
+            <el-form-item label="银行名称" prop="BankName">
+              <el-input v-model="EnterpriseManage.BankName" placeholder="银行名称" readonly />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <el-card style="margin-top:-1px ;">
+        <div slot="header" class="clearfix">
+          <span>发票抬头</span>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="公司名称" prop="CompanyName">
+              <el-input v-model="EnterpriseManage.CompanyName" placeholder="公司名称" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <el-card style="margin-top:-1px ;">
+        <div slot="header" class="clearfix">
+          <span>收件地址</span>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="联系人" prop="ContactPerson">
+              <el-input v-model="EnterpriseManage.ContactPerson" placeholder="联系人" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系方式" prop="Phone">
+              <el-input v-model="EnterpriseManage.Phone" placeholder="联系方式" clearable />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="所在地区" prop="LocationRegion">
+              <el-cascader v-model="EnterpriseManage.LocationRegion" class="rangeTimeClass" :options="options"
+                           clearable filterable @change="handleChange"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="详细地址" prop="DetailedAddress">
+              <el-input v-model="EnterpriseManage.DetailedAddress" type="textarea"
+                        :autosize="{ minRows: 2, maxRows: 4 }" placeholder="详细地址" clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+    </el-form>
 
-
-    </div>
+  </div>
 </template>
 <script>
 import moment from "moment";
@@ -137,27 +143,21 @@ export default {
     components: {
     },
     data() {
-        //身份证检验规则
+        // 身份证检验规则
         var checkCollectionAccount = (rule, value, callback) => {
             if (value) {
-                //只检验证件类型是身份证的
+                // 只检验证件类型是身份证的
                 if (this.EnterpriseManage.AccountOpenType == 1) {
-                    if (!this.EnterpriseManage.BankName)
-                        return callback(new Error("收款账户输入有误，请检查"));
-                    else {
+                    if (!this.EnterpriseManage.BankName) { return callback(new Error("收款账户输入有误，请检查")); } else {
                         return callback();
                     }
                 } else {
                     const regMobile = /^1[34578]\d{9}$/;
                     if (regMobile.test(this.EnterpriseManage.CollectionAccount)) {
                         return callback();
-                    } else
-                        return callback(new Error("收款账户输入有误，请检查"));
+                    } else { return callback(new Error("收款账户输入有误，请检查")); }
                 }
-            }
-            else
-                return callback();
-
+            } else { return callback(); }
         };
         // 自定义手机号规则
         var checkMobile = (rule, value, callback) => {
@@ -172,7 +172,7 @@ export default {
             }
         };
         return {
-            ReadOnly: false,//演示人员不能操作数据
+            ReadOnly: false, // 演示人员不能操作数据
             AccountOpenTypeArray: [],
             LoadingAdd: false,
             options: regionData,
@@ -189,7 +189,6 @@ export default {
                 DetailedAddress: '',
                 LocationRegionArray: [],
             },
-            AccountOpenTypeArray: [],
             WhereParameter: {
                 ParentEnterPriseCode: '',
                 EnterPriseCode: '',
@@ -213,6 +212,15 @@ export default {
 
             },
         };
+    },
+    computed: {
+    },
+    created() { },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        if (this.$store.getters.roles.indexOf(7) != -1) { this.ReadOnly = true }
+        this.GetDataConfigData();
+        this.GetEnterpriseList();
     },
     methods: {
         UpdateEnterpriseManage() {
@@ -251,21 +259,18 @@ export default {
         GetBank() {
             this.$getBankcardinfo.getBankBin(this.EnterpriseManage.CollectionAccount, (err, data) => {
                 if (!err) {
-
                     this.EnterpriseManage.BankName = data.bankName;
-                }
-                else
-                    this.EnterpriseManage.BankName = '';
+                } else { this.EnterpriseManage.BankName = ''; }
             })
         },
 
-        //如果登陆人是客服，那么获取公司列表
+        // 如果登陆人是客服，那么获取公司列表
         GetEnterpriseList() {
             // 传入vuex存储的值
             GetEnterpriseList().then((res) => {
                 if (res.success) {
                     this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 2 });
-                    //如果有数据那么赋个默认的值
+                    // 如果有数据那么赋个默认的值
                     if (this.EnterpriseList.length > 0) {
                         this.WhereParameter.ParentEnterPriseCode = this.EnterpriseList[0].ParentEnterPriseCode;
                         this.GetChildUser(this.EnterpriseList[0].ParentEnterPriseCode);
@@ -275,7 +280,7 @@ export default {
                 }
             });
         },
-        //根据父级公司获取分公司
+        // 根据父级公司获取分公司
         GetChildUser(ParentEnterPriseCode) {
             this.WhereParameter.EnterPriseCode = '';
             GetChildUser(ParentEnterPriseCode).then((res) => {
@@ -290,7 +295,7 @@ export default {
                 }
             });
         },
-        //根据分公司获取改公司下所有公司配置数据
+        // 根据分公司获取改公司下所有公司配置数据
         GetManageSettings() {
             this.$refs.EnterpriseManageRef.resetFields();
             this.loading = true;
@@ -312,8 +317,7 @@ export default {
                         res.result.LocationRegion.split(',').forEach(element => {
                             this.EnterpriseManage.LocationRegion.push(element);
                         });
-                    }
-                    else {
+                    } else {
                         this.EnterpriseManage.AccountOpenType = '';
                         this.EnterpriseManage.AccountName = '';
                         this.EnterpriseManage.CollectionAccount = '';
@@ -329,11 +333,11 @@ export default {
                 this.loading = false;
             });
         },
-        //行政区选择事件
+        // 行政区选择事件
         handleChange(value) {
             this.AddEnterpriseFrom.EnterpriseCityArray = value;
         },
-        //正序
+        // 正序
         sortKey(array, key) {
             return array.sort(function (a, b) {
                 var x = a[key];
@@ -342,7 +346,7 @@ export default {
             })
         },
         GetDataConfigData() {
-            //获取配置下拉数据
+            // 获取配置下拉数据
             GetDataConfigData().then((res) => {
                 if (res.success) {
                     this.AccountOpenTypeArray =
@@ -355,16 +359,6 @@ export default {
                 }
             });
         },
-    },
-    created() { },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        if (this.$store.getters.roles.indexOf(7) != -1)
-            this.ReadOnly = true
-        this.GetDataConfigData();
-        this.GetEnterpriseList();
-    },
-    computed: {
     }
 };
 </script>

@@ -39,7 +39,6 @@ const mutations = {
   //   state.UserBaseInfoLoginBackstage = UserBaseInfoLoginBackstage
   // },
   SET_ParentCode: (state, ParentCode) => {
-
     state.ParentCode = ParentCode
   },
   SET_MenuPermissions: (state, MenuPermissions) => {
@@ -55,16 +54,16 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      let md5Pwd = md5(password);
+      const md5Pwd = md5(password);
       const obj = {};
       obj.loginName = username.trim();
       obj.password = md5Pwd;
       obj.deviceType = 2;
-      let t = new Date(); //你已知的时间
-      let t_s = t.getTime(); //转化为时间戳毫秒数
-      let nt = new Date(); //定义一个新时间
-      nt.setTime(t_s + 5000 * 60); //设置新时间比旧时间多5分钟
-      let refresh_expires = nt.getTime();
+      const t = new Date(); // 你已知的时间
+      const t_s = t.getTime(); // 转化为时间戳毫秒数
+      const nt = new Date(); // 定义一个新时间
+      nt.setTime(t_s + 5000 * 60); // 设置新时间比旧时间多5分钟
+      const refresh_expires = nt.getTime();
       obj.refresh_expires = refresh_expires;
       obj.Phone = '';
       obj.Code = '';
@@ -81,7 +80,7 @@ const actions = {
           //   router.addRoutes(accessRoutes)
           // })
         }
-        //返回值
+        // 返回值
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -94,7 +93,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         if (response.result) {
-          const { roleArray, UserInfo, ParentCode, MenuPermissions,InsuranceTypeCode } = response.result
+          const { roleArray, UserInfo, ParentCode, MenuPermissions, InsuranceTypeCode } = response.result
           // const { roles } = result
           // const { roles, name, avatar, introduction } = result
           // roles must be a non-empty array
@@ -106,22 +105,19 @@ const actions = {
           // commit('SET_UserBaseInfoLoginBackstage', UserBaseInfoLoginBackstage)
           commit('SET_realname', UserInfo.User_RealName)
           commit('SET_ROLES', roleArray)
-          //先注释掉，等用到的时候再进行修改
+          // 先注释掉，等用到的时候再进行修改
           commit('SET_NAME', "SET_NAME")
           commit('SET_AVATAR', "SET_AVATAR")
           commit('SET_INTRODUCTION', "SET_INTRODUCTION")
-          //重新存储一下token，防止刷新页面token丢失
+          // 重新存储一下token，防止刷新页面token丢失
           commit('SET_TOKEN', state.token)
           commit('SET_MenuPermissions', MenuPermissions)
           commit('SET_InsuranceTypeCode', InsuranceTypeCode)
 
-          if (roleArray.length != 0)
-            resolve(roleArray)
-        }
-        else
-          reject("")
+          if (roleArray.length != 0) { resolve(roleArray) }
+        } else { reject("") }
       }).catch(error => {
-
+        console.log(error);
         reject("")
       })
     })

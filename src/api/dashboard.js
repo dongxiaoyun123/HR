@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export function GetDataBriefs(parameter) {
   return request({
     url: '/HrDashBoard/GetDataBriefs',
@@ -46,11 +45,4 @@ export function GetChartData(parameter) {
     data: parameter
   })
 }
-
-
-
-
-
-
-
 

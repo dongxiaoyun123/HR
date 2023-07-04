@@ -1,5 +1,5 @@
 <template>
-  <canvas ref="canvas" @click="draw" width="140" height="40" style="cursor: pointer;"></canvas>
+  <canvas ref="canvas" width="140" height="40" style="cursor: pointer;" @click="draw" />
 </template>
 <script>
 export default {
@@ -10,9 +10,6 @@ export default {
       colors: ["#1890FF", "#13CE66", "#909399", "#FFBA00", "#FF4949"],
       code_Len: 4
     };
-  },
-  mounted() {
-    this.draw();
   },
   computed: {
     codeString() {
@@ -27,6 +24,9 @@ export default {
     codeString: function (newValue) {
       this.$emit("change", newValue);
     }
+  },
+  mounted() {
+    this.draw();
   },
   methods: {
     generateRandom() {

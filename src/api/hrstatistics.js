@@ -88,13 +88,3 @@ export function GetillnesslistNew(parameter) {
   })
 }
 
-
-
-
-
-
-
-
-
-
-

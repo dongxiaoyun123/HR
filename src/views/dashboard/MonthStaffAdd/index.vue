@@ -1,10 +1,10 @@
 <template>
-    <el-card style="width: 100%;height: 520px;margin-top: 20px;">
-        <div slot="header" class="clearfix">
-            <span style="float: left;margin: 0;line-height: 2.2rem;">每月在保统计</span>
-        </div>
-        <div ref="chart" style="width:100%;height:450px"></div>
-    </el-card>
+  <el-card style="width: 100%;height: 520px;margin-top: 20px;">
+    <div slot="header" class="clearfix">
+      <span style="float: left;margin: 0;line-height: 2.2rem;">每月在保统计</span>
+    </div>
+    <div ref="chart" style="width:100%;height:450px" />
+  </el-card>
 </template>
 <script>
 import echarts from 'echarts'
@@ -12,9 +12,18 @@ import {
     GetMonthStaffStatistics,
 } from "@/api/dashboard";
 export default {
+    // 父组件传过来的数据
+    props: {
+        whereParameter: {
+            type: Object,
+            default() {
+                return '';
+            }
+        },
+    },
     data() {
         return {
-            IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+            IfClearableEnterprise: !this.$store.getters.ParentCode,
             myChart: null,
             MonthList: [],
             StaffUnderInsurance: [],
@@ -22,20 +31,29 @@ export default {
             AllUnderInsurance: [],
         }
     },
+    watch: {
+        whereParameter: {
+            handler() {
+                this.GetMonthStaffStatistics();
+            },
+            deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+        },
+    },
     mounted() {
 
     },
+    created() {
+    },
     methods: {
-        //根据分公司获取改公司下所有公司配置数据
+        // 根据分公司获取改公司下所有公司配置数据
         GetMonthStaffStatistics() {
             this.loading = true;
             var parameter = {
-                ParentEnterPriseCode: this.WhereParameter.ParentEnterPriseCode,
-                EnterPriseCode: this.WhereParameter.EnterPriseCode,
+                ParentEnterPriseCode: this.whereParameter.ParentEnterPriseCode,
+                EnterPriseCode: this.whereParameter.EnterPriseCode,
             }
             if (!this.IfClearableEnterprise) {
-                if (!this.WhereParameter.EnterPriseCode)
-                    return;
+                if (!this.whereParameter.EnterPriseCode) { return; }
             }
             var chart = this.$refs.chart
             this.myChart = echarts.init(chart);
@@ -56,8 +74,7 @@ export default {
                     this.AllUnderInsurance = res.result.AllUnderInsurance;
 
                     this.getEchartData()
-                }
-                else {
+                } else {
                     this.$message.error("获取失败");
                 }
             });
@@ -144,22 +161,6 @@ export default {
                 });
             })
         },
-    },
-    //父组件传过来的数据
-    props: {
-        WhereParameter: {
-            type: Object
-        },
-    },
-    watch: {
-        WhereParameter: {
-            handler() {
-                this.GetMonthStaffStatistics();
-            },
-            deep: true,  // 可以深度检测到 obj 对象的属性值的变化
-        },
-    },
-    created() {
     }
 }
 </script>

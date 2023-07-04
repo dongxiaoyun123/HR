@@ -69,55 +69,56 @@ export default {
   components: {
     CountTo
   },
+  // 父组件传过来的数据
+  props: {
+    whereParameter: {
+      type: Object,
+      default() {
+                return '';
+            }
+    },
+  },
   data() {
     return {
-      IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
-      allUnderInsuranceCount: null,//全部
-      underInsurance: null,//在保人员
-      allRelatedCount: null,//全部连带
-      underInsuranceAllrelated: null,//连带在保
+      IfClearableEnterprise: !this.$store.getters.ParentCode,
+      allUnderInsuranceCount: null, // 全部
+      underInsurance: null, // 在保人员
+      allRelatedCount: null, // 全部连带
+      underInsuranceAllrelated: null, // 连带在保
       loading: false
     };
   },
-  methods: {
-    //根据分公司获取改公司下所有公司配置数据
-    GetStaffCount() {
-      this.loading = true;
-      var parameter = {
-        ParentEnterPriseCode: this.WhereParameter.ParentEnterPriseCode,
-        EnterPriseCode: this.WhereParameter.EnterPriseCode,
-      }
-      if (!this.IfClearableEnterprise) {
-        if (!this.WhereParameter.EnterPriseCode)
-          return;
-      }
-      GetStaffCount(parameter).then((res) => {
-        this.loading = false;
-        if (res.success) {
-          this.allUnderInsuranceCount = res.result.allUnderInsuranceCount;//全部
-          this.underInsurance = res.result.underInsurance;//在保人员
-          this.allRelatedCount = res.result.allRelatedCount;//全部连带
-          this.underInsuranceAllrelated = res.result.underInsuranceAllrelated;//连带在保
-        }
-        else {
-          this.$message.error("获取失败");
-        }
-      });
-    },
-  },
-  //父组件传过来的数据
-  props: {
-    WhereParameter: {
-      type: Object
-    },
-  },
 
   watch: {
-    WhereParameter: {
+    whereParameter: {
       handler() {
         this.GetStaffCount();
       },
       deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+    },
+  },
+  methods: {
+    // 根据分公司获取改公司下所有公司配置数据
+    GetStaffCount() {
+      this.loading = true;
+      var parameter = {
+        ParentEnterPriseCode: this.whereParameter.ParentEnterPriseCode,
+        EnterPriseCode: this.whereParameter.EnterPriseCode,
+      }
+      if (!this.IfClearableEnterprise) {
+        if (!this.whereParameter.EnterPriseCode) { return; }
+      }
+      GetStaffCount(parameter).then((res) => {
+        this.loading = false;
+        if (res.success) {
+          this.allUnderInsuranceCount = res.result.allUnderInsuranceCount;// 全部
+          this.underInsurance = res.result.underInsurance;// 在保人员
+          this.allRelatedCount = res.result.allRelatedCount;// 全部连带
+          this.underInsuranceAllrelated = res.result.underInsuranceAllrelated;// 连带在保
+        } else {
+          this.$message.error("获取失败");
+        }
+      });
     },
   },
 }

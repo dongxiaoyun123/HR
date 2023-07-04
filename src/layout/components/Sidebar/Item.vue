@@ -18,9 +18,9 @@ export default {
 
     if (icon) {
       if (icon.includes('el-icon')) {
-        vnodes.push(<i style="color: inherit;" class={[icon, 'sub-el-icon']} />)
+        vnodes.push(<i style='color: inherit;' class={[icon, 'sub-el-icon']} />)
       } else {
-        vnodes.push(<svg-icon style="color: inherit;"  icon-class={icon}/>)
+        vnodes.push(<svg-icon style='color: inherit;'  icon-class={icon}/>)
       }
     }
 

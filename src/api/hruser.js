@@ -1,20 +1,15 @@
 import request from '@/utils/request'
 import CBC from '@/utils/CBC'
 export function login(data) {
-  let jsonStr = JSON.stringify(data)
-  let strParam = CBC.encrypt(jsonStr)
-  let obj = {}
+  const jsonStr = JSON.stringify(data)
+  const strParam = CBC.encrypt(jsonStr)
+  const obj = {}
   obj.login = strParam
-  obj.device = 2; //pc
+  obj.device = 2; // pc
   return request({
     url: '/HrLogin/AdminLogin',
     method: 'post',
-    data:obj
+    data: obj
   })
 }
-
-
-
-
-
 

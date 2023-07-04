@@ -3,12 +3,14 @@
     <logo v-if="showLogo" :collapse="isCollapse" />
     <!-- 根据logo是否显示动态修改滚动条的高度 -->
     <div :class="!showLogo ? 'scrollbar1' : 'scrollbar2'">
-      <el-scrollbar wrap-class='scrollbar-wrapper'>
+      <el-scrollbar wrap-class="scrollbar-wrapper">
         <el-menu :default-active="activeMenu" :collapse="isCollapse" :background-color="variables.menuBg"
-          :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText"
-          :collapse-transition="false" mode="vertical" style="color: inherit;">
-          <sidebar-item style="color: inherit;" v-for="route in permission_routes" :key="route.path" :item="route"
-            :base-path="route.path" />
+                 :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText"
+                 :collapse-transition="false" mode="vertical" style="color: inherit;"
+        >
+          <sidebar-item v-for="route in permission_routes" :key="route.path" style="color: inherit;" :item="route"
+                        :base-path="route.path"
+          />
         </el-menu>
       </el-scrollbar>
     </div>

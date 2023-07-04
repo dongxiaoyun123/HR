@@ -1,84 +1,84 @@
 <template>
-    <div style="margin:8px">
-        <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item  label="合同方">
-                                <el-select class="whereClass" v-model="WhereParameter.ParentEnterPriseCode" filterable
-                                    placeholder="合同方" @change="GetChildUser">
-                                    <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                                        :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item  label="付款方">
-                                <el-select @change="GetAdmin_PermissionSearch" class="whereClass"
-                                    v-model="WhereParameter.EnterPriseCode" filterable placeholder="付款方"
-                                    :clearable="IfClearableEnterprise">
-                                    <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
-                                        :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="合同方">
+                <el-select v-model="WhereParameter.ParentEnterPriseCode" class="whereClass" filterable
+                           placeholder="合同方" @change="GetChildUser"
+                >
+                  <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
+                             :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="付款方">
+                <el-select v-model="WhereParameter.EnterPriseCode" class="whereClass"
+                           filterable placeholder="付款方" :clearable="IfClearableEnterprise"
+                           @change="GetAdmin_PermissionSearch"
+                >
+                  <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
+                             :label="item.EnterPriseName" :value="item.EnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
 
-                        <el-col :span="6">
-                            <el-form-item label="投保日期">
-                                <el-date-picker  class="whereClass" format="yyyy-MM" v-model="WhereParameter.Times" type="month"
-                                    placeholder="选择月" :clearable="false">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item  label="人员信息">
-                                <el-input v-model="WhereParameter.Kwd" clearable placeholder="姓名、证件号"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="24">
-                            <el-button style="margin-left:2rem ;" type="primary" @click="GetAdmin_PermissionSearch"
-                                icon="el-icon-search">查 询
-                            </el-button>
-                        </el-col>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
-        <el-card class="CardTableClass">
-            <el-table v-loading="loading" :data="QueryInsuranceList" fit highlight-current-row ref="multipleTable">
-                <el-table-column prop="PsnName" label="姓名" min-width="80" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="Gender" label="性别" :formatter="SexFormat" min-width="60"
-                    show-overflow-tooltip></el-table-column>
-                <el-table-column prop="IDNum" label="证件号" min-width="120">
-                </el-table-column>
-                <el-table-column prop="Month" label="投保月份" min-width="100">
-                    <template slot-scope="scope">
-                        <span>
-                            {{ scope.row.IYear }}年{{ scope.row.IMonth }}月
-                        </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="CorpName" label="付款方" min-width="150" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="ConCorpName" label="合同方" min-width="150" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="PlanName" label="方案" min-width="200" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="RName" label="连带人" sortable min-width="100" show-overflow-tooltip>
-                </el-table-column>
-            </el-table>
-            <!-- 分页区域 -->
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]" :page-size="WhereParameter.PageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
-        </el-card>
+            <el-col :span="6">
+              <el-form-item label="投保日期">
+                <el-date-picker v-model="WhereParameter.Times" class="whereClass" format="yyyy-MM" type="month"
+                                placeholder="选择月" :clearable="false"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="人员信息">
+                <el-input v-model="WhereParameter.Kwd" clearable placeholder="姓名、证件号" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-button style="margin-left:2rem ;" type="primary" icon="el-icon-search"
+                         @click="GetAdmin_PermissionSearch"
+              >查 询
+              </el-button>
+            </el-col>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card class="CardTableClass">
+      <el-table ref="multipleTable" v-loading="loading" :data="QueryInsuranceList" fit highlight-current-row>
+        <el-table-column prop="PsnName" label="姓名" min-width="80" show-overflow-tooltip />
+        <el-table-column prop="Gender" label="性别" :formatter="SexFormat" min-width="60"
+                         show-overflow-tooltip
+        />
+        <el-table-column prop="IDNum" label="证件号" min-width="120" />
+        <el-table-column prop="Month" label="投保月份" min-width="100">
+          <template slot-scope="scope">
+            <span>
+              {{ scope.row.IYear }}年{{ scope.row.IMonth }}月
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="CorpName" label="付款方" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="ConCorpName" label="合同方" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="PlanName" label="方案" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="RName" label="连带人" sortable min-width="100" show-overflow-tooltip />
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination background :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
+                     :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
+    </el-card>
 
-    </div>
+  </div>
 </template>
 
 <script>
@@ -98,7 +98,7 @@ export default {
     },
     data() {
         return {
-            IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+            IfClearableEnterprise: !this.$store.getters.ParentCode,
             loading: false,
             QueryInsuranceList: [],
             WhereParameter: {
@@ -116,15 +116,23 @@ export default {
             ChildEnterpriseList: [],
         };
     },
+    computed: {
+    },
+    created() { },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        this.WhereParameter.Times = this.$moment().format("YYYY-MM");
+        this.GetEnterpriseList();
+    },
     methods: {
-        //性别格式化
+        // 性别格式化
         SexFormat(row, column, cellValue, index) {
             const daterc = row[column.property]
             if (daterc != null) {
                 return daterc == '1' ? '男' : '女'
             }
         },
-        //列表时间格式化
+        // 列表时间格式化
         dateFormat(row, column, cellValue, index) {
             const daterc = row[column.property]
             if (daterc != null) {
@@ -173,13 +181,13 @@ export default {
             this.WhereParameter.PageSize = 20;
             this.GetInsStateListOfCon();
         },
-        //如果登陆人是客服，那么获取公司列表
+        // 如果登陆人是客服，那么获取公司列表
         GetEnterpriseList() {
             // 传入vuex存储的值
             GetEnterpriseList().then((res) => {
                 if (res.success) {
                     this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 1 });
-                    //如果有数据那么赋个默认的值
+                    // 如果有数据那么赋个默认的值
                     if (this.EnterpriseList.length > 0) {
                         this.WhereParameter.ParentEnterPriseCode = this.EnterpriseList[0].ParentEnterPriseCode;
                         this.GetChildUser(this.EnterpriseList[0].ParentEnterPriseCode);
@@ -189,7 +197,7 @@ export default {
                 }
             });
         },
-        //根据父级公司获取分公司
+        // 根据父级公司获取分公司
         GetChildUser(ParentEnterPriseCode) {
             this.WhereParameter.EnterPriseCode = '';
             this.EnterpriseList.forEach(element => {
@@ -201,9 +209,8 @@ export default {
                 if (res.success) {
                     this.ChildEnterpriseList = res.result;
                     if (this.ChildEnterpriseList.length > 0) {
-                        //如果是合同方直接查询全部数据
-                        if (!this.IfClearableEnterprise)
-                            this.WhereParameter.EnterPriseCode = this.ChildEnterpriseList[0].EnterPriseCode;
+                        // 如果是合同方直接查询全部数据
+                        if (!this.IfClearableEnterprise) { this.WhereParameter.EnterPriseCode = this.ChildEnterpriseList[0].EnterPriseCode; }
                         this.GetInsStateListOfCon()
                     }
                 } else {
@@ -211,22 +218,21 @@ export default {
                 }
             });
         },
-        //根据分公司获取改公司下所有方案
+        // 根据分公司获取改公司下所有方案
         GetInsStateListOfCon() {
             var whereClass = {
                 ConID: this.WhereParameter.ConID,
                 year: this.$moment(this.WhereParameter.Times).format("YYYY-MM").split("-")[0],
                 month: this.$moment(this.WhereParameter.Times).format("YYYY-MM").split("-")[1],
             }
-            if (this.WhereParameter.EnterPriseCode)
-                this.ChildEnterpriseList.forEach(element => {
+            if (this.WhereParameter.EnterPriseCode) {
+ this.ChildEnterpriseList.forEach(element => {
                     if (this.WhereParameter.EnterPriseCode == element.EnterPriseCode) {
                         this.WhereParameter.CorpID = element.CorpID;
                         return;
                     }
                 });
-            else
-                this.WhereParameter.CorpID = '';
+} else { this.WhereParameter.CorpID = ''; }
             this.loading = true;
             GetInsStateListOfCon(whereClass).then((res) => {
                 if (res.success) {
@@ -244,7 +250,7 @@ export default {
                             return this.$message.warning("未生成该月投保");
                         }
                     }
-                    //正常请求接口
+                    // 正常请求接口
                     var childWhereClass = {
                         ConID: this.WhereParameter.ConID,
                         year: this.$moment(this.WhereParameter.Times).format("YYYY-MM").split("-")[0],
@@ -272,14 +278,6 @@ export default {
                 }
             });
         },
-    },
-    created() { },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        this.WhereParameter.Times = this.$moment().format("YYYY-MM");
-        this.GetEnterpriseList();
-    },
-    computed: {
     }
 };
 </script>

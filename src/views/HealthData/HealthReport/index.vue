@@ -1,173 +1,177 @@
 <template>
-    <div style="margin:8px">
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="合同方">
+                <el-select v-model="WhereParameter.ConID" class="whereClass" filterable placeholder="合同方"
+                           @change="GetChildUser"
+                >
+                  <el-option v-for="item in EnterpriseList" :key="item.ConID"
+                             :label="item.ParentEnterPriseName" :value="item.ConID"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="付款方">
+                <el-select v-model="WhereParameter.CorpID" class="whereClass" filterable
+                           placeholder="付款方" :clearable="IfClearableEnterprise" @change="GetChartData"
+                >
+                  <el-option v-for="item in ChildEnterpriseList" :key="item.CorpID"
+                             :label="item.EnterPriseName" :value="item.CorpID"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="操作时间">
+                <el-date-picker v-model="WhereParameter.CreateTime" :clearable="false" style="width: 100%;"
+                                type="daterange" range-separator="至" start-placeholder="开始时间"
+                                end-placeholder="结束时间" :picker-options="pickerOptions" @input="datetimeChange"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-button style="margin-left:2rem ;" type="primary" icon="el-icon-search"
+                         @click="GetChartData"
+              >查
+                询
+              </el-button>
+            </el-col>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-row :gutter="8" style="margin-top: 8px;">
+      <el-col :span="6">
         <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="合同方">
-                                <el-select class="whereClass" v-model="WhereParameter.ConID" filterable placeholder="合同方"
-                                    @change="GetChildUser">
-                                    <el-option v-for="item in EnterpriseList" :key="item.ConID"
-                                        :label="item.ParentEnterPriseName" :value="item.ConID">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="付款方">
-                                <el-select @change="GetChartData" class="whereClass" v-model="WhereParameter.CorpID"
-                                    filterable placeholder="付款方" :clearable='IfClearableEnterprise'>
-                                    <el-option v-for="item in ChildEnterpriseList" :key="item.CorpID"
-                                        :label="item.EnterPriseName" :value="item.CorpID">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="操作时间">
-                                <el-date-picker :clearable="false" style="width: 100%;" @input="datetimeChange"
-                                    v-model="WhereParameter.CreateTime" type="daterange" range-separator="至"
-                                    start-placeholder="开始时间" end-placeholder="结束时间" :picker-options="pickerOptions">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-button style="margin-left:2rem ;" type="primary" icon="el-icon-search"
-                                @click="GetChartData">查
-                                询
-                            </el-button>
-                        </el-col>
-                    </el-row>
-                </el-row>
-            </el-form>
+          <div class="grid-content">
+            <div ref="chart1" class="ContentClass" />
+          </div>
         </el-card>
-        <el-row :gutter="8" style="margin-top: 8px;">
-            <el-col :span="6">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart1" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart2" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart3" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart4" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
+      </el-col>
+      <el-col :span="6">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart2" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart3" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart4" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
 
-        <el-row :gutter="8" style="margin-top: 8px;">
-            <el-col :span="12">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart5" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="12">
-                <el-card>
-                    <div class="grid-content">
-                        <el-row>
-                            <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass1">
-                                <el-statistic :title="VisitMale">
-                                    <template slot="formatter">
-                                        {{ VisitMaleProportion }}
-                                    </template>
-                                </el-statistic>
-                            </el-col>
-                            <el-col :span="16">
-                                <div ref="chart6" style="height: 215px;"></div>
-                            </el-col>
-                            <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass2">
-                                <el-statistic :title="NotVisitMale">
-                                    <template slot="formatter">
-                                        {{ NotVisitMaleProportion }}
-                                    </template>
-                                </el-statistic>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass3">
-                                <el-statistic :title="VisitFeMale">
-                                    <template slot="formatter">
-                                        {{ VisitFeMaleProportion }}
-                                    </template>
-                                </el-statistic>
-                            </el-col>
-                            <el-col :span="16">
-                                <div ref="chart7" style="height: 215px;"></div>
-                            </el-col>
-                            <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass4">
-                                <el-statistic :title="NotVisitFeMale">
-                                    <template slot="formatter">
-                                        {{ NotVisitFeMaleProportion }}
-                                    </template>
-                                </el-statistic>
-                            </el-col>
-                        </el-row>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
+    <el-row :gutter="8" style="margin-top: 8px;">
+      <el-col :span="12">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart5" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
+          <div class="grid-content">
+            <el-row>
+              <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass1">
+                <el-statistic :title="VisitMale">
+                  <template slot="formatter">
+                    {{ VisitMaleProportion }}
+                  </template>
+                </el-statistic>
+              </el-col>
+              <el-col :span="16">
+                <div ref="chart6" style="height: 215px;" />
+              </el-col>
+              <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass2">
+                <el-statistic :title="NotVisitMale">
+                  <template slot="formatter">
+                    {{ NotVisitMaleProportion }}
+                  </template>
+                </el-statistic>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass3">
+                <el-statistic :title="VisitFeMale">
+                  <template slot="formatter">
+                    {{ VisitFeMaleProportion }}
+                  </template>
+                </el-statistic>
+              </el-col>
+              <el-col :span="16">
+                <div ref="chart7" style="height: 215px;" />
+              </el-col>
+              <el-col :span="4" class="SexVisitDeepClass SexVisitDeepClass4">
+                <el-statistic :title="NotVisitFeMale">
+                  <template slot="formatter">
+                    {{ NotVisitFeMaleProportion }}
+                  </template>
+                </el-statistic>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
 
-        <el-row :gutter="8" style="margin-top: 8px;">
-            <el-col :span="24">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart8" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
-        <el-row :gutter="8" style="margin-top: 8px;">
-            <el-col :span="24">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart9" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
+    <el-row :gutter="8" style="margin-top: 8px;">
+      <el-col :span="24">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart8" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row :gutter="8" style="margin-top: 8px;">
+      <el-col :span="24">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart9" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
 
-        <el-row :gutter="8" style="margin-top: 8px;">
-            <el-col :span="12">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart10" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="12">
-                <el-card>
-                    <div class="grid-content">
-                        <div ref="chart11" class="ContentClass"></div>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
-    </div>
+    <el-row :gutter="8" style="margin-top: 8px;">
+      <el-col :span="12">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart10" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart11" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-import moment from "moment"; //导入模块
+import moment from "moment"; // 导入模块
+import { getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
 moment.locale("zh-cn");
 import {
     GetEnterpriseList,
@@ -179,7 +183,7 @@ export default {
     },
     data() {
         return {
-            IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+            IfClearableEnterprise: !this.$store.getters.ParentCode,
             ChildEnterpriseList: [],
             VisitMale: '',
             VisitMaleProportion: '',
@@ -226,7 +230,7 @@ export default {
                         text: "本年",
                         onClick(picker) {
                             const end = new Date();
-                            var y = end.getFullYear(); //年
+                            var y = end.getFullYear(); // 年
 
                             var startStr = y + "-01-01";
 
@@ -340,18 +344,31 @@ export default {
             myChart11: null,
         };
     },
+    computed: {
+
+    },
+    created() {
+
+    },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        var now = new Date();
+        var year = now.getFullYear(); // 得到年份
+        this.WhereParameter.CreateTime = [moment(`${year}-01-01`), moment(now)];
+        this.GetEnterpriseList();
+    },
     methods: {
         datetimeChange(time) {
-            //强制刷新
+            // 强制刷新
             this.$forceUpdate();
         },
-        //如果登陆人是客服，那么获取公司列表
+        // 如果登陆人是客服，那么获取公司列表
         GetEnterpriseList() {
             // 传入vuex存储的值
             GetEnterpriseList().then((res) => {
                 if (res.success) {
                     this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 1 });
-                    //如果有数据那么赋个默认的值
+                    // 如果有数据那么赋个默认的值
                     if (this.EnterpriseList.length > 0) {
                         this.WhereParameter.ConID = this.EnterpriseList[0].ConID;
                         this.GetChildUser();
@@ -361,16 +378,15 @@ export default {
                 }
             });
         },
-        //根据父级公司获取分公司
+        // 根据父级公司获取分公司
         GetChildUser() {
             this.WhereParameter.CorpID = null;
             GetChildUserConId(this.WhereParameter.ConID).then((res) => {
                 if (res.success) {
                     this.ChildEnterpriseList = res.result;
                     if (this.ChildEnterpriseList.length > 0) {
-                        //如果是合同方直接查询全部数据
-                        if (!this.IfClearableEnterprise)
-                            this.WhereParameter.CorpID = this.ChildEnterpriseList[0].CorpID;
+                        // 如果是合同方直接查询全部数据
+                        if (!this.IfClearableEnterprise) { this.WhereParameter.CorpID = this.ChildEnterpriseList[0].CorpID; }
                         this.GetChartData();
                     }
                 } else {
@@ -378,14 +394,13 @@ export default {
                 }
             });
         },
-        //获取列表数据
+        // 获取列表数据
         GetChartData() {
             this.loading = true;
             if (this.WhereParameter.CreateTime && this.WhereParameter.CreateTime.length > 0) {
                 this.WhereParameter.BeginTime = this.$moment(this.WhereParameter.CreateTime[0]).format("YYYY-MM-DD");
                 this.WhereParameter.EndTime = this.$moment(this.WhereParameter.CreateTime[1]).format("YYYY-MM-DD");
-            }
-            else {
+            } else {
                 this.WhereParameter.BeginTime = '';
                 this.WhereParameter.EndTime = '';
             }
@@ -395,7 +410,7 @@ export default {
                 BeginTime: this.WhereParameter.BeginTime,
                 EndTime: this.WhereParameter.EndTime,
             }
-            //重置数据
+            // 重置数据
             this.VisitMale = '';
             this.VisitMaleProportion = '';
             this.NotVisitMale = '';
@@ -542,7 +557,7 @@ export default {
                 this.loading = false;
             });
         },
-        //企业健康分数
+        // 企业健康分数
         PercentPie() {
             let titleBottom = '';
             let color = '';
@@ -553,14 +568,12 @@ export default {
                 color = this.PercentPieParameter.color[0];
                 image = this.PercentPieParameter.images[0];
                 fontsizeColor = this.PercentPieParameter.fontsizeColor[0];
-            }
-            else if (this.ChartData.Health < 80 && this.ChartData.Health >= 60) {
+            } else if (this.ChartData.Health < 80 && this.ChartData.Health >= 60) {
                 titleBottom = this.PercentPieParameter.titleBottom[1];
                 color = this.PercentPieParameter.color[1];
                 image = this.PercentPieParameter.images[1];
                 fontsizeColor = this.PercentPieParameter.fontsizeColor[1];
-            }
-            else {
+            } else {
                 titleBottom = this.PercentPieParameter.titleBottom[2];
                 color = this.PercentPieParameter.color[2];
                 image = this.PercentPieParameter.images[2];
@@ -646,7 +659,7 @@ export default {
                 });
             })
         },
-        //员工平均年龄
+        // 员工平均年龄
         PercentPieAverageAge() {
             var titleBottom = '';
             var color = null;
@@ -657,14 +670,12 @@ export default {
                 color = this.PercentPieAverageAgeParameter.color[0];
                 image = this.PercentPieAverageAgeParameter.images[0];
                 fontsizeColor = this.PercentPieAverageAgeParameter.fontsizeColor[0];
-            }
-            else if (this.ChartData.AverageAge <= 40 && this.ChartData.AverageAge > 30) {
+            } else if (this.ChartData.AverageAge <= 40 && this.ChartData.AverageAge > 30) {
                 titleBottom = this.PercentPieAverageAgeParameter.titleBottom[1];
                 color = this.PercentPieAverageAgeParameter.color[1];
                 image = this.PercentPieAverageAgeParameter.images[1];
                 fontsizeColor = this.PercentPieAverageAgeParameter.fontsizeColor[1];
-            }
-            else {
+            } else {
                 titleBottom = this.PercentPieAverageAgeParameter.titleBottom[2];
                 color = this.PercentPieAverageAgeParameter.color[2];
                 image = this.PercentPieAverageAgeParameter.images[2];
@@ -754,7 +765,7 @@ export default {
                 });
             })
         },
-        //就诊统计
+        // 就诊统计
         PercentPieVisitStatistics() {
             var option = {
                 color: this.PercentPieVisitStatisticsParameter.color,
@@ -780,8 +791,8 @@ export default {
                     bottom: '5%',
                     data: ['就诊次数', '就诊人数']
                 },
-                graphic: [{ //环形图中间添加文字
-                    type: 'text', //通过不同top值可以设置上下显示
+                graphic: [{ // 环形图中间添加文字
+                    type: 'text', // 通过不同top值可以设置上下显示
                     left: 'center',
                     top: '45.5%',
                     style: {
@@ -795,7 +806,7 @@ export default {
                         fontFamily: "Microsoft YaHei"
                     }
                 },
-                { //环形图中间添加文字
+                { // 环形图中间添加文字
                     type: 'text',
                     left: 'center',
                     top: '51.5%',
@@ -848,7 +859,7 @@ export default {
                 });
             })
         },
-        //在保人数男女比例
+        // 在保人数男女比例
         PercentPieSexRatio() {
             var option = {
                 color: this.PercentPieSexRatioParameter.color,
@@ -870,8 +881,8 @@ export default {
                     formatter: '{a} <br/>{b}: {c}人 ({d}%)'
                 },
 
-                graphic: [{ //环形图中间添加文字
-                    type: 'image', //通过不同top值可以设置上下显示
+                graphic: [{ // 环形图中间添加文字
+                    type: 'image', // 通过不同top值可以设置上下显示
                     left: '40%',
                     top: '45.5%',
                     style: {
@@ -881,8 +892,8 @@ export default {
                         height: 14,
 
                     }
-                }, { //环形图中间添加文字
-                    type: 'text', //通过不同top值可以设置上下显示
+                }, { // 环形图中间添加文字
+                    type: 'text', // 通过不同top值可以设置上下显示
                     left: '48%',
                     top: '45.5%',
                     style: {
@@ -893,8 +904,8 @@ export default {
 
                     }
                 },
-                { //环形图中间添加文字
-                    type: 'image', //通过不同top值可以设置上下显示
+                { // 环形图中间添加文字
+                    type: 'image', // 通过不同top值可以设置上下显示
                     left: '40%',
                     top: '50%',
                     style: {
@@ -904,8 +915,8 @@ export default {
                         height: 16,
 
                     }
-                }, { //环形图中间添加文字
-                    type: 'text', //通过不同top值可以设置上下显示
+                }, { // 环形图中间添加文字
+                    type: 'text', // 通过不同top值可以设置上下显示
                     left: '48%',
                     top: '51%',
                     style: {
@@ -977,7 +988,7 @@ export default {
                 });
             })
         },
-        //总体健康概览
+        // 总体健康概览
         PercentPieGeneralHealthOverview() {
             var option = {
                 title: [{
@@ -1046,7 +1057,7 @@ export default {
                 });
             })
         },
-        //男性就诊比例
+        // 男性就诊比例
         PercentPiemale() {
             var option = {
                 title: {
@@ -1082,7 +1093,7 @@ export default {
 
                 },
                 grid: {
-                    top: 'center',
+                    // top: 'center',
                     height: 200,
                     top: 110,
                 },
@@ -1124,7 +1135,7 @@ export default {
                 });
             })
         },
-        //女性就诊比例
+        // 女性就诊比例
         PercentPiefemale() {
             var option = {
                 title: {
@@ -1160,7 +1171,7 @@ export default {
 
                 },
                 grid: {
-                    top: 'center',
+                    // top: 'center',
                     height: 200,
                     top: 110,
                 },
@@ -1202,7 +1213,7 @@ export default {
                 });
             })
         },
-        //就诊人数分布
+        // 就诊人数分布
         PercentDistributionOfPatients() {
             var option = {
                 title: {
@@ -1269,7 +1280,7 @@ export default {
             }
             return arr;
         },
-        //就诊次数分布
+        // 就诊次数分布
         PercentNumberOfVisits() {
             var illness_IllnessTypeListArr = [];
             var titalData = this.ChartData.NumberOfVisits.Illness_IllnessTypeList;
@@ -1280,9 +1291,9 @@ export default {
             }
             var personCaseInfoListArr = [];
             var contentData = this.ChartData.NumberOfVisits.PersonCaseInfoList;
-            for (var i = 0; i < contentData.length; i++) {
+            for (var s = 0; s < contentData.length; s++) {
                 personCaseInfoListArr.push(
-                    contentData[i]
+                    contentData[s]
                 );
             }
 
@@ -1301,20 +1312,14 @@ export default {
                 xAxis: {
                     data: illness_IllnessTypeListArr,
                     axisLabel: {
-                        inside: true,
-                        textStyle: {
-                            color: '#fff'
-                        }
+                        interval: 0,
+                        rotate: -40
                     },
                     axisTick: {
                         show: false
                     },
                     axisLine: {
                         show: false
-                    },
-                    axisLabel: {
-                        interval: 0,
-                        rotate: -40
                     },
                     z: 10
                 },
@@ -1365,7 +1370,6 @@ export default {
                                         const curr = item.data / this.ChartData.NumberOfVisits.Max * 100
 
                                         return this.ChartData.NumberOfVisits.Max == 0 ? '0%' : parseInt(curr) + '%'
-
                                     }
                                 }
                             }
@@ -1397,7 +1401,7 @@ export default {
                 });
             })
         },
-        //金额分布
+        // 金额分布
         PercentAmountDistribution() {
             var option = {
                 title: [{
@@ -1445,7 +1449,7 @@ export default {
                         itemStyle: {
                             normal: {
                                 color: function (params) {
-                                    var colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',];
+                                    var colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
                                     var index = params.dataIndex % colorList.length;
                                     return colorList[index]
                                 }
@@ -1467,7 +1471,7 @@ export default {
                 });
             })
         },
-        //年龄分布
+        // 年龄分布
         PercentAgeDistribution() {
             var option = {
                 title: {
@@ -1496,7 +1500,7 @@ export default {
                     {
                         name: '访问来源',
                         type: 'pie',
-                        radius: '50%',//控制图形大小
+                        radius: '50%', // 控制图形大小
                         center: ['50%', '55%'],
                         top: 34,
                         label: {
@@ -1514,7 +1518,7 @@ export default {
                         itemStyle: {
                             normal: {
                                 color: function (params) {
-                                    var colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',];
+                                    var colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
                                     var index = params.dataIndex % colorList.length;
                                     return colorList[index]
                                 }
@@ -1534,19 +1538,6 @@ export default {
                 });
             })
         },
-    },
-    created() {
-
-    },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        var now = new Date();
-        var year = now.getFullYear(); //得到年份
-        this.WhereParameter.CreateTime = [moment(`${year}-01-01`), moment(now)];
-        this.GetEnterpriseList();
-    },
-    computed: {
-
     }
 };
 </script>

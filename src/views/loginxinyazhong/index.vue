@@ -4,7 +4,7 @@
       <el-form>
         <el-row class="logoClass">
           <el-col style="width:115px ;" :offset="3">
-            <el-image style="width: 115px;" :src="imgUrl"></el-image>
+            <el-image style="width: 115px;" :src="imgUrl" />
           </el-col>
           <el-col class="titleClass">
             HR保险管理系统V2.0
@@ -14,39 +14,42 @@
     </el-card>
     <div class="contentClass">
       <div class="login-form">
-        <span class="login-form-one"></span>
-        <span class="login-form-two"></span>
+        <span class="login-form-one" />
+        <span class="login-form-two" />
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="loginFormClass" autocomplete="on"
-          label-position="left">
+                 label-position="left"
+        >
           <div class="title-container">
             <h3 class="title">系统登录</h3>
           </div>
 
           <el-form-item prop="username">
             <span class="svg-container">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-user" />
             </span>
             <el-input ref="username" v-model="loginForm.username" placeholder="用户名" tabindex="1" autocomplete="on"
-              @clear="clearAllinfo" clearable  />
+                      clearable @clear="clearAllinfo"
+            />
           </el-form-item>
 
           <el-tooltip v-model="capsTooltip" content="大写锁定打开" placement="right" manual>
             <el-form-item prop="password">
               <span class="svg-container">
-                <i class="el-icon-lock"></i>
+                <i class="el-icon-lock" />
               </span>
-              <el-input show-password ref="password" v-model="loginForm.password" placeholder="密码" tabindex="2"
-                autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false"
-                 />
+              <el-input ref="password" v-model="loginForm.password" show-password placeholder="密码" tabindex="2"
+                        autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false"
+              />
             </el-form-item>
           </el-tooltip>
           <el-form-item prop="inputVal">
             <span class="svg-container">
-              <i class="el-icon-key"></i>
+              <i class="el-icon-key" />
             </span>
-            <el-input ref="inputVal" style="width:202px ;" v-model="loginForm.inputVal" placeholder="验证码" tabindex="3"
-              autocomplete="on"  />
-            <validate-code class="validateClass" ref="ref_validateCode" @change="changeCode" />
+            <el-input ref="inputVal" v-model="loginForm.inputVal" style="width:202px ;" placeholder="验证码" tabindex="3"
+                      autocomplete="on"
+            />
+            <validate-code ref="ref_validateCode" class="validateClass" @change="changeCode" />
           </el-form-item>
           <el-form-item>
             <el-button :loading="loading" type="primary" style="width:100%" @click.native.prevent="handleLogin">登
@@ -91,12 +94,10 @@ export default {
           // this.$refs["ref_validateCode"].draw();
           callback(new Error('验证码比对失败,请重新输入'))
           return;
-        }
-        else {
+        } else {
           callback()
         }
-      }
-      else {
+      } else {
         callback(new Error('请输入右侧验证码'))
       }
     }
@@ -124,7 +125,7 @@ export default {
   watch: {
   },
   created() {
-    let that = this;
+    const that = this;
     document.onkeypress = function (e) {
       var keycode = document.all ? event.keyCode : e.which;
       if (keycode == 13) {
@@ -151,7 +152,7 @@ export default {
             .then((data) => {
               this.loading = false
               if (data.success) {
-                //记录logo缓存
+                // 记录logo缓存
                 window.localStorage.setItem("LogoCatch", window.location.hash);
                 // if (data.MenuPermissions == 2)
                 //   this.$router.push('InsuranceServices/StatisticsInsuredPersonnel')
@@ -159,9 +160,7 @@ export default {
                 //   this.$router.push('UserHomePage/UserHomePageList')
                 this.$router.push('/')
                 // this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              }
-              else
-                this.$message.error(data.resultMessage);
+              } else { this.$message.error(data.resultMessage); }
             })
             .catch((data) => {
               this.loading = false
@@ -248,8 +247,8 @@ $cursor: #737478;
   .login-form {
     border: 1px solid #79bbff;
     border-radius: 3px;
-    width: 470px;
-    height: 380px;
+    width: 450px;
+    height: 345px;
     position: relative;
     overflow: hidden;
     background-color: #ffffff;
@@ -326,7 +325,7 @@ $cursor: #737478;
     }
 
     .loginFormClass {
-      padding: 55px 55px 50px 55px;
+      padding: 40px 55px 0 55px;
     }
   }
 
@@ -387,6 +386,7 @@ $cursor: #737478;
 
   .logoClass {
     line-height: 43px;
+    height: 43px;
   }
 
   .titleClass {
@@ -407,7 +407,7 @@ $cursor: #737478;
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: calc(100vh - 277px);
+    height: calc(100vh - 210px);
     background-image: url("../../assets/i-mages/loginbj.jpg");
     overflow: hidden;
     background-size: cover; //或者background-size:100%;

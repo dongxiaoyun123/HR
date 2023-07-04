@@ -1,48 +1,49 @@
 <template>
-    <div style="margin:8px">
-        <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="操作时间">
-                                <el-date-picker style="width: 100%;" format="yyyy-MM" @change="GetData"
-                                    v-model="WhereParameter.Times" type="month" placeholder="选择月">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
-        <el-row :gutter="8" style="margin-top: 8px;">
-            <el-col :span="16">
-                <el-card>
-                    <div class="grid-content">
-                        <div v-loading="loading" ref="chart" class="ContentClass"></div>
-                    </div>
-                </el-card>
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="操作时间">
+                <el-date-picker v-model="WhereParameter.Times" style="width: 100%;" format="yyyy-MM"
+                                type="month" placeholder="选择月" @change="GetData"
+                />
+              </el-form-item>
             </el-col>
-            <el-col :span="8">
-                <el-card>
-                    <div class="grid-content">
-                        <el-table v-loading="TableLoading" highlight-current-row :data="LoginStatisticsList" fit
-                            height="calc(100vh - 230px)">
-                            <el-table-column prop="EnterPriseName" label="公司名称" min-width="180"
-                                show-overflow-tooltip></el-table-column>
-                            <el-table-column prop="Count" label="登录次数" min-width="100">
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </el-card>
-            </el-col>
+          </el-row>
         </el-row>
-    </div>
+      </el-form>
+    </el-card>
+    <el-row :gutter="8" style="margin-top: 8px;">
+      <el-col :span="16">
+        <el-card>
+          <div class="grid-content">
+            <div ref="chart" v-loading="loading" class="ContentClass" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card>
+          <div class="grid-content">
+            <el-table v-loading="TableLoading" highlight-current-row :data="LoginStatisticsList" fit
+                      height="calc(100vh - 230px)"
+            >
+              <el-table-column prop="EnterPriseName" label="公司名称" min-width="180"
+                               show-overflow-tooltip
+              />
+              <el-table-column prop="Count" label="登录次数" min-width="100" />
+            </el-table>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-import moment from "moment"; //导入模块
+import moment from "moment"; // 导入模块
 moment.locale("zh-cn");
 import {
     GetLoginStatisticsChart,
@@ -68,6 +69,16 @@ export default {
             chart: null
         };
     },
+    computed: {
+
+    },
+    created() {
+        this.WhereParameter.Times = this.$moment().format("YYYY-MM");
+    },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        this.GetData();
+    },
     methods: {
         GetData() {
             this.WhereParameter.Times = this.$moment(this.WhereParameter.Times).format("YYYY-MM");
@@ -75,7 +86,7 @@ export default {
             this.GetLoginStatisticsChart();
             this.GetLoginStatisticsLog();
         },
-        //获取列表数据
+        // 获取列表数据
         GetLoginStatisticsLog() {
             this.TableLoading = true;
             var parameter = {
@@ -88,7 +99,7 @@ export default {
                 this.TableLoading = false;
             });
         },
-        //获取图表数据
+        // 获取图表数据
         GetLoginStatisticsChart() {
             this.loading = true;
             var parameter = {
@@ -187,22 +198,12 @@ export default {
                     myChart.resize()
                 })
             }
-            this.$on('hook:destroyed', () => {
-                window.removeEventListener("resize", function () {
-                    myChart.resize();
-                });
-            })
+            // this.$on('hook:destroyed', () => {
+            //     window.removeEventListener("resize", function () {
+            //         myChart.resize();
+            //     });
+            // })
         },
-    },
-    created() {
-        this.WhereParameter.Times = this.$moment().format("YYYY-MM");
-    },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        this.GetData();
-    },
-    computed: {
-
     }
 };
 </script>

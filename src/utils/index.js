@@ -45,7 +45,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -254,7 +254,7 @@ export function getTime(type) {
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
-  const later = function() {
+  const later = function () {
     // 据上一次触发时间间隔
     const last = +new Date() - timestamp
 
@@ -271,7 +271,7 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  return function (...args) {
     context = this
     timestamp = +new Date()
     const callNow = immediate && !timeout
@@ -372,16 +372,14 @@ export function getDateByTimesLast(Times) {
   }
   var firstDay = new Date(new_year, new_month, 1) // 取当年当月中的第一天
   var lastDay = new Date(firstDay.getTime() - 1000 * 60 * 60 * 24).getDate() // 获取当月最后一天日期
+  var mon = firstDay.getMonth();
   if (firstDay.getMonth() < 10) {
-    var mon = "0" + firstDay.getMonth()
-  } else {
-    var mon = firstDay.getMonth()
+    mon = "0" + firstDay.getMonth()
   }
   var nowMonth = [];
   nowMonth[0] = firstDay.getFullYear() + '-' + mon + '-' + "0" + firstDay.getDate();
   nowMonth[1] = firstDay.getFullYear() + '-' + mon + '-' + lastDay;
   return nowMonth;
-
 }
 /**
 * 获取上个月的第一天和最后一天（传入字符串）
@@ -389,21 +387,20 @@ export function getDateByTimesLast(Times) {
 * @param {string} cls
 */
 export function getDateByTimes() {
-  let curDate = new Date()
+  const curDate = new Date()
   let y = curDate.getFullYear()
   let m = curDate.getMonth()
-  if (m > 12) {//月份大于12划为下一年
+  if (m > 12) { // 月份大于12划为下一年
     m = 1
     y++
   }
-  if (m === 0) {//月份等于0时
+  if (m === 0) { // 月份等于0时
     m = 12
     y--
   }
   var lastStartDay = [];
-  let monthLastDay = new Date(y, m, 0).getDate()
+  const monthLastDay = new Date(y, m, 0).getDate()
   lastStartDay[0] = y + '-' + (m < 10 ? '0' + m : m) + '-' + '01'
   lastStartDay[1] = y + '-' + (m < 10 ? '0' + m : m) + '-' + (monthLastDay < 10 ? '0' + monthLastDay : monthLastDay)
   return lastStartDay;
-
 }

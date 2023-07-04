@@ -1,5 +1,5 @@
 <template>
-  <div :class="classObj" class="app-wrapper" ref="app-wrapper">
+  <div ref="app-wrapper" :class="classObj" class="app-wrapper">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <!-- 左侧菜单 -->
     <sidebar class="sidebar-container" />
@@ -17,10 +17,9 @@
       </right-panel>
     </div>
 
-
     <el-backtop target=".app-wrapper" :bottom="45">
       <el-tooltip placement="top" content="回到顶部">
-        <svg-icon style="color: #1890FF;font-size:medium;" icon-class='BackToTop' />
+        <svg-icon style="color: #1890FF;font-size:medium;" icon-class="BackToTop" />
       </el-tooltip>
     </el-backtop>
   </div>

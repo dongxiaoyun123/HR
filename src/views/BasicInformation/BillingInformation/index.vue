@@ -1,104 +1,107 @@
 <template>
-    <div style="margin:8px">
-        <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="合同方">
-                                <el-select class="whereClass" v-model="WhereParameter.ParentCode" filterable
-                                    placeholder="合同方" clearable>
-                                    <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                                        :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-button-group class="buttonGroupClass">
-                            <el-button type="primary" @click="GetAdmin_PermissionSearch" icon="el-icon-search">查 询
-                            </el-button>
-                            <el-button type="success" @click="showContractorDialog(null)"
-                                icon="el-icon-circle-plus-outline">增
-                                加
-                            </el-button>
-                        </el-button-group>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
-        <el-card class="CardTableClass">
-            <el-table v-loading="loading" highlight-current-row :data="BillingList" fit>
-                <el-table-column prop="EnterpriseName" label="付款方" min-width="180" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="OrderCode" label="账单编号" min-width="150" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="OrderBeginTime" label="开始时间" min-width="120" show-overflow-tooltip>
-                    <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
-                        <span style="margin-left: 6px">{{ scope.row.OrderBeginTime }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="OrderEndTime" label="结束时间" min-width="120" show-overflow-tooltip>
-                    <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
-                        <span style="margin-left: 6px">{{ scope.row.OrderEndTime }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="OrderStatesName" label="订单状态" min-width="100">
-                </el-table-column>
-                <el-table-column prop="PaymentTime" label="支付时间" min-width="100" show-overflow-tooltip>
-                </el-table-column>
-            </el-table>
-            <!-- 分页区域 -->
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]" :page-size="WhereParameter.PageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
-        </el-card>
-        <!-- 添加账单信息 -->
-        <el-dialog :visible.sync="addBillingVisible" top="5vh" width="45%" @close="detailAddDialogVisibleClosed"
-            :lock-scroll="false" :append-to-body="true">
-            <!-- 上面两个属性用来重置滚动条 -->
-            <div slot="title" class="dialog-title">
-                <span>添加账单信息</span>
-            </div>
-            <el-form :model="AddBillingForm" ref="addBillingRef" :rules="addBillingRules" label-width="120px">
-                <el-alert style="margin-bottom:20px ;" type="warning" show-icon title="只有续签的客户才能添加账单信息，慎重！慎重！慎重！"
-                    :closable="false">
-                </el-alert>
-                <el-form-item label="合同方" prop="ParentCode">
-                    <el-select v-model="AddBillingForm.ParentCode" filterable placeholder="合同方"
-                        @change="GetChildEnterprise">
-                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
-                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="付款方" prop="EnterPriseCode">
-                    <el-select v-model="AddBillingForm.EnterPriseCode" filterable placeholder="付款方">
-                        <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
-                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="账单日期" prop="OrderRangeDate">
-                    <el-date-picker @input="datetimeChange" v-model="AddBillingForm.OrderRangeDate" type="daterange"
-                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
-                    </el-date-picker>
-                </el-form-item>
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="合同方">
+                <el-select v-model="WhereParameter.ParentCode" class="whereClass" filterable
+                           placeholder="合同方" clearable
+                >
+                  <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
+                             :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-button-group class="buttonGroupClass">
+              <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
+              </el-button>
+              <el-button type="success" icon="el-icon-circle-plus-outline"
+                         @click="showContractorDialog(null)"
+              >增
+                加
+              </el-button>
+            </el-button-group>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card class="CardTableClass">
+      <el-table v-loading="loading" highlight-current-row :data="BillingList" fit>
+        <el-table-column prop="EnterpriseName" label="付款方" min-width="180" show-overflow-tooltip />
+        <el-table-column prop="OrderCode" label="账单编号" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="OrderBeginTime" label="开始时间" min-width="120" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-time" />
+            <span style="margin-left: 6px">{{ scope.row.OrderBeginTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="OrderEndTime" label="结束时间" min-width="120" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <i class="el-icon-time" />
+            <span style="margin-left: 6px">{{ scope.row.OrderEndTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="OrderStatesName" label="订单状态" min-width="100" />
+        <el-table-column prop="PaymentTime" label="支付时间" min-width="100" show-overflow-tooltip />
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination background :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
+                     :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
+    </el-card>
+    <!-- 添加账单信息 -->
+    <el-dialog :visible.sync="addBillingVisible" top="5vh" width="45%" :lock-scroll="false"
+               :append-to-body="true" @close="detailAddDialogVisibleClosed"
+    >
+      <!-- 上面两个属性用来重置滚动条 -->
+      <div slot="title" class="dialog-title">
+        <span>添加账单信息</span>
+      </div>
+      <el-form ref="addBillingRef" :model="AddBillingForm" :rules="addBillingRules" label-width="120px">
+        <el-alert style="margin-bottom:20px ;" type="warning" show-icon title="只有续签的客户才能添加账单信息，慎重！慎重！慎重！"
+                  :closable="false"
+        />
+        <el-form-item label="合同方" prop="ParentCode">
+          <el-select v-model="AddBillingForm.ParentCode" filterable placeholder="合同方"
+                     @change="GetChildEnterprise"
+          >
+            <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="付款方" prop="EnterPriseCode">
+          <el-select v-model="AddBillingForm.EnterPriseCode" filterable placeholder="付款方">
+            <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
+                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="账单日期" prop="OrderRangeDate">
+          <el-date-picker v-model="AddBillingForm.OrderRangeDate" type="daterange" range-separator="至"
+                          start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" @input="datetimeChange"
+          />
+        </el-form-item>
 
-                <el-divider></el-divider>
-                <el-row class="buttonCenter">
-                    <el-col>
-                        <el-button type="primary" :loading="LoadingAdd" @click="addBilling">保
-                            存</el-button>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </el-dialog>
-    </div>
+        <el-divider />
+        <el-row class="buttonCenter">
+          <el-col>
+            <el-button type="primary" :loading="LoadingAdd" @click="addBilling">保
+              存</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
 import { scrollTo } from '@/utils/scroll-to'
-import { getDateByTimes } from "@/utils"; //时间日期格式化成字符串
+import { getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
 import {
     GetOrderList,
     AddOrder,
@@ -152,7 +155,7 @@ export default {
                         text: "本年",
                         onClick(picker) {
                             const end = new Date();
-                            var y = end.getFullYear(); //年
+                            var y = end.getFullYear(); // 年
 
                             var startStr = y + "-01-01";
 
@@ -222,12 +225,22 @@ export default {
             },
         };
     },
+    computed: {
+    },
+    created() {
+    },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        this.GetEnterpriseList();
+        this.GetAdmin_PermissionSearch();
+        this.ParentGetContractorList();
+    },
     methods: {
         datetimeChange(time) {
-            //强制刷新
+            // 强制刷新
             this.$forceUpdate();
         },
-        //根据父级公司获取分公司
+        // 根据父级公司获取分公司
         GetChildEnterprise() {
             GetChildEnterprise(this.AddBillingForm.ParentCode).then((res) => {
                 if (res.success) {
@@ -238,7 +251,7 @@ export default {
                 }
             });
         },
-        //添加投保数据
+        // 添加投保数据
         addBilling() {
             this.LoadingAdd = true;
             // 提交请求前，表单预验证
@@ -251,8 +264,7 @@ export default {
                     if (this.AddBillingForm.OrderRangeDate && this.AddBillingForm.OrderRangeDate.length > 0) {
                         this.AddBillingForm.OrderBeginTime = this.$moment(this.AddBillingForm.OrderRangeDate[0]).format("YYYY-MM-DD");
                         this.AddBillingForm.OrderEndTime = this.$moment(this.AddBillingForm.OrderRangeDate[1]).format("YYYY-MM-DD");
-                    }
-                    else {
+                    } else {
                         this.AddBillingForm.OrderBeginTime = '';
                         this.AddBillingForm.OrderEndTime = '';
                     }
@@ -274,13 +286,13 @@ export default {
                 }
             });
         },
-        //添加窗口关闭
+        // 添加窗口关闭
         detailAddDialogVisibleClosed() {
-            //初始化data-AddBillingForm 的数据
+            // 初始化data-AddBillingForm 的数据
             this.$data.AddBillingForm = this.$options.data().AddBillingForm;
             this.$refs.addBillingRef.resetFields();
         },
-        //弹出添加窗口(修改需要传入参数)
+        // 弹出添加窗口(修改需要传入参数)
         showContractorDialog() {
             this.addBillingVisible = true;
         },
@@ -303,7 +315,7 @@ export default {
             this.WhereParameter.PageSize = 20;
             this.GetOrderList();
         },
-        //获取员工方案列表数据
+        // 获取员工方案列表数据
         GetOrderList() {
             this.loading = true;
             var parameter = {
@@ -324,7 +336,7 @@ export default {
                 this.loading = false;
             });
         },
-        //获取公司列表
+        // 获取公司列表
         GetEnterpriseList() {
             GetEnterpriseList().then((res) => {
                 if (res.success) {
@@ -334,7 +346,7 @@ export default {
                 }
             });
         },
-        //获取员工方案列表数据
+        // 获取员工方案列表数据
         ParentGetContractorList() {
             var parameter = {
                 ContractorParameter: "",
@@ -352,16 +364,6 @@ export default {
                 }
             });
         },
-    },
-    created() {
-    },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        this.GetEnterpriseList();
-        this.GetAdmin_PermissionSearch();
-        this.ParentGetContractorList();
-    },
-    computed: {
     }
 };
 </script>

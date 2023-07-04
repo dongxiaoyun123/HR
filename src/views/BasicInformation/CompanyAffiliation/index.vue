@@ -1,85 +1,89 @@
 <template>
-    <div style="margin:8px">
-        <el-card>
-            <el-form label-width="90px">
-                <el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-form-item style="margin-bottom: 0;" label="客服人员">
-                                <el-select style="width:100% ;" v-model="WhereParameter.User_ID" filterable
-                                    placeholder="客服人员" clearable>
-                                    <el-option v-for="item in BackstageUserList" :key="item.User_ID"
-                                        :label="item.User_RealName" :value="item.User_ID">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-button-group class="buttonGroupClass">
-                            <el-button type="primary" @click="GetAdmin_PermissionSearch" icon="el-icon-search">查 询
-                            </el-button>
-                            <el-button type="success" @click="showContractorDialog()" icon="el-icon-circle-plus-outline">增
-                                加
-                            </el-button>
-                        </el-button-group>
-                    </el-row>
-                </el-row>
-            </el-form>
-        </el-card>
-        <el-card class="CardTableClass">
-            <el-table v-loading="loading" highlight-current-row :data="BackstageRegionList" fit>
-                <el-table-column prop="User_Account" label="登录名" width="150" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="User_RealName" label="真实姓名" width="150" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="EnterPriseName" label="公司名称" width="250" show-overflow-tooltip></el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button icon="el-icon-delete" type="text" size="mini" @click="
-                            DeleteBackstageRegion(scope.row.EnterPriseCode, scope.row.User_ID)
-                        ">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 分页区域 -->
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]" :page-size="WhereParameter.PageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
-        </el-card>
-        <!-- 添加同步信息 -->
-        <el-dialog :visible.sync="addBackstageRegionVisible" top="5vh" width="45%" @close="detailAddDialogVisibleClosed"
-            :lock-scroll="false" :append-to-body="true">
-            <!-- 上面两个属性用来重置滚动条 -->
-            <div slot="title" class="dialog-title">
-                <span>添加同步信息</span>
-            </div>
-            <el-form :model="AddBackstageRegionForm" ref="addBackstageRegionRef" :rules="addBackstageRegionRules"
-                label-width="120px">
-                <el-form-item label="客服人员" prop="User_ID">
-                    <el-select v-model="AddBackstageRegionForm.User_ID" filterable placeholder="客服人员">
-                        <el-option v-for="item in BackstageUserList" :key="item.User_ID" :label="item.User_RealName"
-                            :value="item.User_ID">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="合同方" prop="ParentCode">
-                    <el-select v-model="AddBackstageRegionForm.ParentCode" filterable placeholder="合同方" multiple>
-                        <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
-                            :label="item.EnterPriseName" :value="item.EnterPriseCode">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-divider></el-divider>
-                <el-row class="buttonCenter">
-                    <el-col>
-                        <el-button type="primary" :loading="LoadingAdd" @click="AddBackstageRegion">保
-                            存</el-button>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </el-dialog>
-    </div>
+  <div style="margin:8px">
+    <el-card>
+      <el-form label-width="90px">
+        <el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item style="margin-bottom: 0;" label="客服人员">
+                <el-select v-model="WhereParameter.User_ID" style="width:100% ;" filterable
+                           placeholder="客服人员" clearable
+                >
+                  <el-option v-for="item in BackstageUserList" :key="item.User_ID"
+                             :label="item.User_RealName" :value="item.User_ID"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-button-group class="buttonGroupClass">
+              <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
+              </el-button>
+              <el-button type="success" icon="el-icon-circle-plus-outline" @click="showContractorDialog()">增
+                加
+              </el-button>
+            </el-button-group>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card class="CardTableClass">
+      <el-table v-loading="loading" highlight-current-row :data="BackstageRegionList" fit>
+        <el-table-column prop="User_Account" label="登录名" width="150" show-overflow-tooltip />
+        <el-table-column prop="User_RealName" label="真实姓名" width="150" show-overflow-tooltip />
+        <el-table-column prop="EnterPriseName" label="公司名称" width="250" show-overflow-tooltip />
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button icon="el-icon-delete" type="text" size="mini" @click="
+              DeleteBackstageRegion(scope.row.EnterPriseCode, scope.row.User_ID)
+            "
+            >删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination background :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
+                     :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
+    </el-card>
+    <!-- 添加同步信息 -->
+    <el-dialog :visible.sync="addBackstageRegionVisible" top="5vh" width="45%" :lock-scroll="false"
+               :append-to-body="true" @close="detailAddDialogVisibleClosed"
+    >
+      <!-- 上面两个属性用来重置滚动条 -->
+      <div slot="title" class="dialog-title">
+        <span>添加同步信息</span>
+      </div>
+      <el-form ref="addBackstageRegionRef" :model="AddBackstageRegionForm" :rules="addBackstageRegionRules"
+               label-width="120px"
+      >
+        <el-form-item label="客服人员" prop="User_ID">
+          <el-select v-model="AddBackstageRegionForm.User_ID" filterable placeholder="客服人员">
+            <el-option v-for="item in BackstageUserList" :key="item.User_ID" :label="item.User_RealName"
+                       :value="item.User_ID"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="合同方" prop="ParentCode">
+          <el-select v-model="AddBackstageRegionForm.ParentCode" filterable placeholder="合同方" multiple>
+            <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
+                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-divider />
+        <el-row class="buttonCenter">
+          <el-col>
+            <el-button type="primary" :loading="LoadingAdd" @click="AddBackstageRegion">保
+              存</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-import { getDateByTimes } from "@/utils"; //时间日期格式化成字符串
 import { scrollTo } from '@/utils/scroll-to'
 import {
     GetEnterpriseList,
@@ -122,6 +126,17 @@ export default {
             },
         };
     },
+    computed: {
+    },
+    created() {
+    },
+    // 加载完成后执行调取回款数据接口
+    mounted() {
+        this.GetEnterpriseList();
+        this.GetAdmin_PermissionSearch();
+        this.GetBackstageUserList();
+        this.ParentGetContractorList();
+    },
     methods: {
         async DeleteBackstageRegion(ParentCode, UserID) {
             const confirmResult = await this.$confirm(
@@ -135,8 +150,7 @@ export default {
             ).catch((err) => err);
             if (confirmResult !== "confirm") {
                 return this.$message.info("已取消删除");
-            }
-            else {
+            } else {
                 var addparameter = {
                     UserID,
                     ParentCode,
@@ -151,7 +165,7 @@ export default {
                 });
             }
         },
-        //添加数据
+        // 添加数据
         AddBackstageRegion() {
             this.LoadingAdd = true;
             // 提交请求前，表单预验证
@@ -178,13 +192,13 @@ export default {
                 }
             });
         },
-        //添加窗口关闭
+        // 添加窗口关闭
         detailAddDialogVisibleClosed() {
-            //初始化data-AddBackstageRegionForm 的数据
+            // 初始化data-AddBackstageRegionForm 的数据
             this.$data.AddBackstageRegionForm = this.$options.data().AddBackstageRegionForm;
             this.$refs.addBackstageRegionRef.resetFields();
         },
-        //弹出添加窗口(修改需要传入参数)
+        // 弹出添加窗口(修改需要传入参数)
         showContractorDialog() {
             this.addBackstageRegionVisible = true;
         },
@@ -207,7 +221,7 @@ export default {
             this.WhereParameter.PageSize = 20;
             this.GetBackstageRegion();
         },
-        //获取员工方案列表数据
+        // 获取员工方案列表数据
         GetBackstageRegion() {
             this.loading = true;
             var parameter = {
@@ -226,7 +240,7 @@ export default {
                 this.loading = false;
             });
         },
-        //获取公司列表
+        // 获取公司列表
         GetEnterpriseList() {
             GetEnterpriseList().then((res) => {
                 if (res.success) {
@@ -236,7 +250,7 @@ export default {
                 }
             });
         },
-        //获取hr人员列表
+        // 获取hr人员列表
         GetBackstageUserList() {
             GetBackstageUserList().then((res) => {
                 if (res.success) {
@@ -246,7 +260,7 @@ export default {
                 }
             });
         },
-        //获取员工方案列表数据
+        // 获取员工方案列表数据
         ParentGetContractorList() {
             var parameter = {
                 ContractorParameter: "",
@@ -264,17 +278,6 @@ export default {
                 }
             });
         },
-    },
-    created() {
-    },
-    //加载完成后执行调取回款数据接口
-    mounted() {
-        this.GetEnterpriseList();
-        this.GetAdmin_PermissionSearch();
-        this.GetBackstageUserList();
-        this.ParentGetContractorList();
-    },
-    computed: {
     }
 };
 </script>

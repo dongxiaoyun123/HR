@@ -5,10 +5,12 @@
         <el-row>
           <el-col :span="6">
             <el-form-item class="formClass" label="合同方">
-              <el-select class="whereClass" v-model="WhereParameter.ParentEnterPriseCode" filterable placeholder="合同方"
-                @change="GetChildUser">
+              <el-select v-model="WhereParameter.ParentEnterPriseCode" class="whereClass" filterable placeholder="合同方"
+                         @change="GetChildUser"
+              >
                 <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                  :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode">
+                           :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
+                >
                   <span style="float: left">{{ item.ParentEnterPriseName }}</span>
                   <span v-if="item.MenuPermissions == 1" style="float: right; color: #1890FF; font-size: 13px">在线增减</span>
                   <span v-if="item.MenuPermissions == 2" style="float: right; color: #909399; font-size: 13px">健康数据</span>
@@ -19,11 +21,12 @@
           </el-col>
           <el-col :span="6">
             <el-form-item class="formClass" label="付款方">
-              <el-select class="whereClass" v-model="WhereParameter.EnterPriseCode" filterable placeholder="付款方"
-                :clearable='IfClearableEnterprise'>
+              <el-select v-model="WhereParameter.EnterPriseCode" class="whereClass" filterable placeholder="付款方"
+                         :clearable="IfClearableEnterprise"
+              >
                 <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode" :label="item.EnterPriseName"
-                  :value="item.EnterPriseCode">
-                </el-option>
+                           :value="item.EnterPriseCode"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -31,39 +34,39 @@
       </el-form>
     </el-card>
     <!-- 人数统计 -->
-    <PersonnelStatistics v-show="MenuPermissions != 2" :WhereParameter="WhereParameter" />
+    <PersonnelStatistics v-show="MenuPermissions != 2" :where-parameter="WhereParameter" />
     <!-- 每月在保统计 -->
     <el-row v-show="MenuPermissions != 2">
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
-          <MonthStaffAdd :WhereParameter="WhereParameter" />
+          <MonthStaffAdd :where-parameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" v-show="MenuPermissions != 2">
+    <el-row v-show="MenuPermissions != 2" :gutter="20">
       <!-- 方案统计 -->
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <ProgramStatistics :WhereParameter="WhereParameter" />
+          <ProgramStatistics :where-parameter="WhereParameter" />
         </div>
       </el-col>
       <!-- 账单统计 -->
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <BillingStatistics :WhereParameter="WhereParameter" />
+          <BillingStatistics :where-parameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
     <el-row v-show="MenuPermissions != 1">
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
-          <ReportSummary v-show="MenuPermissions != 1" :WhereParameter="WhereParameter" />
+          <ReportSummary v-show="MenuPermissions != 1" :where-parameter="WhereParameter" />
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
-          <RankingVisits v-show="MenuPermissions != 1" :WhereParameter="WhereParameter" />
+          <RankingVisits v-show="MenuPermissions != 1" :where-parameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
@@ -87,7 +90,7 @@ export default {
   components: { PersonnelStatistics, MonthStaffAdd, ProgramStatistics, BillingStatistics, ReportSummary, RankingVisits },
   data() {
     return {
-      IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+      IfClearableEnterprise: !this.$store.getters.ParentCode,
       WhereParameter: {
         ParentEnterPriseCode: '',
         EnterPriseCode: '',
@@ -97,6 +100,11 @@ export default {
       ChildEnterpriseList: [],
       MenuPermissions: null,
     }
+  },
+  created() {
+  },
+  mounted() {
+    this.GetEnterpriseList();
   },
   // computed: {
   //   ...mapGetters([
@@ -108,9 +116,9 @@ export default {
       // 传入vuex存储的值
       GetEnterpriseList().then((res) => {
         if (res.success) {
-          //过滤掉自主增减的公司
+          // 过滤掉自主增减的公司
           this.EnterpriseList = res.result;
-          //如果有数据那么赋个默认的值
+          // 如果有数据那么赋个默认的值
           if (this.EnterpriseList.length > 0) {
             this.WhereParameter.ParentEnterPriseCode = this.EnterpriseList[0].ParentEnterPriseCode;
             this.GetChildUser(this.EnterpriseList[0].ParentEnterPriseCode);
@@ -120,7 +128,7 @@ export default {
         }
       });
     },
-    //根据父级公司获取分公司
+    // 根据父级公司获取分公司
     GetChildUser(ParentEnterPriseCode) {
       this.EnterpriseList.forEach(element => {
         if (element.ParentEnterPriseCode == this.WhereParameter.ParentEnterPriseCode) {
@@ -132,21 +140,14 @@ export default {
         if (res.success) {
           this.ChildEnterpriseList = res.result;
           if (this.ChildEnterpriseList.length > 0) {
-            //如果是合同方直接查询全部数据
-            if (!this.IfClearableEnterprise)
-              this.WhereParameter.EnterPriseCode = this.ChildEnterpriseList[0].EnterPriseCode;
+            // 如果是合同方直接查询全部数据
+            if (!this.IfClearableEnterprise) { this.WhereParameter.EnterPriseCode = this.ChildEnterpriseList[0].EnterPriseCode; }
           }
         } else {
           this.ChildEnterpriseList = [];
         }
       });
     },
-  },
-  created() {
-  },
-  mounted() {
-
-    this.GetEnterpriseList();
   },
 }
 </script>

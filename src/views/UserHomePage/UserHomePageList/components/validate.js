@@ -1,6 +1,6 @@
 export function isIdentityId(identityId) {
-    var patrn = /(^\d{15}$)|(^\d{17}(\d|X|x)$)/;//长度或格式校验
-    //地区校验
+    var patrn = /(^\d{15}$)|(^\d{17}(\d|X|x)$)/;// 长度或格式校验
+    // 地区校验
     var aCity = {
       11: "北京",
       12: "天津",
@@ -45,17 +45,17 @@ export function isIdentityId(identityId) {
       Number(identityId.substr(10, 2)) +
       "-" +
       Number(identityId.substr(12, 2))
-    ).replace(/-/g, "/"),
-      d = new Date(sBirthday)
+    ).replace(/-/g, "/");
+      var d = new Date(sBirthday)
     // 身份证号码校验 最后4位  包括最后一位的数字/字母X
-    var sum = 0,
-      weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2],
-      codes = "10X98765432";
+    var sum = 0;
+      var weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+      var codes = "10X98765432";
     for (var i = 0; i < identityId.length - 1; i++) {
       sum += identityId[i] * weights[i];
     }
-    var last = codes[sum % 11]; //计算出来的最后一位身份证号码
-   
+    var last = codes[sum % 11]; // 计算出来的最后一位身份证号码
+
     var errorMsg = '';
     if (identityId === '') {
       errorMsg = "身份证号不能为空"

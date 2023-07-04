@@ -15,9 +15,9 @@ const getters = {
   realname: state => state.user.realname,
   // // 只存储客服角色的编号，如果是企业用户，那么此字段为空
   // UserBaseInfoLoginBackstage: state => state.user.UserBaseInfoLoginBackstage,
-  /// 如果为空证明是合同方用户，不为空那么就是付款方用户
+  // / 如果为空证明是合同方用户，不为空那么就是付款方用户
   ParentCode: state => state.user.ParentCode,
   MenuPermissions: state => state.user.MenuPermissions,
-  InsuranceTypeCode: state => state.user.InsuranceTypeCode,//生效方式
+  InsuranceTypeCode: state => state.user.InsuranceTypeCode, // 生效方式
 }
 export default getters

@@ -4,7 +4,7 @@
       <el-form>
         <el-row class="logoClass">
           <el-col style="width:115px ;" :offset="4">
-            <el-image style="width: 115px;" :src="require('@/assets/i-mages/yf2w.png')"></el-image>
+            <el-image style="width: 115px;" :src="require('@/assets/i-mages/yf2w.png')" />
           </el-col>
           <el-col class="titleClass">
             HR保险管理系统V2.0
@@ -13,20 +13,17 @@
       </el-form>
     </el-card>
 
-
-
-    		<div class="login-right flex">
-			<div class="login-right-warp flex-margin">
-				<span class="login-right-warp-one"></span>
-				<span class="login-right-warp-two"></span>
-				<div class="login-right-warp-mian">
-				
-				</div>
-			</div>
-		</div>
+    <div class="login-right flex">
+      <div class="login-right-warp flex-margin">
+        <span class="login-right-warp-one" />
+        <span class="login-right-warp-two" />
+        <div class="login-right-warp-mian" />
+      </div>
+    </div>
     <div class="contentClass">
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on"
-        label-position="left">
+               label-position="left"
+      >
         <div class="title-container">
           <h3 class="title">HR保险管理系统V2.0</h3>
         </div>
@@ -35,8 +32,9 @@
           <span class="svg-container">
             <svg-icon icon-class="user" />
           </span>
-          <el-input ref="username" v-model="loginForm.username" placeholder="用户名" 
-            tabindex="1" autocomplete="on" clearable  @clear="clearAllinfo" />
+          <el-input ref="username" v-model="loginForm.username" placeholder="用户名"
+                    tabindex="1" autocomplete="on" clearable @clear="clearAllinfo"
+          />
         </el-form-item>
 
         <el-tooltip v-model="capsTooltip" content="大写锁定打开" placement="right" manual>
@@ -44,9 +42,10 @@
             <span class="svg-container">
               <svg-icon icon-class="password" />
             </span>
-            <el-input show-password  ref="password" v-model="loginForm.password"
-              placeholder="密码"  tabindex="2" autocomplete="on" @keyup.native="checkCapslock"
-              @blur="capsTooltip = false" @keyup.enter.native="handleLogin" />
+            <el-input ref="password" v-model="loginForm.password" show-password
+                      placeholder="密码" tabindex="2" autocomplete="on" @keyup.native="checkCapslock"
+                      @blur="capsTooltip = false" @keyup.enter.native="handleLogin"
+            />
           </el-form-item>
         </el-tooltip>
 

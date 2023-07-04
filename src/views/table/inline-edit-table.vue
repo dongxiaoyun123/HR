@@ -36,10 +36,10 @@
       <el-table-column min-width="300px" label="Title">
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-input v-model="row.title" class="edit-input"  />
+            <el-input v-model="row.title" class="edit-input" />
             <el-button
               class="cancel-btn"
-              
+
               icon="el-icon-refresh"
               type="warning"
               @click="cancelEdit(row)"
@@ -56,7 +56,7 @@
           <el-button
             v-if="row.edit"
             type="success"
-            
+
             icon="el-icon-circle-check-outline"
             @click="confirmEdit(row)"
           >
@@ -65,7 +65,7 @@
           <el-button
             v-else
             type="primary"
-            
+
             icon="el-icon-edit"
             @click="row.edit=!row.edit"
           >

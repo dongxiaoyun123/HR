@@ -6,11 +6,9 @@
       </div>
       <el-skeleton style="width: 100%" :loading="loading" :rows="11" animated>
         <el-table :data="ProgramList" size="small" max-height="412px" border>
-          <el-table-column prop="ProgramName" label="方案名称" min-width="250"></el-table-column>
-          <el-table-column prop="Children" label="在保人数" sortable min-width="100">
-          </el-table-column>
-          <el-table-column prop="AllChildren" label="导入人数" sortable min-width="100">
-          </el-table-column>
+          <el-table-column prop="ProgramName" label="方案名称" min-width="250" />
+          <el-table-column prop="Children" label="在保人数" sortable min-width="100" />
+          <el-table-column prop="AllChildren" label="导入人数" sortable min-width="100" />
         </el-table>
       </el-skeleton>
     </el-card>
@@ -22,44 +20,24 @@ import {
   GetProgramInfoAll,
 } from "@/api/dashboard";
 export default {
+  // 父组件传过来的数据
+  props: {
+    whereParameter: {
+      type: Object,
+      default() {
+        return '';
+      }
+    },
+  },
   data() {
     return {
-      IfClearableEnterprise: this.$store.getters.ParentCode ? false : true,
+      IfClearableEnterprise: !this.$store.getters.ParentCode,
       ProgramList: [],
       loading: false,
     };
   },
-  methods: {
-    //根据分公司获取改公司下所有公司配置数据
-    GetProgramInfoAll() {
-      this.loading = true;
-      var parameter = {
-        ParentEnterPriseCode: this.WhereParameter.ParentEnterPriseCode,
-        EnterPriseCode: this.WhereParameter.EnterPriseCode,
-      }
-      if (!this.IfClearableEnterprise) {
-        if (!this.WhereParameter.EnterPriseCode)
-          return;
-      }
-      GetProgramInfoAll(parameter).then((res) => {
-        this.loading = false;
-        if (res.success) {
-          this.ProgramList = res.result;
-        }
-        else {
-          this.$message.error("获取失败");
-        }
-      });
-    },
-  },
-  //父组件传过来的数据
-  props: {
-    WhereParameter: {
-      type: Object
-    },
-  },
   watch: {
-    WhereParameter: {
+    whereParameter: {
       handler() {
         this.GetProgramInfoAll();
       },
@@ -69,14 +47,34 @@ export default {
   created() {
 
   },
+  methods: {
+    // 根据分公司获取改公司下所有公司配置数据
+    GetProgramInfoAll() {
+      this.loading = true;
+      var parameter = {
+        ParentEnterPriseCode: this.whereParameter.ParentEnterPriseCode,
+        EnterPriseCode: this.whereParameter.EnterPriseCode,
+      }
+      if (!this.IfClearableEnterprise) {
+        if (!this.whereParameter.EnterPriseCode) { return; }
+      }
+      GetProgramInfoAll(parameter).then((res) => {
+        this.loading = false;
+        if (res.success) {
+          this.ProgramList = res.result;
+        } else {
+          this.$message.error("获取失败");
+        }
+      });
+    },
+  },
 };
 </script>
-  
+
 <style  scoped>
 ::v-deep .el-card__header {
   padding: 10px 20px
 }
-
 
 ::v-deep .el-table {
   margin-top: 0

@@ -427,7 +427,6 @@ export function DeleteBackstageRegion(param) {
   })
 }
 
-
 export function GetEnterpriseInfo(EnterPriseCode) {
   return request({
     url: '/HrMain/GetEnterpriseInfo',
@@ -514,7 +513,6 @@ export function GetChildEnterpriseBind(ParentEnterpriseCode, SaveFlag) {
 }
 
 export function SaveChildEnterprise(param) {
-  
   return request({
     url: '/HrMain/SaveChildEnterprise',
     method: 'post',
