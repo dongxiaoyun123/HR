@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-indent -->
 <template>
   <div class="login-container">
     <el-card>
@@ -17,8 +18,8 @@
         <span class="login-form-one" />
         <span class="login-form-two" />
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="loginFormClass" autocomplete="on"
-                 label-position="left"
-        >
+          label-position="left"
+>
           <div class="title-container">
             <h3 class="title">系统登录</h3>
           </div>
@@ -28,8 +29,8 @@
               <i class="el-icon-user" />
             </span>
             <el-input ref="username" v-model="loginForm.username" placeholder="用户名" tabindex="1" autocomplete="on"
-                      clearable @clear="clearAllinfo"
-            />
+              clearable @clear="clearAllinfo"
+/>
           </el-form-item>
 
           <el-tooltip v-model="capsTooltip" content="大写锁定打开" placement="right" manual>
@@ -38,8 +39,8 @@
                 <i class="el-icon-lock" />
               </span>
               <el-input ref="password" v-model="loginForm.password" show-password placeholder="密码" tabindex="2"
-                        autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false"
-              />
+                autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false"
+/>
             </el-form-item>
           </el-tooltip>
           <el-form-item prop="inputVal">
@@ -47,12 +48,14 @@
               <i class="el-icon-key" />
             </span>
             <el-input ref="inputVal" v-model="loginForm.inputVal" style="width:202px ;" placeholder="验证码" tabindex="3"
-                      autocomplete="on"
-            />
+              autocomplete="on"
+/>
             <validate-code ref="ref_validateCode" class="validateClass" @change="changeCode" />
           </el-form-item>
           <el-form-item>
-            <el-button size="medium" :loading="loading" type="primary" style="width:100%" @click.native.prevent="handleLogin">登
+            <el-button size="medium" :loading="loading" type="primary" style="width:100%"
+              @click.native.prevent="handleLogin"
+>登
               录</el-button>
           </el-form-item>
         </el-form>
@@ -151,7 +154,7 @@ export default {
       this.imgUrl = zhiweijia;
       this.loginContentFlag = false;
       this.loginContent = '职为家';
-    // eslint-disable-next-line brace-style
+      // eslint-disable-next-line brace-style
     }
     // 乱写的
     else if (host.indexOf("kangkang.fuliplat.com") != -1) {

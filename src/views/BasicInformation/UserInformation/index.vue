@@ -9,7 +9,7 @@
                 <el-select v-model="WhereParameter.ParentCode" class="whereClass" filterable
                            placeholder="合同方" clearable
                 >
-                  <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
+                  <el-option v-for="(item, index) in EnterpriseList" :key="index"
                              :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
                   />
                 </el-select>
@@ -88,8 +88,8 @@
           <el-select v-model="AddUserForm.ParentCode" filterable placeholder="合同方" :disabled="IfUpdate"
                      @change="GetChildEnterpriseChange"
           >
-            <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
-                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
+            <el-option v-for="(item, index) in ParentContractorList" :key="index" :label="item.EnterPriseName"
+                       :value="item.EnterPriseCode"
             />
           </el-select>
         </el-form-item>
@@ -97,8 +97,8 @@
           <el-select v-model="AddUserForm.EnterPriseCode" filterable placeholder="付款方"
                      :disabled="IfUpdate || ShowEntFlag"
           >
-            <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
-                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
+            <el-option v-for="(item, index) in ChildEnterpriseList" :key="index" :label="item.EnterPriseName"
+                       :value="item.EnterPriseCode"
             />
           </el-select>
         </el-form-item>
