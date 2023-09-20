@@ -110,6 +110,7 @@ import {
     GetContractorList,
 } from "@/api/hrmain";
 export default {
+    name:'BillingInformation',
     components: {
     },
     data() {

@@ -161,6 +161,13 @@ export function OrderExportAll(param) {
   })
 }
 
+export function OrderExport(param) {
+  return request({
+    url: '/HrMain/OrderExport',
+    method: 'post',
+    data: param
+  })
+}
 export function GetManageSettings(EnterpriseCode) {
   return request({
     url: '/HrMain/GetManageSettings',

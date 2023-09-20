@@ -1,135 +1,119 @@
 <template>
-  <div style="margin:8px">
-    <el-card>
-      <el-form label-width="90px">
-        <el-row>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item style="margin-bottom: 0;" label="合同方">
-                <el-select v-model="WhereParameter.ParentCode" class="whereClass" filterable
-                           placeholder="合同方" clearable
-                >
-                  <el-option v-for="(item, index) in EnterpriseList" :key="index"
-                             :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-button-group class="buttonGroupClass">
-              <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
-              </el-button>
-              <el-button type="success" icon="el-icon-circle-plus-outline"
-                         @click="showContractorDialog(null)"
-              >增
-                加
-              </el-button>
-            </el-button-group>
-          </el-row>
-        </el-row>
-      </el-form>
-    </el-card>
-    <el-card class="CardTableClass">
-      <el-table v-loading="loading" highlight-current-row :data="UserList" fit>
-        <el-table-column prop="User_Account" label="登陆用户名" min-width="100" show-overflow-tooltip />
-        <el-table-column prop="User_RealName" label="真实姓名" min-width="150" show-overflow-tooltip />
-        <el-table-column prop="ParentCode" label="用户类型" :formatter="ParentCodeFormat" min-width="100"
-                         show-overflow-tooltip
-        />
-        <el-table-column prop="EnterPriseName" label="公司名称" min-width="150" show-overflow-tooltip />
-        <el-table-column prop="InsuranceTypeCode" label="生效方式" min-width="100" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.InsuranceTypeCode == 1" type="success">次日生效</el-tag>
-            <el-tag v-else-if="scope.row.InsuranceTypeCode == 2">月底生效</el-tag>
-            <el-tag v-else type="info">暂无配置</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="160">
-          <template slot-scope="scope">
-            <el-button icon="el-icon-edit" type="text" size="mini" @click="
-              showContractorDialog(scope.row)
-            "
-            >编辑</el-button>
+    <div style="margin:8px">
+        <el-card>
+            <el-form label-width="90px">
+                <el-row>
+                    <el-row>
+                        <el-col :span="6">
+                            <el-form-item style="margin-bottom: 0;" label="合同方">
+                                <el-select v-model="WhereParameter.ParentCode" class="whereClass" filterable
+                                    placeholder="合同方" clearable>
+                                    <el-option v-for="(item, index) in EnterpriseList" :key="index"
+                                        :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-button-group class="buttonGroupClass">
+                            <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
+                            </el-button>
+                            <el-button type="success" icon="el-icon-circle-plus-outline"
+                                @click="showContractorDialog(null)">增
+                                加
+                            </el-button>
+                        </el-button-group>
+                    </el-row>
+                </el-row>
+            </el-form>
+        </el-card>
+        <el-card class="CardTableClass">
+            <el-table v-loading="loading" highlight-current-row :data="UserList" fit>
+                <el-table-column prop="User_Account" label="登陆用户名" min-width="100" show-overflow-tooltip />
+                <el-table-column prop="User_RealName" label="真实姓名" min-width="150" show-overflow-tooltip />
+                <el-table-column prop="ParentCode" label="用户类型" :formatter="ParentCodeFormat" min-width="100"
+                    show-overflow-tooltip />
+                <el-table-column prop="EnterPriseName" label="公司名称" min-width="150" show-overflow-tooltip />
+                <el-table-column prop="InsuranceTypeCode" label="生效方式" min-width="100" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.InsuranceTypeCode == 1" type="success">次日生效</el-tag>
+                        <el-tag v-else-if="scope.row.InsuranceTypeCode == 2">月底生效</el-tag>
+                        <el-tag v-else type="info">暂无配置</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" fixed="right" width="160">
+                    <template slot-scope="scope">
+                        <el-button icon="el-icon-edit" type="text" size="mini" @click="
+                            showContractorDialog(scope.row)
+                            ">编辑</el-button>
 
-            <el-button icon="el-icon-delete" type="text" size="mini" @click="
-              DeleteUser(scope.row)
-            "
-            >删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 分页区域 -->
-      <el-pagination background :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
-                     :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
-    </el-card>
-    <!-- 添加用户 -->
-    <el-dialog :visible.sync="addUserVisible" top="5vh" width="45%" :lock-scroll="false" :append-to-body="true"
-               @close="detailUserVisibleClosed"
-    >
-      <!-- 上面两个属性用来重置滚动条 -->
-      <div slot="title" class="dialog-title">
-        <span>{{ !IfUpdate ? '添加用户' : '修改用户' }}</span>
-      </div>
+                        <el-button icon="el-icon-delete" type="text" size="mini" @click="
+                            DeleteUser(scope.row)
+                            ">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 分页区域 -->
+            <el-pagination background :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
+                :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        </el-card>
+        <!-- 添加用户 -->
+        <el-dialog :visible.sync="addUserVisible" top="5vh" width="45%" :lock-scroll="false" :append-to-body="true"
+            @close="detailUserVisibleClosed">
+            <!-- 上面两个属性用来重置滚动条 -->
+            <div slot="title" class="dialog-title">
+                <span>{{ !IfUpdate ? '添加用户' : '修改用户' }}</span>
+            </div>
 
-      <el-form ref="addStaffRef" :model="AddUserForm" :rules="addContractorRules" label-width="120px">
-        <el-alert v-if="!IfUpdate" style="margin-bottom:20px ;" type="success" show-icon
-                  title="此登陆密码默认为登录名加“YUANFU001”，例如：用户名为dongxiaoyun则密码为dongxiaoyunYUANFU001" :closable="false"
-        />
-        <el-form-item label="用户类型" prop="UserType">
-          <el-radio v-model="AddUserForm.UserType" :disabled="IfUpdate" label="1" border
-                    @input="UserTypeChange"
-          >合同方用户</el-radio>
-          <el-radio v-model="AddUserForm.UserType" :disabled="IfUpdate" label="2" border
-                    @input="UserTypeChange"
-          >付款方用户</el-radio>
-        </el-form-item>
-        <el-form-item label="合同方" prop="ParentCode">
-          <el-select v-model="AddUserForm.ParentCode" filterable placeholder="合同方" :disabled="IfUpdate"
-                     @change="GetChildEnterpriseChange"
-          >
-            <el-option v-for="(item, index) in ParentContractorList" :key="index" :label="item.EnterPriseName"
-                       :value="item.EnterPriseCode"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="付款方" prop="EnterPriseCode">
-          <el-select v-model="AddUserForm.EnterPriseCode" filterable placeholder="付款方"
-                     :disabled="IfUpdate || ShowEntFlag"
-          >
-            <el-option v-for="(item, index) in ChildEnterpriseList" :key="index" :label="item.EnterPriseName"
-                       :value="item.EnterPriseCode"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="登陆用户名" prop="User_Account">
-          <el-input v-model="AddUserForm.User_Account" placeholder="登陆用户名" />
-        </el-form-item>
-        <el-form-item label="真实姓名" prop="User_RealName">
-          <el-input v-model="AddUserForm.User_RealName" placeholder="真实姓名" />
-        </el-form-item>
-        <el-form-item label="生效方式" prop="InsuranceTypeCode">
-          <el-select v-model="AddUserForm.InsuranceTypeCode" placeholder="生效方式">
-            <el-option v-for="item in InsuranceTypeCodeArray" :key="item.value" :label="item.label"
-                       :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="演示用户">
-          <el-switch v-model="AddUserForm.DemoUser" :disabled="IfUpdate" active-text="是" inactive-text="否" />
-        </el-form-item>
+            <el-form ref="addStaffRef" :model="AddUserForm" :rules="addContractorRules" label-width="120px">
+                <el-alert v-if="!IfUpdate" style="margin-bottom:20px ;" type="success" show-icon
+                    title="此登陆密码默认为登录名加“YUANFU001”，例如：用户名为dongxiaoyun则密码为dongxiaoyunYUANFU001" :closable="false" />
+                <el-form-item label="用户类型" prop="UserType">
+                    <el-radio v-model="AddUserForm.UserType" :disabled="IfUpdate" label="1" border
+                        @input="UserTypeChange">合同方用户</el-radio>
+                    <el-radio v-model="AddUserForm.UserType" :disabled="IfUpdate" label="2" border
+                        @input="UserTypeChange">付款方用户</el-radio>
+                </el-form-item>
+                <el-form-item label="合同方" prop="ParentCode">
+                    <el-select v-model="AddUserForm.ParentCode" filterable placeholder="合同方" :disabled="IfUpdate"
+                        @change="GetChildEnterpriseChange">
+                        <el-option v-for="(item, index) in ParentContractorList" :key="index" :label="item.EnterPriseName"
+                            :value="item.EnterPriseCode" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="付款方" prop="EnterPriseCode">
+                    <el-select v-model="AddUserForm.EnterPriseCode" filterable placeholder="付款方"
+                        :disabled="IfUpdate || ShowEntFlag">
+                        <el-option v-for="(item, index) in ChildEnterpriseList" :key="index" :label="item.EnterPriseName"
+                            :value="item.EnterPriseCode" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="登陆用户名" prop="User_Account">
+                    <el-input v-model="AddUserForm.User_Account" placeholder="登陆用户名" />
+                </el-form-item>
+                <el-form-item label="真实姓名" prop="User_RealName">
+                    <el-input v-model="AddUserForm.User_RealName" placeholder="真实姓名" />
+                </el-form-item>
+                <el-form-item label="生效方式" prop="InsuranceTypeCode">
+                    <el-select v-model="AddUserForm.InsuranceTypeCode" placeholder="生效方式">
+                        <el-option v-for="item in InsuranceTypeCodeArray" :key="item.value" :label="item.label"
+                            :value="item.value" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="演示用户">
+                    <el-switch v-model="AddUserForm.DemoUser" :disabled="IfUpdate" active-text="是" inactive-text="否" />
+                </el-form-item>
 
-        <el-divider />
-        <el-row class="buttonCenter">
-          <el-col>
-            <el-button type="primary" :loading="LoadingAdd" @click="addContractor">保
-              存</el-button>
-            <el-button v-if="!IfUpdate" @click="detailUserVisibleClosed">重 置</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-dialog>
-  </div>
+                <el-divider />
+                <el-row class="buttonCenter">
+                    <el-col>
+                        <el-button type="primary" :loading="LoadingAdd" @click="addContractor">保
+                            存</el-button>
+                        <el-button v-if="!IfUpdate" @click="detailUserVisibleClosed">重 置</el-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
@@ -147,6 +131,7 @@ import {
     GetContractorList,
 } from "@/api/hrmain";
 export default {
+    name: 'UserInformation',
     components: {
     },
     data() {

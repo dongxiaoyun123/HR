@@ -50,6 +50,7 @@ import {
     GetLoginStatisticsLog,
 } from "@/api/hrmain";
 export default {
+    name: 'LoginStatistics',
     components: {
     },
     data() {

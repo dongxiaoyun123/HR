@@ -97,6 +97,7 @@ import {
     GetContractorList
 } from "@/api/hrmain";
 export default {
+    name:'SynchronizeInformation',
     components: {
     },
     data() {

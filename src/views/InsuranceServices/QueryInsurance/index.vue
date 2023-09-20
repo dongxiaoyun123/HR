@@ -94,6 +94,7 @@ import {
     LoadInsurePsns,
 } from "@/api/hrstatistics";
 export default {
+    name:'QueryInsurance',
     components: {
     },
     data() {

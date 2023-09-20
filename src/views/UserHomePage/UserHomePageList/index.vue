@@ -555,6 +555,7 @@ import {
 // import Mallki from '../UserHomePageList/components/TextHoverEffect/'
 import axios from "axios";
 export default {
+  name: 'UserHomePageList',
   components: {
     // Mallki
   },

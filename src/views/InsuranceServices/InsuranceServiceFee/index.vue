@@ -74,6 +74,7 @@ import {
     GetDataFinancial,
 } from "@/api/hrstatistics";
 export default {
+    name:'InsuranceServiceFee',
     components: {
     },
     data() {

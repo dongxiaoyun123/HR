@@ -170,6 +170,7 @@ import {
     EditOrderBy,
 } from "@/api/hrmain";
 export default {
+    name:'PayerInformation',
     components: {
     },
     data() {

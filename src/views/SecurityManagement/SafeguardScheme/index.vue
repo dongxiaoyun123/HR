@@ -121,6 +121,7 @@ import {
     GetProgramList,
 } from "@/api/hrmain";
 export default {
+  name: 'SafeguardScheme',
     components: {
     },
     data() {

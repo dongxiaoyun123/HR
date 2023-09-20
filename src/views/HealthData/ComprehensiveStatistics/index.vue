@@ -82,6 +82,7 @@ import {
 } from "@/api/hrstatistics";
 
 export default {
+    name:'ComprehensiveStatistics',
     components: {
     },
     data() {

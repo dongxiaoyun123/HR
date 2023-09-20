@@ -221,6 +221,7 @@ import {
     HrSynchronizeData
 } from "@/api/hrsynchronization";
 export default {
+    name:'ContractorInformation',
     components: {
     },
     data() {

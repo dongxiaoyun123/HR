@@ -58,6 +58,7 @@ import {
     GetLoginLog,
 } from "@/api/hrmain";
 export default {
+    name: 'LoginLog',
     components: {
     },
     data() {

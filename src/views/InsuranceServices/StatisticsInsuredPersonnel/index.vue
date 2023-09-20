@@ -63,6 +63,7 @@ import {
     GetInsvCount,
 } from "@/api/hrstatistics";
 export default {
+  name:'StatisticsInsuredPersonnel',
     components: {
     },
     data() {

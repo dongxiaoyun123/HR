@@ -60,6 +60,7 @@ import {
 } from "@/api/hrstatistics";
 
 export default {
+    name:'StatisticsSpecialDiseases',
     components: {
     },
     data() {

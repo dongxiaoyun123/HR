@@ -107,6 +107,7 @@ import {
 } from "@/api/hrstatistics";
 
 export default {
+  name:'HospitalRanking',
     components: {
     },
     data() {

@@ -207,6 +207,7 @@ import {
     GetDataBriefs,
 } from "@/api/hrstatistics";
 export default {
+  name:'DataReport',
     components: {
     },
     data() {

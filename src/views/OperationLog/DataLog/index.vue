@@ -99,6 +99,7 @@ import {
     ReportOperationLog,
 } from "@/api/hrmain";
 export default {
+    name: 'DataLog',
     components: {
     },
     data() {

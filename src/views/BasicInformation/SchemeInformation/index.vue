@@ -6,21 +6,16 @@
           <el-row>
             <el-col :span="6">
               <el-form-item style="margin-bottom: 0;" label="合同方">
-                <el-select v-model="WhereParameter.ParentCode" class="whereClass" filterable
-                           placeholder="合同方" clearable
-                >
+                <el-select v-model="WhereParameter.ParentCode" class="whereClass" filterable placeholder="合同方" clearable>
                   <el-option v-for="item in EnterpriseList" :key="item.ParentEnterPriseCode"
-                             :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode"
-                  />
+                    :label="item.ParentEnterPriseName" :value="item.ParentEnterPriseCode" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-button-group class="buttonGroupClass">
               <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
               </el-button>
-              <el-button type="success" icon="el-icon-circle-plus-outline"
-                         @click="showContractorDialog(null)"
-              >增
+              <el-button type="success" icon="el-icon-circle-plus-outline" @click="showContractorDialog(null)">增
                 加
               </el-button>
             </el-button-group>
@@ -63,9 +58,7 @@
           <template slot-scope="{row}">
             <template v-if="row.edit">
               <el-input-number v-model="row.OrderBy" size="mini" :min="1" />
-              <el-button size="mini" class="cancel-btn" icon="el-icon-refresh" type="text"
-                         @click="cancelEdit(row)"
-              >
+              <el-button size="mini" class="cancel-btn" icon="el-icon-refresh" type="text" @click="cancelEdit(row)">
                 取消
               </el-button>
             </template>
@@ -82,54 +75,44 @@
             </el-button>
             <el-button v-if="row.IsDel == 0" icon="el-icon-close" type="text" size="mini" @click="
               UpdateProgramInfo(row.ProgramCode, 1)
-            "
-            >
+              ">
               置为隐藏</el-button>
             <el-button v-else icon="el-icon-view" type="text" size="mini" @click="
               UpdateProgramInfo(row.ProgramCode, 0)
-            "
-            >
+              ">
               置为显示</el-button>
 
             <el-button icon="el-icon-refresh" type="text" size="mini" @click="
               RefreshProgramInfo(row.EnterpriseCode, row.ProgramCode)
-            "
-            >更新</el-button>
+              ">更新</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="WhereParameter.PageIndex" :page-sizes="[20, 50, 100]"
-                     :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+        :page-size="WhereParameter.PageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
     <!-- 添加投保数据 -->
-    <el-dialog :visible.sync="addProgramVisible" top="5vh" width="45%" :lock-scroll="false"
-               :append-to-body="true" @close="detailAddDialogVisibleClosed"
-    >
+    <el-dialog :visible.sync="addProgramVisible" top="5vh" width="45%" :lock-scroll="false" :append-to-body="true"
+      @close="detailAddDialogVisibleClosed">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
         <span>添加方案信息</span>
       </div>
       <el-form ref="addProgramRef" :model="AddProgramForm" :rules="addProgramRules" label-width="120px">
         <el-alert style="margin-bottom:20px ;" type="success" show-icon
-                  title="方案名称（不是隐藏的）要和客服系统中的保持一致，方案信息和当前客服系统保持一致，客服系统如果修改那么只需点击同步即可更新方案信息" :closable="false"
-        />
+          title="方案名称（不是隐藏的）要和客服系统中的保持一致，方案信息和当前客服系统保持一致，客服系统如果修改那么只需点击同步即可更新方案信息" :closable="false" />
         <el-form-item label="合同方" prop="ParentCode">
-          <el-select v-model="AddProgramForm.ParentCode" filterable placeholder="合同方"
-                     @change="GetChildEnterprise"
-          >
-            <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode"
-                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
-            />
+          <el-select v-model="AddProgramForm.ParentCode" filterable placeholder="合同方" @change="GetChildEnterprise">
+            <el-option v-for="item in ParentContractorList" :key="item.EnterPriseCode" :label="item.EnterPriseName"
+              :value="item.EnterPriseCode" />
           </el-select>
         </el-form-item>
         <el-form-item label="付款方" prop="EnterPriseCode">
           <el-select v-model="AddProgramForm.EnterPriseCode" filterable placeholder="付款方">
-            <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode"
-                       :label="item.EnterPriseName" :value="item.EnterPriseCode"
-            />
+            <el-option v-for="item in ChildEnterpriseList" :key="item.EnterPriseCode" :label="item.EnterPriseName"
+              :value="item.EnterPriseCode" />
           </el-select>
         </el-form-item>
         <el-form-item label="方案名称" prop="ProgramName">
@@ -153,258 +136,259 @@
 <script>
 import { scrollTo } from '@/utils/scroll-to'
 import {
-    GetSettingProgramList,
-    AddPrograminfo,
-    GetEnterpriseList,
-    GetChildEnterprise,
-    UpdateProgramInfo,
-    RefreshProgramInfo,
-    EditProgramOrderBy,
-    GetContractorList,
+  GetSettingProgramList,
+  AddPrograminfo,
+  GetEnterpriseList,
+  GetChildEnterprise,
+  UpdateProgramInfo,
+  RefreshProgramInfo,
+  EditProgramOrderBy,
+  GetContractorList,
 } from "@/api/hrmain";
 export default {
-    components: {
+  name: 'SchemeInformation',
+  components: {
+  },
+  data() {
+    return {
+      ParentContractorList: [],
+      ChildEnterpriseList: [],
+      EnterpriseList: [],
+      addProgramVisible: false,
+      AddProgramForm: {
+        ParentCode: '',
+        EnterPriseCode: '',
+        ProgramName: '',
+        OrderBy: null,
+      },
+      WhereParameter: {
+        ParentCode: '',
+        PageIndex: 1,
+        PageSize: 20,
+      },
+      ProgramList: [],
+      total: 0,
+      loading: false,
+      LoadingAdd: false,
+      addProgramRules: {
+        ParentCode: [
+          { required: true, message: "请选择合同方", trigger: "change" },
+        ],
+        EnterPriseCode: [
+          { required: true, message: "请选择付款方", trigger: "change" },
+        ],
+        ProgramName: [
+          { required: true, message: "请输入方案名称", trigger: "blur" },
+        ],
+        OrderBy: [
+          { required: true, message: "请输入排序", trigger: "change" },
+        ],
+      },
+    };
+  },
+  computed: {
+  },
+  created() {
+  },
+  // 加载完成后执行调取回款数据接口
+  mounted() {
+    this.GetEnterpriseList();
+    this.GetAdmin_PermissionSearch();
+    this.ParentGetContractorList();
+  },
+  methods: {
+    // 行内取消编辑，还原数据
+    cancelEdit(row) {
+      row.OrderBy = row.originalOrderBy
+      row.edit = false
+      this.$message({
+        message: '排序已恢复到原始值',
+        type: 'warning'
+      })
     },
-    data() {
-        return {
-            ParentContractorList: [],
-            ChildEnterpriseList: [],
-            EnterpriseList: [],
-            addProgramVisible: false,
-            AddProgramForm: {
-                ParentCode: '',
-                EnterPriseCode: '',
-                ProgramName: '',
-                OrderBy: null,
-            },
-            WhereParameter: {
-                ParentCode: '',
-                PageIndex: 1,
-                PageSize: 20,
-            },
-            ProgramList: [],
-            total: 0,
-            loading: false,
-            LoadingAdd: false,
-            addProgramRules: {
-                ParentCode: [
-                    { required: true, message: "请选择合同方", trigger: "change" },
-                ],
-                EnterPriseCode: [
-                    { required: true, message: "请选择付款方", trigger: "change" },
-                ],
-                ProgramName: [
-                    { required: true, message: "请输入方案名称", trigger: "blur" },
-                ],
-                OrderBy: [
-                    { required: true, message: "请输入排序", trigger: "change" },
-                ],
-            },
-        };
+    // 确认行内编辑
+    confirmEdit(row) {
+      if (!row.OrderBy) {
+        this.$message({
+          message: '请输入排序值',
+          type: 'warning'
+        });
+        return;
+      }
+      // 编辑排序方法
+      EditProgramOrderBy(row.ProgramCode, row.OrderBy).then((res) => {
+        if (res.success) {
+          row.edit = false;
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          this.GetContractorList();
+        } else {
+          this.$message({
+            message: '操作失败',
+            type: 'error'
+          });
+        }
+      });
     },
-    computed: {
+    UpdateProgramInfo(ProgramCode, States) {
+      UpdateProgramInfo(ProgramCode, States).then((res) => {
+        if (res.success) {
+          this.$message.success("操作成功");
+          this.GetSettingProgramList();
+        } else {
+          this.$message.error("操作失败");
+        }
+      });
     },
-    created() {
+    RefreshProgramInfo(EnterpriseCode, ProgramCode) {
+      RefreshProgramInfo(EnterpriseCode, ProgramCode).then((res) => {
+        if (res.success) {
+          this.$message.success("更新成功");
+          this.GetSettingProgramList();
+        } else {
+          this.$message.error(res.resultMessage);
+        }
+      });
     },
-    // 加载完成后执行调取回款数据接口
-    mounted() {
-        this.GetEnterpriseList();
-        this.GetAdmin_PermissionSearch();
-        this.ParentGetContractorList();
+    // 根据父级公司获取分公司
+    GetChildEnterprise() {
+      GetChildEnterprise(this.AddProgramForm.ParentCode).then((res) => {
+        if (res.success) {
+          this.ChildEnterpriseList = res.result;
+          this.AddProgramForm.EnterPriseCode = res.result[0].EnterPriseCode;
+        } else {
+          this.ChildEnterpriseList = [];
+        }
+      });
     },
-    methods: {
-        // 行内取消编辑，还原数据
-        cancelEdit(row) {
-            row.OrderBy = row.originalOrderBy
-            row.edit = false
-            this.$message({
-                message: '排序已恢复到原始值',
-                type: 'warning'
-            })
-        },
-        // 确认行内编辑
-        confirmEdit(row) {
-            if (!row.OrderBy) {
-                this.$message({
-                    message: '请输入排序值',
-                    type: 'warning'
-                });
-                return;
-            }
-            // 编辑排序方法
-            EditProgramOrderBy(row.ProgramCode, row.OrderBy).then((res) => {
-                if (res.success) {
-                    row.edit = false;
-                    this.$message({
-                        message: '操作成功',
-                        type: 'success'
-                    });
-                    this.GetContractorList();
-                } else {
-                    this.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                }
-            });
-        },
-        UpdateProgramInfo(ProgramCode, States) {
-            UpdateProgramInfo(ProgramCode, States).then((res) => {
-                if (res.success) {
-                    this.$message.success("操作成功");
-                    this.GetSettingProgramList();
-                } else {
-                    this.$message.error("操作失败");
-                }
-            });
-        },
-        RefreshProgramInfo(EnterpriseCode, ProgramCode) {
-            RefreshProgramInfo(EnterpriseCode, ProgramCode).then((res) => {
-                if (res.success) {
-                    this.$message.success("更新成功");
-                    this.GetSettingProgramList();
-                } else {
-                    this.$message.error(res.resultMessage);
-                }
-            });
-        },
-        // 根据父级公司获取分公司
-        GetChildEnterprise() {
-            GetChildEnterprise(this.AddProgramForm.ParentCode).then((res) => {
-                if (res.success) {
-                    this.ChildEnterpriseList = res.result;
-                    this.AddProgramForm.EnterPriseCode = res.result[0].EnterPriseCode;
-                } else {
-                    this.ChildEnterpriseList = [];
-                }
-            });
-        },
 
-        // 添加投保数据
-        addProgram() {
-            this.LoadingAdd = true;
-            // 提交请求前，表单预验证
-            this.$refs.addProgramRef.validate(async (valid, object) => {
-                // 表单预校验失败
-                if (!valid) {
-                    this.LoadingAdd = false;
-                    return;
-                } else {
-                    var addparameter = {
-                        ParentCode: this.AddProgramForm.ParentCode,
-                        EnterPriseCode: this.AddProgramForm.EnterPriseCode,
-                        ProgramName: this.AddProgramForm.ProgramName,
-                        OrderBy: this.AddProgramForm.OrderBy,
-                    };
-                    AddPrograminfo(addparameter).then((res) => {
-                        this.LoadingAdd = false;
-                        if (res.success) {
-                            this.$message.success("添加成功");
-                            this.addProgramVisible = false;
-                            this.GetSettingProgramList();
-                        } else {
-                            this.$message.error(res.resultMessage);
-                        }
-                    });
-                }
-            });
-        },
-        // 添加窗口关闭
-        detailAddDialogVisibleClosed() {
-            // 初始化data-AddProgramForm 的数据
-            this.$data.AddProgramForm = this.$options.data().AddProgramForm;
-            this.$refs.addProgramRef.resetFields();
-        },
-        // 弹出添加窗口(修改需要传入参数)
-        showContractorDialog() {
-            this.addProgramVisible = true;
-        },
-
-        // 监听 pagesize改变的事件
-        handleSizeChange(newSize) {
-            this.WhereParameter.PageSize = newSize;
-            this.GetSettingProgramList(); scrollTo(0, 800)
-        },
-        // 监听 页码值 改变事件
-        handleCurrentChange(newSize) {
-            this.WhereParameter.PageIndex = newSize;
-            this.GetSettingProgramList(); scrollTo(0, 800)
-        },
-
-        GetAdmin_PermissionSearch() {
-            this.WhereParameter.PageIndex = 1;
-            this.WhereParameter.PageSize = 20;
-            this.GetSettingProgramList();
-        },
-        // 获取员工方案列表数据
-        GetSettingProgramList() {
-            this.loading = true;
-            var parameter = {
-                ParentCode: this.WhereParameter.ParentCode,
-                PageIndex: this.WhereParameter.PageIndex,
-                PageSize: this.WhereParameter.PageSize,
+    // 添加投保数据
+    addProgram() {
+      this.LoadingAdd = true;
+      // 提交请求前，表单预验证
+      this.$refs.addProgramRef.validate(async (valid, object) => {
+        // 表单预校验失败
+        if (!valid) {
+          this.LoadingAdd = false;
+          return;
+        } else {
+          var addparameter = {
+            ParentCode: this.AddProgramForm.ParentCode,
+            EnterPriseCode: this.AddProgramForm.EnterPriseCode,
+            ProgramName: this.AddProgramForm.ProgramName,
+            OrderBy: this.AddProgramForm.OrderBy,
+          };
+          AddPrograminfo(addparameter).then((res) => {
+            this.LoadingAdd = false;
+            if (res.success) {
+              this.$message.success("添加成功");
+              this.addProgramVisible = false;
+              this.GetSettingProgramList();
+            } else {
+              this.$message.error(res.resultMessage);
             }
-            GetSettingProgramList(
-                parameter
-            ).then((res) => {
-                if (res.success) {
-                    this.ProgramList = res.result.data.map(v => {
-                        this.$set(v, 'edit', false);// 通过this.$set 方法重新为数组赋值，用来判断是不是需要编辑的标识
-                        this.$set(v, 'originalOrderBy', v.OrderBy);// 用于取消时重新赋值
-                        return v
-                    });
-                    this.total = res.result.count;
-                } else {
-                    this.ProgramList = [];
-                    this.total = 0;
-                }
-                this.loading = false;
-            });
-        },
-        // 获取公司列表
-        GetEnterpriseList() {
-            GetEnterpriseList().then((res) => {
-                if (res.success) {
-                    this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 2 });
-                } else {
-                    this.EnterpriseList = [];
-                }
-            });
-        },
-        // 获取员工方案列表数据
-        ParentGetContractorList() {
-            var parameter = {
-                ContractorParameter: "",
-                EnterpriseType: 1,
-                PageIndex: 1,
-                PageSize: 10000,
-            }
-            GetContractorList(
-                parameter
-            ).then((res) => {
-                if (res.success) {
-                    this.ParentContractorList = res.result.data;
-                } else {
-                    this.ParentContractorList = [];
-                }
-            });
-        },
-    }
+          });
+        }
+      });
+    },
+    // 添加窗口关闭
+    detailAddDialogVisibleClosed() {
+      // 初始化data-AddProgramForm 的数据
+      this.$data.AddProgramForm = this.$options.data().AddProgramForm;
+      this.$refs.addProgramRef.resetFields();
+    },
+    // 弹出添加窗口(修改需要传入参数)
+    showContractorDialog() {
+      this.addProgramVisible = true;
+    },
+
+    // 监听 pagesize改变的事件
+    handleSizeChange(newSize) {
+      this.WhereParameter.PageSize = newSize;
+      this.GetSettingProgramList(); scrollTo(0, 800)
+    },
+    // 监听 页码值 改变事件
+    handleCurrentChange(newSize) {
+      this.WhereParameter.PageIndex = newSize;
+      this.GetSettingProgramList(); scrollTo(0, 800)
+    },
+
+    GetAdmin_PermissionSearch() {
+      this.WhereParameter.PageIndex = 1;
+      this.WhereParameter.PageSize = 20;
+      this.GetSettingProgramList();
+    },
+    // 获取员工方案列表数据
+    GetSettingProgramList() {
+      this.loading = true;
+      var parameter = {
+        ParentCode: this.WhereParameter.ParentCode,
+        PageIndex: this.WhereParameter.PageIndex,
+        PageSize: this.WhereParameter.PageSize,
+      }
+      GetSettingProgramList(
+        parameter
+      ).then((res) => {
+        if (res.success) {
+          this.ProgramList = res.result.data.map(v => {
+            this.$set(v, 'edit', false);// 通过this.$set 方法重新为数组赋值，用来判断是不是需要编辑的标识
+            this.$set(v, 'originalOrderBy', v.OrderBy);// 用于取消时重新赋值
+            return v
+          });
+          this.total = res.result.count;
+        } else {
+          this.ProgramList = [];
+          this.total = 0;
+        }
+        this.loading = false;
+      });
+    },
+    // 获取公司列表
+    GetEnterpriseList() {
+      GetEnterpriseList().then((res) => {
+        if (res.success) {
+          this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 2 });
+        } else {
+          this.EnterpriseList = [];
+        }
+      });
+    },
+    // 获取员工方案列表数据
+    ParentGetContractorList() {
+      var parameter = {
+        ContractorParameter: "",
+        EnterpriseType: 1,
+        PageIndex: 1,
+        PageSize: 10000,
+      }
+      GetContractorList(
+        parameter
+      ).then((res) => {
+        if (res.success) {
+          this.ParentContractorList = res.result.data;
+        } else {
+          this.ParentContractorList = [];
+        }
+      });
+    },
+  }
 };
 </script>
 
 <style scoped>
 .whereClass {
-    width: 100%;
-    margin-bottom: 0;
+  width: 100%;
+  margin-bottom: 0;
 }
 
 .buttonGroupClass {
-    margin-left: 2rem;
+  margin-left: 2rem;
 }
 
 .buttonCenter {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
 }
 </style>

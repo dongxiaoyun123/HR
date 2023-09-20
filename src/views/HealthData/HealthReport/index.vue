@@ -179,6 +179,7 @@ import {
     GetChildUserConId,
 } from "@/api/hrmain";
 export default {
+    name:'HealthReport',
     components: {
     },
     data() {

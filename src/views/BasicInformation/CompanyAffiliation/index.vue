@@ -94,6 +94,7 @@ import {
     GetContractorList,
 } from "@/api/hrmain";
 export default {
+    name:'CompanyAffiliation',
     components: {
     },
     data() {

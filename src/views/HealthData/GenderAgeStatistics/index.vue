@@ -80,6 +80,7 @@ import {
 } from "@/api/hrstatistics";
 
 export default {
+    name:'GenderAgeStatistics',
     components: {
     },
     data() {
