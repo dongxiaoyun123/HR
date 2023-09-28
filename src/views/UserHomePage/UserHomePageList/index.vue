@@ -952,19 +952,19 @@ export default {
     },
     // 只考虑修改数据的情况，如果是本人，那么关联修改
     StaffNameAddChange() {
-      if (this.addStaffForm.DocumentTypeCodeAdd == "1" && this.IfUpdate) { this.addStaffForm.MainStaffNameAdd = this.addStaffForm.StaffNameAdd; }
+      if (this.addStaffForm.DocumentTypeCodeAdd == "1" && this.addStaffForm.EmployeeRelationshipCodeAdd=="1" && this.IfUpdate) { this.addStaffForm.MainStaffNameAdd = this.addStaffForm.StaffNameAdd; }
     },
     // 只考虑修改数据的情况，如果是本人，那么关联修改
     IdentificationNumberAddChange() {
-      if (this.addStaffForm.DocumentTypeCodeAdd == "1" && this.IfUpdate) { this.addStaffForm.IdentificationNumberMainAdd = this.addStaffForm.IdentificationNumberAdd; }
+      if (this.addStaffForm.DocumentTypeCodeAdd == "1"  && this.addStaffForm.EmployeeRelationshipCodeAdd=="1" && this.IfUpdate) { this.addStaffForm.IdentificationNumberMainAdd = this.addStaffForm.IdentificationNumberAdd; }
     },
     // 只考虑修改数据的情况，如果是本人，那么关联修改
     MainStaffNameAddChange() {
-      if (this.addStaffForm.DocumentTypeCodeAdd == "1" && this.IfUpdate) { this.addStaffForm.StaffNameAdd = this.addStaffForm.MainStaffNameAdd; }
+      if (this.addStaffForm.DocumentTypeCodeAdd == "1"  && this.addStaffForm.EmployeeRelationshipCodeAdd=="1" && this.IfUpdate) { this.addStaffForm.StaffNameAdd = this.addStaffForm.MainStaffNameAdd; }
     },
     // 只考虑修改数据的情况，如果是本人，那么关联修改
     MainIdentificationNumberAddChange() {
-      if (this.addStaffForm.DocumentTypeCodeAdd == "1" && this.IfUpdate) { this.addStaffForm.IdentificationNumberAdd = this.addStaffForm.IdentificationNumberMainAdd; }
+      if (this.addStaffForm.DocumentTypeCodeAdd == "1"  && this.addStaffForm.EmployeeRelationshipCodeAdd=="1" && this.IfUpdate) { this.addStaffForm.IdentificationNumberAdd = this.addStaffForm.IdentificationNumberMainAdd; }
     },
     // 切换方案
     ProgramChangeAdd() {
