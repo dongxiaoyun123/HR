@@ -25,7 +25,7 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
         <el-tooltip content="操作手册" effect="dark" placement="bottom">
-          <OperationManual id="header-search" class="right-menu-item" />
+          <OperationManual v-if="rolesFlag && (rolesFlag[0] != 1 && rolesFlag[0] != 2 && rolesFlag[0] != 7)" id="header-search" class="right-menu-item" />
         </el-tooltip>
       </template>
 
@@ -128,6 +128,7 @@ export default {
   },
   data() {
     return {
+      rolesFlag: this.$store.getters.roles,
       updatePasswordVisible: false,
       updatePassword: {
         User_ID: "",

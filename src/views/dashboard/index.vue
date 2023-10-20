@@ -39,7 +39,7 @@
     <el-row v-show="MenuPermissions != 2">
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
-          <MonthStaffAdd :where-parameter="WhereParameter" />
+          <MonthStaffAdd :where-parameter="WhereParameter"  :MenuPermissions="MenuPermissions"/>
         </div>
       </el-col>
     </el-row>

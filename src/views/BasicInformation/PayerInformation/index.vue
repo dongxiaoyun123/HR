@@ -536,7 +536,8 @@ export default {
             // 传入vuex存储的值
             GetEnterpriseList().then((res) => {
                 if (res.success) {
-                    this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 2 });
+                    this.EnterpriseList = res.result;
+                    // this.EnterpriseList = res.result.filter((item) => { return item.MenuPermissions != 2 });
                 } else {
                     this.EnterpriseList = [];
                 }
