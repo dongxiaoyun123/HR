@@ -61,6 +61,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/loginxinyazhongNew',
+    component: () => import('@/views/loginxinyazhongNew/index'),
+    hidden: true
+  },
+  {
     path: '/loginzhiweijia',
     component: () => import('@/views/loginzhiweijia/index'),
     hidden: true
@@ -75,7 +80,11 @@ export const constantRoutes = [
     component: () => import('@/views/loginNotLogo/index'),
     hidden: true
   },
-
+  {
+    path: '/loginbeijingnongtou',
+    component: () => import('@/views/loginbeijingnongtou/index'),
+    hidden: true
+  },
   // {
   //   path: '/auth-redirect',
   //   component: () => import('@/views/login/auth-redirect'),

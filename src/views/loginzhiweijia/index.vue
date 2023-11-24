@@ -416,7 +416,7 @@ $cursor: #737478;
   .footClass {
     margin: 20px 0;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 25px;
   }
 

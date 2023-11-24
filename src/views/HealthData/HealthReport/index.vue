@@ -172,6 +172,7 @@
 import echarts from 'echarts'
 import moment from "moment"; // 导入模块
 import { getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
+import { mapState } from "vuex";
 moment.locale("zh-cn");
 import {
     GetEnterpriseList,
@@ -346,8 +347,28 @@ export default {
         };
     },
     computed: {
-
+    ...mapState({
+      opened: (state) => state.app.sidebar.opened,
+    }),
+  },
+  watch: {
+    opened(val) {
+      setTimeout(() => {
+        //点击折叠按钮时图标不渲染问题（缩放浏览器自适应的方法写在了渲染图表时和页面点击不一样）
+        this.myChart1.resize();
+        this.myChart2.resize();
+        this.myChart3.resize();
+        this.myChart4.resize();
+        this.myChart5.resize();
+        this.myChart6.resize();
+        this.myChart7.resize();
+        this.myChart8.resize();
+        this.myChart9.resize();
+        this.myChart10.resize();
+        this.myChart11.resize();
+      }, 300);
     },
+  },
     created() {
 
     },
@@ -1079,7 +1100,7 @@ export default {
                     axisLabel: { show: false },
                     axisTick: { show: false },
                     axisLine: { show: false },
-                    max: parseInt(this.ChartData.VisitSexRatio.MaxFeMale),
+                    max: parseInt(this.ChartData.VisitSexRatio.MaxMale),
                     offset: 10,
                 },
                 yAxis: {
@@ -1089,7 +1110,7 @@ export default {
                     axisLabel: { show: false },
                     axisTick: { show: false },
                     axisLine: { show: false },
-                    max: parseInt(this.ChartData.VisitSexRatio.MaxFeMale),
+                    max: parseInt(this.ChartData.VisitSexRatio.MaxMale),
                     offset: 10,
 
                 },
@@ -1105,8 +1126,8 @@ export default {
                     symbolMargin: '-20%',
                     symbolClip: true,
                     symbolSize: 30,
-                    symbolBoundingData: parseInt(this.ChartData.VisitSexRatio.MaxFeMale),
-                    data: [parseInt(this.ChartData.VisitSexRatio.VisitFeMale)],
+                    symbolBoundingData: parseInt(this.ChartData.VisitSexRatio.MaxMale),
+                    data: [parseInt(this.ChartData.VisitSexRatio.VisitMale)],
                     z: 10
                 }, {
                     type: 'pictorialBar',
@@ -1120,8 +1141,8 @@ export default {
                     symbolMargin: '-20%',
                     symbol: this.PercentPiemaleParameter.spirit,
                     symbolSize: 30,
-                    symbolBoundingData: parseInt(this.ChartData.VisitSexRatio.MaxFeMale),
-                    data: [parseInt(this.ChartData.VisitSexRatio.MaxFeMale) - parseInt(this.ChartData.VisitSexRatio.VisitFeMale)],
+                    symbolBoundingData: parseInt(this.ChartData.VisitSexRatio.MaxMale),
+                    data: [parseInt(this.ChartData.VisitSexRatio.MaxMale) - parseInt(this.ChartData.VisitSexRatio.VisitMale)],
 
                 }]
             };

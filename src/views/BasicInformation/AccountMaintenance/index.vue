@@ -148,7 +148,7 @@ export default {
         ParentEnterPriseCode: '',
         EnterPriseCode: '',
       },
-      loading: true,
+      loading: false,
       EnterpriseList: [],
       ChildEnterpriseList: [],
       EnterpriseManageRules: {

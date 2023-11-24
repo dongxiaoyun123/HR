@@ -18,6 +18,7 @@ import yuanfu from '@/assets/i-mages/logo.png';
 import xinyazhong from '@/assets/i-mages/xinyazhongLogo.png';
 import zhiweijia from '@/assets/i-mages/zhiweijiaLogo.png';
 import kangkang from '@/assets/i-mages/kangkangLogo.png';
+import loginbeijingnongtou from '@/assets/i-mages/beijingnongtouLogo.jpg';
 export default {
   name: 'SidebarLogo',
   props: {
@@ -41,12 +42,19 @@ export default {
         break;
       case "#/loginxinyazhong":
         this.logo = xinyazhong;
+        this.title="人保直投"+ "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
+        break;
+      case "#/loginxinyazhongNew":
+        this.logo = xinyazhong;
         break;
       case "#/loginzhiweijia":
         this.logo = zhiweijia;
         break;
       case "#/loginkangkang":
         this.logo = kangkang;
+        break;
+        case "#/loginbeijingnongtou":
+        this.logo = loginbeijingnongtou;
         break;
         case "#/loginNotLogo":
         this.logo = '';

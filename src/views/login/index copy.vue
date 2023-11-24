@@ -320,7 +320,7 @@ $light_gray: #999999;
   .footClass {
     margin-top: 40px;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 25px;
   }
 

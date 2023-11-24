@@ -14,7 +14,7 @@
         </el-tooltip>
 
         <el-tooltip content="疑难问题" effect="dark" placement="bottom">
-          <message-log class="errLog-container right-menu-item hover-effect" />
+          <message-log v-if="rolesFlag && (rolesFlag[0] != 1 && rolesFlag[0] != 2 && rolesFlag[0] != 7)" class="errLog-container right-menu-item hover-effect" />
         </el-tooltip>
 
         <el-tooltip content="全屏" effect="dark" placement="bottom">
@@ -205,6 +205,9 @@ export default {
         case "#/loginxinyazhong":
           this.$router.push(`/loginxinyazhong`);
           break;
+          case "#/loginxinyazhongNew":
+          this.$router.push(`/loginxinyazhongNew`);
+          break;
         case "#/loginzhiweijia":
           this.$router.push(`/loginzhiweijia`);
           break;
@@ -213,6 +216,9 @@ export default {
           break;
         case "#/loginNotLogo":
           this.$router.push(`/loginNotLogo`);
+          break;
+          case "#/loginbeijingnongtou":
+          this.$router.push(`/loginbeijingnongtou`);
           break;
         default:
           this.$router.push(`/login`);

@@ -11,6 +11,7 @@
 <script>
 import echarts from "echarts";
 import { GetMonthStaffStatistics } from "@/api/dashboard";
+import { mapState } from "vuex";
 export default {
   // 父组件传过来的数据
   props: {
@@ -38,6 +39,17 @@ export default {
       },
       deep: true, // 可以深度检测到 obj 对象的属性值的变化
     },
+    opened(val) {
+      setTimeout(() => {
+        //点击折叠按钮时图标不渲染问题（缩放浏览器自适应的方法写在了渲染图表时和页面点击不一样）
+        this.myChart.resize();
+      }, 300);
+    },
+  },
+  computed: {
+    ...mapState({
+      opened: (state) => state.app.sidebar.opened,
+    }),
   },
   mounted() {},
   created() {},

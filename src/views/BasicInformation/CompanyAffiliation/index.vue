@@ -46,13 +46,13 @@
                      @size-change="handleSizeChange" @current-change="handleCurrentChange"
       />
     </el-card>
-    <!-- 添加同步信息 -->
+    <!-- 添加关联公司 -->
     <el-dialog :visible.sync="addBackstageRegionVisible" top="5vh" width="45%" :lock-scroll="false"
                :append-to-body="true" @close="detailAddDialogVisibleClosed"
     >
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
-        <span>添加同步信息</span>
+        <span>添加关联公司</span>
       </div>
       <el-form ref="addBackstageRegionRef" :model="AddBackstageRegionForm" :rules="addBackstageRegionRules"
                label-width="120px"

@@ -2,8 +2,11 @@
   <div class="login-container">
     <el-card>
       <el-form>
-        <el-row class="logoClass" :gutter="20">
-          <el-col class="titleClass" :span="24" :offset="4">
+        <el-row class="logoClass">
+          <el-col style="width:115px ;" :offset="3">
+            <el-image style="width: 115px;" :src="imgUrl" />
+          </el-col>
+          <el-col class="titleClass">
             HR保险管理系统V2.0
           </el-col>
         </el-row>
@@ -55,12 +58,15 @@
         </el-form>
       </div>
     </div>
-    <div class="footClass" />
+    <div class="footClass">
+      <div>北京农投</div>
+    </div>
   </div>
 </template>
 
 <script>
 import validateCode from "../login/components/ValidateCode.vue";
+import xinyazhong from '@/assets/i-mages/beijingnongtou.jpg';
 export default {
   name: 'Login',
   components: {
@@ -96,6 +102,7 @@ export default {
       }
     }
     return {
+      imgUrl: xinyazhong,
       loginForm: {
         username: '',
         password: '',
@@ -385,9 +392,13 @@ $cursor: #737478;
   .titleClass {
     line-height: 43px;
     height: 43px;
+    width: 350px;
     font-size: 18px;
     color: #666;
     letter-spacing: 1px;
+    border-left: 1px solid #b1b1b1;
+    padding-left: 15px;
+    margin-left: 15px;
     display: block;
     font-weight: bold;
   }

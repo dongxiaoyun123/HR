@@ -7,7 +7,7 @@
             <el-image style="width: 115px;" :src="imgUrl" />
           </el-col>
           <el-col class="titleClass">
-            HR保险管理系统V2.0
+            HR保险管理系统V2.0（人保直投）
           </el-col>
         </el-row>
       </el-form>
@@ -392,7 +392,7 @@ $cursor: #737478;
   .titleClass {
     line-height: 43px;
     height: 43px;
-    width: 200px;
+    width: 350px;
     font-size: 18px;
     color: #666;
     letter-spacing: 1px;
@@ -416,7 +416,7 @@ $cursor: #737478;
   .footClass {
     margin: 20px 0;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 25px;
   }
 
